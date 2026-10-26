@@ -328,7 +328,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 ### Fase 1 — Base visual e páginas públicas
 
 - [x] 1.1 — HTML da landing page, cadastro e login.
-- [ ] 1.2 — HTML do onboarding de três passos.
+- [x] 1.2 — HTML do onboarding de três passos.
 - [ ] 1.3 — Tokens, reset, tipografia e utilitários CSS.
 - [ ] 1.4 — Componentes e layouts compartilhados.
 - [ ] 1.5 — Revisão visual e responsiva das páginas públicas.
@@ -369,12 +369,15 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - O cadastro solicita nome, sobrenome, e-mail, senha com mínimo de seis caracteres e aceite dos termos; login solicita e-mail e senha.
 - Os formulários têm labels, parágrafos de erro ligados por `aria-describedby`, regiões de feedback acessíveis e controles de mostrar/ocultar senha.
 - A landing apresenta os destaques definidos, quatro passos do fluxo e seis recursos baseados nas áreas já previstas para o produto.
+- O onboarding é uma única página com três seções de etapa; somente a etapa inicial fica visível no HTML e os controles de avanço e conclusão começam desabilitados, com texto explicativo associado por `aria-describedby`.
+- As escolhas de instrumento e nível são grupos de radio com seleção única; objetivos são checkboxes de seleção múltipla. A página não inclui navegação do app.
 
 ### Suposições
 
-- Como não havia imagens do Figma acessíveis nos arquivos do projeto durante esta etapa, o HTML foi organizado segundo a estrutura e os textos descritos no pedido; a fidelidade visual ainda deve ser conferida com as referências antes da estilização.
+- Na Etapa 1.1, as imagens do Figma não estavam acessíveis nos arquivos do projeto; o HTML daquela etapa seguiu a estrutura e os textos descritos no pedido, e a fidelidade visual ainda deve ser conferida com as referências antes da estilização.
 - A página de login não tem tela de referência no Figma; foi criada no mesmo padrão estrutural do cadastro, com e-mail, senha, ação de entrar e link para criar conta.
 - O checklist 1.1–1.5 foi alinhado à divisão de etapas informada para esta implementação; as páginas futuras continuam pendentes.
+- O detalhe “48 aulas disponíveis” é exibido somente para Violão, como exemplo informado, sem inferir a quantidade de aulas dos outros instrumentos.
 
 ## Pendências conhecidas
 
@@ -382,7 +385,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - Há um frame do Figma com sidebar dentro de um celular; tratar como erro de design e usar barra inferior em mobile.
 - Os ícones de Músicas e Perfil aparecem como círculos/quebrados; usar nota musical e usuário em SVG.
 - “Setembro 2024” no calendário é dado de exemplo visual, não uma data fixa. O calendário deve representar os dados reais do aluno.
-- As imagens do Figma não estavam acessíveis nos arquivos do workspace durante a Etapa 1.1; conferir as páginas com as referências antes de definir os estilos e perguntar se houver tela ou detalhe ambíguo.
+- Conferir a fidelidade visual das páginas públicas com as referências do Figma antes ou durante a etapa de estilos; os detalhes de apresentação ainda não foram implementados nesta fase HTML.
 - Os limites exatos de níveis, regras de sequência e critérios de desbloqueio de conquistas precisam ser definidos antes de codificar quando as referências não forem suficientes.
 
 ## Créditos

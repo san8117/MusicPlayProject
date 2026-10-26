@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Configuração inicial | MUSICPLAY</title>
+    <meta
+      name="description"
+      content="Escolha seu instrumento, seu nível e seus objetivos para personalizar sua jornada musical no MUSICPLAY."
+    >
+    <link rel="stylesheet" href="../css/main.css">
+    <script type="module" src="../js/main.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Pular para o conteúdo</a>
+    <main class="onboarding" id="main-content">
+      <div class="onboarding__container">
+        <header class="onboarding__header">
+          <a class="brand onboarding__brand" href="../index.html" aria-label="MUSICPLAY, página inicial">
+            <span class="brand__text">MUSICPLAY</span>
+          </a>
+          <div class="onboarding__progress">
+            <div class="onboarding__progress-heading">
+              <p class="onboarding__eyebrow">Configuração inicial</p>
+              <p class="onboarding__step-count" data-step-count aria-live="polite" aria-atomic="true">
+                1 / 3
+              </p>
+            </div>
+            <progress
+              class="onboarding__progress-bar"
+              data-progress
+              value="1"
+              max="3"
+              aria-label="Progresso da configuração inicial"
+            >
+              Passo 1 de 3
+            </progress>
+          </div>
+        </header>
+
+        <form class="onboarding-form" data-form="onboarding" novalidate>
+          <section class="onboarding-step" data-step="1" aria-labelledby="instrument-title">
+            <header class="onboarding-step__header">
+              <h1 class="onboarding-step__title" id="instrument-title">
+                Qual instrumento você quer aprender?
+              </h1>
+              <p class="onboarding-step__description">Escolha o instrumento para começar.</p>
+            </header>
+
+            <fieldset class="choice-group" aria-describedby="instrument-error">
+              <legend class="visually-hidden">Escolha um instrumento</legend>
+              <div class="choice-group__grid">
+                <div class="choice-option">
+                  <input
+                    class="choice-option__input"
+                    id="instrument-guitar"
+                    name="instrument"
+                    type="radio"
+                    value="guitar"
+                    required
+                    data-option="instrument"
+                  >
+                  <label class="choice-option__label" for="instrument-guitar">
+                    <span class="choice-option__name">Violão</span>
+                    <span class="choice-option__detail">48 aulas disponíveis</span>
+                  </label>
+                </div>
+                <div class="choice-option">
+                  <input
+                    class="choice-option__input"
+                    id="instrument-keyboard"
+                    name="instrument"
+                    type="radio"
+                    value="keyboard"
+                    required
+                    data-option="instrument"
+                  >
+                  <label class="choice-option__label" for="instrument-keyboard">
+                    <span class="choice-option__name">Teclado</span>
+                  </label>
+                </div>
+                <div class="choice-option">
+                  <input
+                    class="choice-option__input"
+                    id="instrument-piano"
+                    name="instrument"
+                    type="radio"
+                    value="piano"
+                    required
+                    data-option="instrument"
+                  >
+                  <label class="choice-option__label" for="instrument-piano">
+                    <span class="choice-option__name">Piano</span>
+                  </label>
+                </div>
+                <div class="choice-option">
+                  <input
+                    class="choice-option__input"
+                    id="instrument-drums"
+                    name="instrument"
+                    type="radio"
+                    value="drums"
+                    required
+                    data-option="instrument"
+                  >
+                  <label class="choice-option__label" for="instrument-drums">
+                    <span class="choice-option__name">Bateria</span>
+                  </label>
+                </div>
+                <div class="choice-option">
+                  <input
+                    class="choice-option__input"
+                    id="instrument-electric-guitar"
+                    name="instrument"
+                    type="radio"
+                    value="electric-guitar"
+                    required
+                    data-option="instrument"
+                  >
+                  <label class="choice-option__label" for="instrument-electric-guitar">
+                    <span class="choice-option__name">Guitarra</span>
+                  </label>
+                </div>
+                <div class="choice-option">
+                  <input
+                    class="choice-option__input"
+                    id="instrument-violin"
+                    name="instrument"
+                    type="radio"
+                    value="violin"
+                    required
+                    data-option="instrument"
+                  >
+                  <label class="choice-option__label" for="instrument-violin">
+                    <span class="choice-option__name">Violino</span>
+                  </label>
+                </div>
+                <div class="choice-option">
+                  <input
+                    class="choice-option__input"
+                    id="instrument-flute"
+                    name="instrument"
+                    type="radio"
+                    value="flute"
+                    required
+                    data-option="instrument"
+                  >
+                  <label class="choice-option__label" for="instrument-flute">
+                    <span class="choice-option__name">Flauta</span>
+                  </label>
+                </div>
+                <div class="choice-option">
+                  <input
+                    class="choice-option__input"
+                    id="instrument-cavaquinho"
+                    name="instrument"
+                    type="radio"
+                    value="cavaquinho"
+                    required
+                    data-option="instrument"
+                  >
+                  <label class="choice-option__label" for="instrument-cavaquinho">
+                    <span class="choice-option__name">Cavaquinho</span>
+                  </label>
+                </div>
+                <div class="choice-option">
+                  <input
+                    class="choice-option__input"
+                    id="instrument-ukulele"
+                    name="instrument"
+                    type="radio"
+                    value="ukulele"
+                    required
+                    data-option="instrument"
+                  >
+                  <label class="choice-option__label" for="instrument-ukulele">
+                    <span class="choice-option__name">Ukulele</span>
+                  </label>
+                </div>
+                <div class="choice-option">
+                  <input
+                    class="choice-option__input"
+                    id="instrument-accordion"
+                    name="instrument"
+                    type="radio"
+                    value="accordion"
+                    required
+                    data-option="instrument"
+                  >
+                  <label class="choice-option__label" for="instrument-accordion">
+                    <span class="choice-option__name">Sanfona / Acordeão</span>
+                  </label>
+                </div>
+              </div>
+              <p class="choice-group__error" id="instrument-error" data-field-error="instrument" aria-live="polite"></p>
+            </fieldset>
+
+            <div class="onboarding-step__actions">
+              <p class="onboarding-step__help" id="instrument-step-help" data-step-help>
+                Escolha um instrumento para continuar.
+              </p>
+              <button
+                class="button button--primary"
+                type="button"
+                data-action="next-step"
+                aria-describedby="instrument-step-help"
+                disabled
+              >
+                Continuar
+              </button>
+            </div>
+          </section>
+
+          <section
+            class="onboarding-step"
+            data-step="2"
+            aria-labelledby="level-title"
+            aria-describedby="level-description"
+            hidden
+          >
+            <header class="onboarding-step__header">
+              <h1 class="onboarding-step__title" id="level-title">Qual é o seu nível?</h1>
+              <p class="onboarding-step__description" id="level-description">
+                Seja honesto — vamos montar o plano ideal para você.
+              </p>
+            </header>
+
+            <fieldset class="choice-group" aria-describedby="level-error">
+              <legend class="visually-hidden">Escolha seu nível</legend>
+              <div class="choice-group__list">
+                <div class="choice-option">
+                  <input
+                    class="choice-option__input"
+                    id="level-never-played"
+                    name="level"
+                    type="radio"
+                    value="never-played"
+                    required
+                    data-option="level"
+                  >
+                  <label class="choice-option__label" for="level-never-played">
+                    <span class="choice-option__name">Nunca toquei</span>
+                    <span class="choice-option__detail">Sou completamente iniciante</span>
+                  </label>
+                </div>
+                <div class="choice-option">
+                  <input
+                    class="choice-option__input"
+                    id="level-beginner"
+                    name="level"
+                    type="radio"
+                    value="beginner"
+                    required
+                    data-option="level"
+                  >
+                  <label class="choice-option__label" for="level-beginner">
+                    <span class="choice-option__name">Sou iniciante</span>
+                    <span class="choice-option__detail">Já tive contato mas sei pouco</span>
+                  </label>
+                </div>
+                <div class="choice-option">
+                  <input
+                    class="choice-option__input"
+                    id="level-some-experience"
+                    name="level"
+                    type="radio"
+                    value="some-experience"
+                    required
+                    data-option="level"
+                  >
+                  <label class="choice-option__label" for="level-some-experience">
+                    <span class="choice-option__name">Já sei tocar um pouco</span>
+                    <span class="choice-option__detail">Conheço o básico do instrumento</span>
+                  </label>
+                </div>
+              </div>
+              <p class="choice-group__error" id="level-error" data-field-error="level" aria-live="polite"></p>
+            </fieldset>
+
+            <div class="onboarding-step__actions">
+              <button class="button button--secondary" type="button" data-action="prev-step">
+                Voltar
+              </button>
+              <div class="onboarding-step__forward">
+                <p class="onboarding-step__help" id="level-step-help" data-step-help>
+                  Escolha seu nível para continuar.
+                </p>
+                <button
+                  class="button button--primary"
+                  type="button"
+                  data-action="next-step"
+                  aria-describedby="level-step-help"
+                  disabled
+                >
+                  Continuar
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <section
+            class="onboarding-step"
+            data-step="3"
+            aria-labelledby="goals-title"
+            aria-describedby="goals-description"
+            hidden
+          >
+            <header class="onboarding-step__header">
+              <h1 class="onboarding-step__title" id="goals-title">Qual é o seu objetivo?</h1>
+              <p class="onboarding-step__description" id="goals-description">
+                Selecione tudo que se aplica a você.
+              </p>
+            </header>
+
+            <fieldset class="choice-group" aria-describedby="goals-error">
+              <legend class="visually-hidden">Selecione seus objetivos</legend>
+              <div class="choice-group__list">
+                <div class="choice-option">
+                  <input
+                    class="choice-option__input"
+                    id="goal-songs"
+                    name="goals"
+                    type="checkbox"
+                    value="learn-songs"
+                    data-option="goal"
+                  >
+                  <label class="choice-option__label" for="goal-songs">
+                    <span class="choice-option__name">Aprender músicas</span>
+                  </label>
+                </div>
+                <div class="choice-option">
+                  <input
+                    class="choice-option__input"
+                    id="goal-theory"
+                    name="goals"
+                    type="checkbox"
+                    value="learn-theory"
+                    data-option="goal"
+                  >
+                  <label class="choice-option__label" for="goal-theory">
+                    <span class="choice-option__name">Aprender teoria</span>
+                  </label>
+                </div>
+                <div class="choice-option">
+                  <input
+                    class="choice-option__input"
+                    id="goal-technique"
+                    name="goals"
+                    type="checkbox"
+                    value="improve-technique"
+                    data-option="goal"
+                  >
+                  <label class="choice-option__label" for="goal-technique">
+                    <span class="choice-option__name">Melhorar minha técnica</span>
+                  </label>
+                </div>
+                <div class="choice-option">
+                  <input
+                    class="choice-option__input"
+                    id="goal-fun"
+                    name="goals"
+                    type="checkbox"
+                    value="play-for-fun"
+                    data-option="goal"
+                  >
+                  <label class="choice-option__label" for="goal-fun">
+                    <span class="choice-option__name">Tocar por diversão</span>
+                  </label>
+                </div>
+              </div>
+              <p class="choice-group__error" id="goals-error" data-field-error="goals" aria-live="polite"></p>
+            </fieldset>
+
+            <div class="onboarding-step__actions">
+              <button class="button button--secondary" type="button" data-action="prev-step">
+                Voltar
+              </button>
+              <div class="onboarding-step__forward">
+                <p class="onboarding-step__help" id="goals-step-help" data-step-help>
+                  Selecione pelo menos um objetivo para começar.
+                </p>
+                <button
+                  class="button button--primary"
+                  type="submit"
+                  data-action="finish"
+                  aria-describedby="goals-step-help"
+                  disabled
+                >
+                  Começar minha jornada 🚀
+                </button>
+              </div>
+            </div>
+          </section>
+        </form>
+      </div>
+    </main>
+
+    <div class="app-feedback" data-app-feedback role="status" aria-live="polite" aria-atomic="true"></div>
+    <div
+      class="toast-region"
+      data-toast-container
+      role="status"
+      aria-live="polite"
+      aria-relevant="additions text"
+    ></div>
+  </body>
+</html>
