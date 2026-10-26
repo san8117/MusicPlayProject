@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Início | MUSICPLAY</title>
+    <meta
+      name="description"
+      content="Acompanhe seu progresso musical, continue uma aula e descubra atividades recomendadas para você."
+    >
+    <link rel="stylesheet" href="../css/main.css">
+    <script type="module" src="../js/main.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Pular para o conteúdo</a>
+    <div class="app-shell">
+      <nav class="app-nav" aria-label="Navegação principal">
+        <a class="brand app-nav__brand" href="./dashboard.html" aria-label="MUSICPLAY, início">
+          <span class="brand__text">MUSICPLAY</span>
+        </a>
+        <ul class="app-nav__list">
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./dashboard.html" aria-current="page">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m3 10 9-7 9 7"></path>
+                <path d="M5 9v11h14V9"></path>
+                <path d="M9 20v-6h6v6"></path>
+              </svg>
+              <span>Início</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./learn.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path>
+                <path d="M8 7h8M8 11h6"></path>
+              </svg>
+              <span>Aprender</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./games.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M6 12h4m-2-2v4"></path>
+                <path d="M15.5 11h.01M18 13.5h.01"></path>
+                <path d="M6.5 7h11a4.5 4.5 0 0 1 4.4 5.4l-1 4.5a2.5 2.5 0 0 1-4.1 1.3L14 16H10l-2.8 2.2a2.5 2.5 0 0 1-4.1-1.3l-1-4.5A4.5 4.5 0 0 1 6.5 7Z"></path>
+              </svg>
+              <span>Jogos</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./songs.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 18V5l12-2v13"></path>
+                <circle cx="6" cy="18" r="3"></circle>
+                <circle cx="18" cy="16" r="3"></circle>
+              </svg>
+              <span>Músicas</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./achievements.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="8" r="6"></circle>
+                <path d="M8.2 13.2 7 22l5-3 5 3-1.2-8.8"></path>
+                <path d="m10 8 1.3 1.3L14 6.5"></path>
+              </svg>
+              <span>Conquistas</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./profile.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="8" r="4"></circle>
+                <path d="M4 21a8 8 0 0 1 16 0"></path>
+              </svg>
+              <span>Perfil</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <main class="app-main" id="main-content">
+        <header class="dashboard-header">
+          <div class="dashboard-header__greeting">
+            <p class="dashboard-header__welcome" data-user-greeting>Bem-vindo de volta</p>
+            <h1 class="dashboard-header__title">Olá, <span data-user="first-name">Aluno</span>! 👋</h1>
+            <p class="dashboard-header__description">Continue sua jornada musical.</p>
+          </div>
+        </header>
+
+        <section class="dashboard-stats" aria-label="Suas estatísticas">
+          <article class="stat-card">
+            <h2 class="stat-card__label">Sequência</h2>
+            <p class="stat-card__value"><span data-user="streak">0</span> <span class="stat-card__unit">dias</span></p>
+          </article>
+          <article class="stat-card">
+            <h2 class="stat-card__label">XP Total</h2>
+            <p class="stat-card__value"><span data-user="xp">0</span> <span class="stat-card__unit">XP</span></p>
+          </article>
+          <article class="stat-card">
+            <h2 class="stat-card__label">Conquistas</h2>
+            <p class="stat-card__value"><span data-user="achievements-count">0</span></p>
+          </article>
+        </section>
+
+        <section class="level-card" aria-labelledby="level-card-title">
+          <div class="level-card__heading">
+            <p class="level-card__badge" data-user="level">Nível 1</p>
+            <h2 class="level-card__title" id="level-card-title" data-user="level-title">Músico Iniciante</h2>
+          </div>
+          <div class="level-card__progress">
+            <div class="level-card__progress-labels">
+              <span data-user-level-xp>0 / 100 XP</span>
+              <span>100 XP para o Nível 2</span>
+            </div>
+            <progress class="level-card__progress-bar" data-level-progress value="0" max="100" aria-label="Progresso até o Nível 2">
+              0 de 100 XP
+            </progress>
+          </div>
+        </section>
+
+        <section class="continue-card" aria-labelledby="continue-card-title">
+          <div class="continue-card__content">
+            <p class="continue-card__eyebrow">Sua trilha de aprendizagem</p>
+            <h2 class="continue-card__title" id="continue-card-title" data-current-lesson-title>
+              Comece sua primeira aula
+            </h2>
+            <p class="continue-card__description" data-current-lesson-description>
+              Dê o primeiro passo e descubra o instrumento que você escolheu.
+            </p>
+            <div class="continue-card__metadata">
+              <span class="badge" data-current-module>Módulo 1</span>
+              <span data-current-lesson-time>Tempo estimado: 10 min</span>
+              <span data-current-lesson-completion>0% concluído</span>
+            </div>
+            <progress
+              class="continue-card__progress-bar"
+              data-current-lesson-progress
+              value="0"
+              max="100"
+              aria-label="Progresso da aula atual"
+            >
+              0% concluído
+            </progress>
+            <a class="button button--primary" href="./lesson.html" data-action="continue-lesson">
+              Continuar aula
+            </a>
+          </div>
+        </section>
+
+        <aside class="personal-tip" aria-labelledby="personal-tip-title">
+          <span class="personal-tip__icon" aria-hidden="true">💡</span>
+          <div class="personal-tip__content">
+            <h2 class="personal-tip__title" id="personal-tip-title">Dica personalizada</h2>
+            <p class="personal-tip__text" data-personal-tip>
+              Separe alguns minutos para praticar com calma. A constância ajuda você a avançar no seu ritmo.
+            </p>
+          </div>
+        </aside>
+
+        <section class="recommendations" aria-labelledby="recommendations-title">
+          <div class="section-heading">
+            <h2 class="section-heading__title" id="recommendations-title">Recomendado para você</h2>
+            <a class="section-heading__link" href="./learn.html">Ver tudo</a>
+          </div>
+          <div class="recommendations__grid">
+            <article class="recommendation-card">
+              <p class="recommendation-card__type">Aula</p>
+              <h3 class="recommendation-card__title" data-recommendation="lesson-title">Sua primeira aula</h3>
+              <p class="recommendation-card__description">Conheça os primeiros passos do seu instrumento.</p>
+              <p class="recommendation-card__xp">+40 XP</p>
+              <a class="recommendation-card__link" href="./lesson.html">Ver aula</a>
+            </article>
+            <article class="recommendation-card">
+              <p class="recommendation-card__type">Jogo</p>
+              <h3 class="recommendation-card__title">Desafio musical</h3>
+              <p class="recommendation-card__description">Pratique percepção musical com um desafio.</p>
+              <p class="recommendation-card__xp">+20 XP</p>
+              <a class="recommendation-card__link" href="./games.html">Explorar jogos</a>
+            </article>
+            <article class="recommendation-card">
+              <p class="recommendation-card__type">Música</p>
+              <h3 class="recommendation-card__title">Hora de explorar músicas</h3>
+              <p class="recommendation-card__description">Descubra músicas para acompanhar seus estudos.</p>
+              <p class="recommendation-card__xp">+30 XP</p>
+              <a class="recommendation-card__link" href="./songs.html">Ver músicas</a>
+            </article>
+          </div>
+        </section>
+
+        <section class="quick-links" aria-labelledby="quick-links-title">
+          <h2 class="section-heading__title" id="quick-links-title">Atalhos</h2>
+          <ul class="quick-links__grid">
+            <li><a class="quick-link-card" href="./learn.html">Aulas</a></li>
+            <li><a class="quick-link-card" href="./games.html">Jogos</a></li>
+            <li><a class="quick-link-card" href="./songs.html">Músicas</a></li>
+            <li><a class="quick-link-card" href="./quiz.html">Teoria</a></li>
+          </ul>
+        </section>
+
+        <section class="recent-achievements" aria-labelledby="recent-achievements-title">
+          <div class="section-heading">
+            <h2 class="section-heading__title" id="recent-achievements-title">Conquistas recentes</h2>
+            <a class="section-heading__link" href="./achievements.html">Ver todas</a>
+          </div>
+          <ul class="recent-achievements__list" data-achievements-list aria-label="Suas conquistas recentes"></ul>
+          <div class="empty-state" data-achievements-empty hidden>
+            <p>Complete sua primeira aula para ganhar sua primeira conquista 🏆</p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="app-feedback" data-app-feedback role="status" aria-live="polite" aria-atomic="true"></div>
+    <div
+      class="toast-region"
+      data-toast-container
+      role="status"
+      aria-live="polite"
+      aria-relevant="additions text"
+    ></div>
+  </body>
+</html>

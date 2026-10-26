@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Aprender | MUSICPLAY</title>
+    <meta
+      name="description"
+      content="Acompanhe sua trilha de aprendizagem musical, veja as aulas liberadas e avance no seu ritmo."
+    >
+    <link rel="stylesheet" href="../css/main.css">
+    <script type="module" src="../js/main.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Pular para o conteúdo</a>
+    <div class="app-shell">
+      <nav class="app-nav" aria-label="Navegação principal">
+        <a class="brand app-nav__brand" href="./dashboard.html" aria-label="MUSICPLAY, início">
+          <span class="brand__text">MUSICPLAY</span>
+        </a>
+        <ul class="app-nav__list">
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./dashboard.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m3 10 9-7 9 7"></path>
+                <path d="M5 9v11h14V9"></path>
+                <path d="M9 20v-6h6v6"></path>
+              </svg>
+              <span>Início</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./learn.html" aria-current="page">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path>
+                <path d="M8 7h8M8 11h6"></path>
+              </svg>
+              <span>Aprender</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./games.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M6 12h4m-2-2v4"></path>
+                <path d="M15.5 11h.01M18 13.5h.01"></path>
+                <path d="M6.5 7h11a4.5 4.5 0 0 1 4.4 5.4l-1 4.5a2.5 2.5 0 0 1-4.1 1.3L14 16H10l-2.8 2.2a2.5 2.5 0 0 1-4.1-1.3l-1-4.5A4.5 4.5 0 0 1 6.5 7Z"></path>
+              </svg>
+              <span>Jogos</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./songs.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 18V5l12-2v13"></path>
+                <circle cx="6" cy="18" r="3"></circle>
+                <circle cx="18" cy="16" r="3"></circle>
+              </svg>
+              <span>Músicas</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./achievements.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="8" r="6"></circle>
+                <path d="M8.2 13.2 7 22l5-3 5 3-1.2-8.8"></path>
+                <path d="m10 8 1.3 1.3L14 6.5"></path>
+              </svg>
+              <span>Conquistas</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./profile.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="8" r="4"></circle>
+                <path d="M4 21a8 8 0 0 1 16 0"></path>
+              </svg>
+              <span>Perfil</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <main class="app-main learn-page" id="main-content">
+        <header class="learn-page__header">
+          <h1 class="learn-page__title">Trilha de Aprendizado 🎸</h1>
+          <p class="learn-page__description" data-user="instrument-journey">Siga a jornada progressiva</p>
+        </header>
+
+        <section class="learning-progress" aria-labelledby="learning-progress-title">
+          <div class="learning-progress__labels">
+            <h2 class="learning-progress__title" id="learning-progress-title">Seu progresso</h2>
+            <p class="learning-progress__count" data-user="lessons-progress">0 / 12 aulas</p>
+          </div>
+          <progress class="learning-progress__bar" data-lessons-progress value="0" max="12" aria-label="Progresso geral das aulas">
+            0 de 12 aulas
+          </progress>
+        </section>
+
+        <section class="learning-module" data-module-id="module-1" aria-labelledby="module-1-title">
+          <header class="learning-module__header">
+            <div>
+              <p class="learning-module__eyebrow">Módulo 1</p>
+              <h2 class="learning-module__title" id="module-1-title">Primeiros Passos</h2>
+            </div>
+            <p class="learning-module__progress" data-module-progress="module-1">0 / 5 aulas</p>
+          </header>
+          <ol class="lesson-list" aria-label="Aulas do módulo Primeiros Passos">
+            <li class="lesson-list__item" data-lesson-id="lesson-1" data-state="current">
+              <a class="lesson-item lesson-item--current" href="./lesson.html" aria-current="step">
+                <span class="lesson-item__number" aria-hidden="true">1</span>
+                <span class="lesson-item__content">
+                  <span class="lesson-item__title">Conhecendo o violão</span>
+                  <span class="lesson-item__status visually-hidden">Em andamento</span>
+                </span>
+                <span class="lesson-item__xp">+30 XP</span>
+              </a>
+            </li>
+            <li class="lesson-list__item" data-lesson-id="lesson-2" data-state="locked">
+              <span class="lesson-item lesson-item--locked" aria-disabled="true">
+                <span class="lesson-item__number" aria-hidden="true">2</span>
+                <span class="lesson-item__content">
+                  <span class="lesson-item__title">Como segurar o instrumento</span>
+                  <span class="lesson-item__status visually-hidden">Bloqueada</span>
+                </span>
+                <span class="lesson-item__xp">+30 XP</span>
+              </span>
+            </li>
+            <li class="lesson-list__item" data-lesson-id="lesson-3" data-state="locked">
+              <span class="lesson-item lesson-item--locked" aria-disabled="true">
+                <span class="lesson-item__number" aria-hidden="true">3</span>
+                <span class="lesson-item__content">
+                  <span class="lesson-item__title">Conhecendo as cordas</span>
+                  <span class="lesson-item__status visually-hidden">Bloqueada</span>
+                </span>
+                <span class="lesson-item__xp">+30 XP</span>
+              </span>
+            </li>
+            <li class="lesson-list__item" data-lesson-id="lesson-4" data-state="locked">
+              <span class="lesson-item lesson-item--locked" aria-disabled="true">
+                <span class="lesson-item__number" aria-hidden="true">4</span>
+                <span class="lesson-item__content">
+                  <span class="lesson-item__title">Primeiros acordes</span>
+                  <span class="lesson-item__status visually-hidden">Bloqueada</span>
+                </span>
+                <span class="lesson-item__xp">+40 XP</span>
+              </span>
+            </li>
+            <li class="lesson-list__item" data-lesson-id="lesson-5" data-state="locked">
+              <span class="lesson-item lesson-item--locked" aria-disabled="true">
+                <span class="lesson-item__number" aria-hidden="true">5</span>
+                <span class="lesson-item__content">
+                  <span class="lesson-item__title">Dedilhado básico</span>
+                  <span class="lesson-item__status visually-hidden">Bloqueada</span>
+                </span>
+                <span class="lesson-item__xp">+40 XP</span>
+              </span>
+            </li>
+          </ol>
+        </section>
+
+        <section
+          class="learning-module learning-module--locked"
+          data-module-id="module-2"
+          data-state="locked"
+          aria-labelledby="module-2-title"
+          aria-describedby="module-2-lock-message"
+        >
+          <header class="learning-module__header">
+            <div>
+              <p class="learning-module__eyebrow">Módulo 2</p>
+              <h2 class="learning-module__title" id="module-2-title">Ritmo e Coordenação</h2>
+            </div>
+            <p class="learning-module__progress" data-module-progress="module-2">Bloqueado</p>
+          </header>
+          <p class="learning-module__lock-message" id="module-2-lock-message">
+            Complete o módulo anterior para desbloquear.
+          </p>
+          <ol class="lesson-list" aria-label="Aulas bloqueadas do módulo Ritmo e Coordenação">
+            <li class="lesson-list__item" data-lesson-id="lesson-6" data-state="locked">
+              <span class="lesson-item lesson-item--locked" aria-disabled="true">
+                <span class="lesson-item__number" aria-hidden="true">6</span>
+                <span class="lesson-item__content">
+                  <span class="lesson-item__title">Ritmos básicos</span>
+                  <span class="lesson-item__status visually-hidden">Bloqueada</span>
+                </span>
+                <span class="lesson-item__xp">+30 XP</span>
+              </span>
+            </li>
+            <li class="lesson-list__item" data-lesson-id="lesson-7" data-state="locked">
+              <span class="lesson-item lesson-item--locked" aria-disabled="true">
+                <span class="lesson-item__number" aria-hidden="true">7</span>
+                <span class="lesson-item__content">
+                  <span class="lesson-item__title">Batida simples</span>
+                  <span class="lesson-item__status visually-hidden">Bloqueada</span>
+                </span>
+                <span class="lesson-item__xp">+30 XP</span>
+              </span>
+            </li>
+          </ol>
+        </section>
+      </main>
+    </div>
+
+    <div class="app-feedback" data-app-feedback role="status" aria-live="polite" aria-atomic="true"></div>
+    <div
+      class="toast-region"
+      data-toast-container
+      role="status"
+      aria-live="polite"
+      aria-relevant="additions text"
+    ></div>
+  </body>
+</html>

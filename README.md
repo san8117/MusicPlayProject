@@ -329,15 +329,15 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 
 - [x] 1.1 — HTML da landing page, cadastro e login.
 - [x] 1.2 — HTML do onboarding de três passos.
-- [ ] 1.3 — Tokens, reset, tipografia e utilitários CSS.
+- [x] 1.3 — HTML do dashboard e da trilha Aprender.
 - [ ] 1.4 — Componentes e layouts compartilhados.
-- [ ] 1.5 — Revisão visual e responsiva das páginas públicas.
+- [ ] 1.5 — Base visual, estilos responsivos e revisão contra o Figma.
 
 ### Fase 2 — Área do aluno e aprendizagem
 
 - [ ] 2.1 — Shell autenticado e navegação responsiva.
-- [ ] 2.2 — Dashboard personalizado.
-- [ ] 2.3 — Trilha Aprender.
+- [ ] 2.2 — Integração funcional dos dados personalizados no dashboard.
+- [ ] 2.3 — Integração funcional do progresso e estados da trilha.
 - [ ] 2.4 — Aula e conclusão.
 - [ ] 2.5 — Jogos.
 - [ ] 2.6 — Músicas.
@@ -371,6 +371,9 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - A landing apresenta os destaques definidos, quatro passos do fluxo e seis recursos baseados nas áreas já previstas para o produto.
 - O onboarding é uma única página com três seções de etapa; somente a etapa inicial fica visível no HTML e os controles de avanço e conclusão começam desabilitados, com texto explicativo associado por `aria-describedby`.
 - As escolhas de instrumento e nível são grupos de radio com seleção única; objetivos são checkboxes de seleção múltipla. A página não inclui navegação do app.
+- Dashboard e Aprender compartilham a mesma marcação de navegação com seis itens e ícones SVG em traço consistente; cada página marca o item atual com `aria-current="page"`.
+- O dashboard usa valores neutros de aluno novo, mantém o estado vazio de conquistas oculto por padrão e oferece marcadores `data-*` para preenchimento posterior.
+- A trilha apresenta as sete aulas especificadas, com a Aula 1 em andamento e as demais bloqueadas; o progresso total permanece em 0 / 12 e não foram inventadas as cinco aulas não descritas.
 
 ### Suposições
 
@@ -378,6 +381,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - A página de login não tem tela de referência no Figma; foi criada no mesmo padrão estrutural do cadastro, com e-mail, senha, ação de entrar e link para criar conta.
 - O checklist 1.1–1.5 foi alinhado à divisão de etapas informada para esta implementação; as páginas futuras continuam pendentes.
 - O detalhe “48 aulas disponíveis” é exibido somente para Violão, como exemplo informado, sem inferir a quantidade de aulas dos outros instrumentos.
+- Como a trilha fornecida descreve apenas sete das 12 aulas totais, as cinco restantes não foram nomeadas ou representadas como conteúdo inventado.
 
 ## Pendências conhecidas
 
@@ -386,6 +390,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - Os ícones de Músicas e Perfil aparecem como círculos/quebrados; usar nota musical e usuário em SVG.
 - “Setembro 2024” no calendário é dado de exemplo visual, não uma data fixa. O calendário deve representar os dados reais do aluno.
 - Conferir a fidelidade visual das páginas públicas com as referências do Figma antes ou durante a etapa de estilos; os detalhes de apresentação ainda não foram implementados nesta fase HTML.
+- As imagens do Figma não estavam acessíveis nos arquivos do workspace durante as etapas HTML; conferir todas as páginas com as referências visuais quando estiverem disponíveis no workspace.
 - Os limites exatos de níveis, regras de sequência e critérios de desbloqueio de conquistas precisam ser definidos antes de codificar quando as referências não forem suficientes.
 
 ## Créditos
