@@ -208,13 +208,13 @@ Os critérios precisos de desbloqueio devem corresponder às atividades do produ
 
 ```text
 musicplay/
-├── index.html                         # Landing page (etapa posterior)
+├── index.html                         # Landing page
 ├── .gitignore
 ├── .editorconfig
 ├── README.md
 ├── pages/
-│   ├── signup.html                    # Cadastro (etapa posterior)
-│   ├── login.html                     # Login (etapa posterior)
+│   ├── signup.html                    # Cadastro
+│   ├── login.html                     # Login
 │   ├── onboarding.html                # Onboarding de três passos
 │   ├── dashboard.html                 # Início da área logada
 │   ├── learn.html                     # Trilha de aprendizagem
@@ -313,7 +313,7 @@ Como o projeto usa ES Modules, abrir `index.html` diretamente por `file://` não
 2. Iniciar a extensão Live Server (ou outro servidor estático local) na raiz do projeto.
 3. Acessar no navegador o endereço local informado pelo servidor.
 
-Não é necessário build ou backend. As páginas serão adicionadas nas etapas de implementação; até lá, a estrutura de setup pode não conter uma aplicação navegável.
+Não é necessário build ou backend. As páginas HTML públicas iniciais já existem; os arquivos CSS e JavaScript referenciados no HTML serão criados em etapas posteriores. Até que esses arquivos sejam implementados, as páginas não terão estilo nem comportamento funcional completo.
 
 ## Plano de desenvolvimento
 
@@ -327,11 +327,11 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 
 ### Fase 1 — Base visual e páginas públicas
 
-- [ ] 1.1 — Tokens, reset, tipografia e utilitários CSS.
-- [ ] 1.2 — Componentes e layouts compartilhados.
-- [ ] 1.3 — Landing page.
-- [ ] 1.4 — Cadastro e login.
-- [ ] 1.5 — Onboarding de três passos.
+- [x] 1.1 — HTML da landing page, cadastro e login.
+- [ ] 1.2 — HTML do onboarding de três passos.
+- [ ] 1.3 — Tokens, reset, tipografia e utilitários CSS.
+- [ ] 1.4 — Componentes e layouts compartilhados.
+- [ ] 1.5 — Revisão visual e responsiva das páginas públicas.
 
 ### Fase 2 — Área do aluno e aprendizagem
 
@@ -364,7 +364,17 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 
 ### Decisões
 
+- A Etapa 1.1 cria somente HTML para landing, cadastro e login; CSS e JavaScript ficam para etapas posteriores.
+- As três páginas incluem links previstos para `css/main.css` e `js/main.js`, conforme o padrão solicitado para todas as páginas.
+- O cadastro solicita nome, sobrenome, e-mail, senha com mínimo de seis caracteres e aceite dos termos; login solicita e-mail e senha.
+- Os formulários têm labels, parágrafos de erro ligados por `aria-describedby`, regiões de feedback acessíveis e controles de mostrar/ocultar senha.
+- A landing apresenta os destaques definidos, quatro passos do fluxo e seis recursos baseados nas áreas já previstas para o produto.
+
 ### Suposições
+
+- Como não havia imagens do Figma acessíveis nos arquivos do projeto durante esta etapa, o HTML foi organizado segundo a estrutura e os textos descritos no pedido; a fidelidade visual ainda deve ser conferida com as referências antes da estilização.
+- A página de login não tem tela de referência no Figma; foi criada no mesmo padrão estrutural do cadastro, com e-mail, senha, ação de entrar e link para criar conta.
+- O checklist 1.1–1.5 foi alinhado à divisão de etapas informada para esta implementação; as páginas futuras continuam pendentes.
 
 ## Pendências conhecidas
 
@@ -372,7 +382,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - Há um frame do Figma com sidebar dentro de um celular; tratar como erro de design e usar barra inferior em mobile.
 - Os ícones de Músicas e Perfil aparecem como círculos/quebrados; usar nota musical e usuário em SVG.
 - “Setembro 2024” no calendário é dado de exemplo visual, não uma data fixa. O calendário deve representar os dados reais do aluno.
-- As telas do Figma são a referência visual. Se uma tela estiver ausente ou houver ambiguidade, perguntar antes de inventar detalhes.
+- As imagens do Figma não estavam acessíveis nos arquivos do workspace durante a Etapa 1.1; conferir as páginas com as referências antes de definir os estilos e perguntar se houver tela ou detalhe ambíguo.
 - Os limites exatos de níveis, regras de sequência e critérios de desbloqueio de conquistas precisam ser definidos antes de codificar quando as referências não forem suficientes.
 
 ## Créditos
