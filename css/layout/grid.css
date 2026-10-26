@@ -10,3 +10,20 @@
 .grid--auto-fit {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
 }
+
+.grid--three-columns,
+.grid--four-columns {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 48rem) {
+  .grid--three-columns {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .grid--four-columns {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

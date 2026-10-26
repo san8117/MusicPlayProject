@@ -1,1 +1,136 @@
-/* Reserved for signup and login page styles. */
+.auth-page {
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: var(--space-6) var(--container-gutter);
+  background:
+    radial-gradient(ellipse at 50% 0%, rgb(150 56 245 / 12%), transparent 38%),
+    var(--color-background);
+}
+
+.auth-page__container {
+  display: grid;
+  width: min(100%, 32rem);
+  min-height: calc(100svh - (var(--space-6) * 2));
+  align-content: start;
+  justify-items: center;
+  gap: var(--space-6);
+  margin-inline: auto;
+}
+
+.auth-page__brand {
+  margin-block: var(--space-3);
+  text-decoration: none;
+}
+
+.auth-card {
+  width: 100%;
+  padding: clamp(1.25rem, 5vw, 2rem);
+}
+
+.auth-card__header {
+  justify-items: center;
+  gap: var(--space-2);
+  text-align: center;
+}
+
+.auth-card__title {
+  font-size: var(--font-size-2xl);
+}
+
+.auth-card__description {
+  font-size: var(--font-size-sm);
+}
+
+.auth-form {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.auth-form > :nth-child(n + 3) {
+  grid-column: 1 / -1;
+}
+
+.auth-form__submit {
+  width: 100%;
+}
+
+.form-field__error:not(:empty)::before {
+  content: "⚠ ";
+  font-weight: 700;
+}
+
+.auth-card__footer {
+  margin-block-start: var(--space-5);
+  font-size: var(--font-size-sm);
+  text-align: center;
+}
+
+@media (min-width: 64rem) {
+  .auth-page {
+    display: grid;
+    align-items: center;
+    padding-block: var(--space-8);
+  }
+
+  .auth-page__container {
+    width: min(100%, 72rem);
+    min-height: min(46rem, calc(100svh - (var(--space-8) * 2)));
+    grid-template-columns: minmax(0, 0.9fr) minmax(24rem, 1.1fr);
+    grid-template-rows: auto 1fr;
+    column-gap: clamp(3rem, 8vw, 7rem);
+    row-gap: var(--space-4);
+    align-items: center;
+    justify-items: stretch;
+  }
+
+  .auth-page__brand {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+  }
+
+  .auth-card {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    grid-template-columns: subgrid;
+    align-items: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .auth-card__header {
+    grid-column: 1;
+    justify-items: start;
+    align-self: start;
+    text-align: start;
+  }
+
+  .auth-card__title {
+    max-width: 12ch;
+    font-size: var(--font-size-3xl);
+  }
+
+  .auth-card__description {
+    max-width: 32ch;
+    font-size: var(--font-size-md);
+  }
+
+  .auth-form {
+    grid-column: 2;
+    align-self: center;
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-card);
+  }
+
+  .auth-card__footer {
+    grid-column: 2;
+    margin-block-start: 0;
+    text-align: center;
+  }
+}

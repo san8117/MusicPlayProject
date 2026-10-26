@@ -12,11 +12,6 @@
   display: none;
 }
 
-.container {
-  width: min(100% - (var(--container-gutter) * 2), var(--container-width));
-  margin-inline: auto;
-}
-
 .skip-link {
   position: fixed;
   z-index: var(--z-index-dialog);

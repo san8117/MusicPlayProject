@@ -336,12 +336,12 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 ### Fase 2 — Área do aluno e aprendizagem
 
 - [x] 2.1 — Fundação CSS: tokens, reset, tipografia, utilitários e componentes base.
-- [ ] 2.2 — Shell autenticado e navegação responsiva.
-- [ ] 2.3 — Estilos específicos das páginas e comparação responsiva com o Figma.
-- [ ] 2.4 — Comportamento da aula e conclusão.
-- [ ] 2.5 — Comportamento dos jogos.
-- [ ] 2.6 — Comportamento e progresso da biblioteca de músicas.
-- [ ] 2.7 — Integração de estatísticas, conquistas e calendário do perfil.
+- [x] 2.2 — Estilos da landing page, cadastro e login.
+- [ ] 2.3 — Estilos do onboarding.
+- [ ] 2.4 — Estilos do dashboard e da trilha Aprender.
+- [ ] 2.5 — Estilos da aula, jogos e Quiz Musical.
+- [ ] 2.6 — Estilos de Músicas, Conquistas e Perfil.
+- [ ] 2.7 — Revisão responsiva e comparação das páginas com o Figma.
 
 ### Fase 3 — Dados e gamificação
 
@@ -385,6 +385,10 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - A tipografia usa Poppins para títulos e Inter para textos via Google Fonts com `display=swap`, importadas pela folha `typography.css`, sem alterar a estrutura HTML.
 - `css/main.css` contém somente imports, agrupados na ordem base, layout, componentes e páginas; folhas de layout e páginas ainda não implementadas foram criadas como reservas importadas.
 - Componentes base incluem botões, cards, formulários, badges, progresso e toasts, com estados acessíveis, foco visível, transições e respeito a `prefers-reduced-motion`.
+- A Etapa 2.2 estiliza a landing e as páginas de cadastro e login sem alterar a semântica HTML; foi adicionado apenas um `span` no título da landing para aplicar o gradiente somente a “forma incrível”.
+- Os destaques da landing passam de uma coluna para três em 768 px; etapas passam a quatro colunas em 1024 px; recursos ficam em duas colunas no mobile e três em 768 px.
+- O botão “Entrar” do cabeçalho da landing fica oculto até 640 px. A área de autenticação coloca nome e sobrenome lado a lado no mobile e, em desktop, mantém o título à esquerda e o formulário em card à direita.
+- Os estados de erro das páginas de autenticação reaproveitam os estilos de `.form-field` e acrescentam um ícone de alerta antes da mensagem não vazia; os botões e cards reutilizam os componentes compartilhados.
 
 ### Suposições
 
@@ -397,10 +401,11 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - A página Jogos apresenta descrições textuais para os títulos fornecidos; os outros jogos ainda são links demonstrativos até suas experiências serem implementadas.
 - A lista de músicas solicitada enumera sete títulos distintos; para completar oito entradas, foi incluída “Brilha, Brilha, Estrelinha” (Tradicional), uma escolha estática de repertório tradicional, sem integração a catálogo ou biblioteca externa.
 - Os exemplos de datas de desbloqueio exibidos nas capturas do Figma representam dados de demonstração; no HTML de aluno novo, todos os registros começam bloqueados e sem uma data de desbloqueio.
+- A composição visual foi implementada a partir da identidade e dos requisitos descritos; a comparação pixel a pixel com as capturas ainda precisa ser feita na revisão responsiva da Etapa 2.7.
 
 ## Pendências conhecidas
 
-- Completar estilos de layout e de cada página e conferir a renderização visual contra o Figma; a Etapa 2.1 cobre somente a fundação CSS e componentes base, não os layouts completos.
+- Completar estilos do onboarding e das páginas logadas, e conferir a renderização responsiva de todas as telas contra o Figma na Etapa 2.7.
 - Os limites exatos de níveis, regras de sequência e critérios de desbloqueio de conquistas precisam ser definidos antes de codificar quando as referências não forem suficientes.
 
 ## Créditos
