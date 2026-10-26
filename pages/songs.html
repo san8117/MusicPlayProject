@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Músicas para praticar | MUSICPLAY</title>
+    <meta
+      name="description"
+      content="Escolha uma música, pratique acordes e acompanhe seu progresso musical no MUSICPLAY."
+    >
+    <link rel="stylesheet" href="../css/main.css">
+    <script type="module" src="../js/main.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Pular para o conteúdo</a>
+    <div class="app-shell">
+      <nav class="app-nav" aria-label="Navegação principal">
+        <a class="brand app-nav__brand" href="./dashboard.html" aria-label="MUSICPLAY, início">
+          <span class="brand__text">MUSICPLAY</span>
+        </a>
+        <ul class="app-nav__list">
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./dashboard.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m3 10 9-7 9 7"></path>
+                <path d="M5 9v11h14V9"></path>
+                <path d="M9 20v-6h6v6"></path>
+              </svg>
+              <span>Início</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./learn.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path>
+                <path d="M8 7h8M8 11h6"></path>
+              </svg>
+              <span>Aprender</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./games.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M6 12h4m-2-2v4"></path>
+                <path d="M15.5 11h.01M18 13.5h.01"></path>
+                <path d="M6.5 7h11a4.5 4.5 0 0 1 4.4 5.4l-1 4.5a2.5 2.5 0 0 1-4.1 1.3L14 16H10l-2.8 2.2a2.5 2.5 0 0 1-4.1-1.3l-1-4.5A4.5 4.5 0 0 1 6.5 7Z"></path>
+              </svg>
+              <span>Jogos</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./songs.html" aria-current="page">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 18V5l12-2v13"></path>
+                <circle cx="6" cy="18" r="3"></circle>
+                <circle cx="18" cy="16" r="3"></circle>
+              </svg>
+              <span>Músicas</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./achievements.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="8" r="6"></circle>
+                <path d="M8.2 13.2 7 22l5-3 5 3-1.2-8.8"></path>
+                <path d="m10 8 1.3 1.3L14 6.5"></path>
+              </svg>
+              <span>Conquistas</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./profile.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="8" r="4"></circle>
+                <path d="M4 21a8 8 0 0 1 16 0"></path>
+              </svg>
+              <span>Perfil</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <main class="app-main songs-page" id="main-content">
+        <header class="songs-page__header">
+          <h1 class="songs-page__title">Músicas para Praticar 🎵</h1>
+          <p class="songs-page__description">Aprenda músicas reais passo a passo</p>
+        </header>
+
+        <div class="song-filters" role="group" aria-label="Filtrar músicas por nível">
+          <button class="song-filters__button" type="button" data-filter="all" aria-pressed="true">Todas</button>
+          <button class="song-filters__button" type="button" data-filter="beginner" aria-pressed="false">Iniciante</button>
+          <button class="song-filters__button" type="button" data-filter="intermediate" aria-pressed="false">Intermediário</button>
+          <button class="song-filters__button" type="button" data-filter="advanced" aria-pressed="false">Avançado</button>
+        </div>
+
+        <section class="songs-list" aria-label="Lista de músicas">
+          <article class="song-card" data-level="beginner">
+            <span class="song-card__icon" aria-hidden="true">🎵</span>
+            <div class="song-card__content">
+              <h2 class="song-card__title">Asa Branca</h2>
+              <p class="song-card__artist">Luiz Gonzaga</p>
+              <ul class="song-card__chords" aria-label="Acordes: Am, Em e C">
+                <li><span class="chord-badge">Am</span></li>
+                <li><span class="chord-badge">Em</span></li>
+                <li><span class="chord-badge">C</span></li>
+              </ul>
+              <progress class="song-card__progress" data-song-id="asa-branca" value="0" max="100" aria-label="Progresso em Asa Branca: 0%">
+                0%
+              </progress>
+              <span class="song-card__progress-label" data-song-progress-label="asa-branca">0%</span>
+            </div>
+            <div class="song-card__actions">
+              <span class="difficulty-badge difficulty-badge--easy">Iniciante</span>
+              <button class="button button--primary" type="button" data-action="practice-song" data-song-action="asa-branca">
+                Praticar
+              </button>
+            </div>
+          </article>
+
+          <article class="song-card" data-level="beginner">
+            <span class="song-card__icon" aria-hidden="true">🎵</span>
+            <div class="song-card__content">
+              <h2 class="song-card__title">Parabéns pra Você</h2>
+              <p class="song-card__artist">Tradicional</p>
+              <ul class="song-card__chords" aria-label="Acordes: G, D e C">
+                <li><span class="chord-badge">G</span></li>
+                <li><span class="chord-badge">D</span></li>
+                <li><span class="chord-badge">C</span></li>
+              </ul>
+              <progress class="song-card__progress" data-song-id="parabens-pra-voce" value="0" max="100" aria-label="Progresso em Parabéns pra Você: 0%">
+                0%
+              </progress>
+              <span class="song-card__progress-label" data-song-progress-label="parabens-pra-voce">0%</span>
+            </div>
+            <div class="song-card__actions">
+              <span class="difficulty-badge difficulty-badge--easy">Iniciante</span>
+              <button class="button button--primary" type="button" data-action="practice-song" data-song-action="parabens-pra-voce">
+                Praticar
+              </button>
+            </div>
+          </article>
+
+          <article class="song-card" data-level="beginner">
+            <span class="song-card__icon" aria-hidden="true">🎵</span>
+            <div class="song-card__content">
+              <h2 class="song-card__title">Peixe Vivo</h2>
+              <p class="song-card__artist">Folclore</p>
+              <ul class="song-card__chords" aria-label="Acordes: G e D">
+                <li><span class="chord-badge">G</span></li>
+                <li><span class="chord-badge">D</span></li>
+              </ul>
+              <progress class="song-card__progress" data-song-id="peixe-vivo" value="0" max="100" aria-label="Progresso em Peixe Vivo: 0%">
+                0%
+              </progress>
+              <span class="song-card__progress-label" data-song-progress-label="peixe-vivo">0%</span>
+            </div>
+            <div class="song-card__actions">
+              <span class="difficulty-badge difficulty-badge--easy">Iniciante</span>
+              <button class="button button--primary" type="button" data-action="practice-song" data-song-action="peixe-vivo">
+                Praticar
+              </button>
+            </div>
+          </article>
+
+          <article class="song-card" data-level="beginner">
+            <span class="song-card__icon" aria-hidden="true">🎵</span>
+            <div class="song-card__content">
+              <h2 class="song-card__title">Noite Feliz</h2>
+              <p class="song-card__artist">Franz Gruber</p>
+              <ul class="song-card__chords" aria-label="Acordes: C, G e F">
+                <li><span class="chord-badge">C</span></li>
+                <li><span class="chord-badge">G</span></li>
+                <li><span class="chord-badge">F</span></li>
+              </ul>
+              <progress class="song-card__progress" data-song-id="noite-feliz" value="0" max="100" aria-label="Progresso em Noite Feliz: 0%">
+                0%
+              </progress>
+              <span class="song-card__progress-label" data-song-progress-label="noite-feliz">0%</span>
+            </div>
+            <div class="song-card__actions">
+              <span class="difficulty-badge difficulty-badge--easy">Iniciante</span>
+              <button class="button button--primary" type="button" data-action="practice-song" data-song-action="noite-feliz">
+                Praticar
+              </button>
+            </div>
+          </article>
+
+          <article class="song-card" data-level="intermediate">
+            <span class="song-card__icon" aria-hidden="true">🎵</span>
+            <div class="song-card__content">
+              <h2 class="song-card__title">Garota de Ipanema</h2>
+              <p class="song-card__artist">Tom Jobim</p>
+              <ul class="song-card__chords" aria-label="Acordes: F, G7, Gm e F sustenido">
+                <li><span class="chord-badge">F</span></li>
+                <li><span class="chord-badge">G7</span></li>
+                <li><span class="chord-badge">Gm</span></li>
+                <li><span class="chord-badge">F#</span></li>
+              </ul>
+              <progress class="song-card__progress" data-song-id="garota-de-ipanema" value="0" max="100" aria-label="Progresso em Garota de Ipanema: 0%">
+                0%
+              </progress>
+              <span class="song-card__progress-label" data-song-progress-label="garota-de-ipanema">0%</span>
+            </div>
+            <div class="song-card__actions">
+              <span class="difficulty-badge difficulty-badge--intermediate">Intermediário</span>
+              <button class="button button--primary" type="button" data-action="practice-song" data-song-action="garota-de-ipanema">
+                Praticar
+              </button>
+            </div>
+          </article>
+
+          <article class="song-card" data-level="intermediate">
+            <span class="song-card__icon" aria-hidden="true">🎵</span>
+            <div class="song-card__content">
+              <h2 class="song-card__title">Imagine</h2>
+              <p class="song-card__artist">John Lennon</p>
+              <ul class="song-card__chords" aria-label="Acordes: C, C maior com sétima maior, F e Am">
+                <li><span class="chord-badge">C</span></li>
+                <li><span class="chord-badge">Cmaj7</span></li>
+                <li><span class="chord-badge">F</span></li>
+                <li><span class="chord-badge">Am</span></li>
+              </ul>
+              <progress class="song-card__progress" data-song-id="imagine" value="0" max="100" aria-label="Progresso em Imagine: 0%">
+                0%
+              </progress>
+              <span class="song-card__progress-label" data-song-progress-label="imagine">0%</span>
+            </div>
+            <div class="song-card__actions">
+              <span class="difficulty-badge difficulty-badge--intermediate">Intermediário</span>
+              <button class="button button--primary" type="button" data-action="practice-song" data-song-action="imagine">
+                Praticar
+              </button>
+            </div>
+          </article>
+
+          <article class="song-card" data-level="advanced">
+            <span class="song-card__icon" aria-hidden="true">🎵</span>
+            <div class="song-card__content">
+              <h2 class="song-card__title">Hotel California</h2>
+              <p class="song-card__artist">Eagles</p>
+              <ul class="song-card__chords" aria-label="Acordes: Am, E, G, D, F e C">
+                <li><span class="chord-badge">Am</span></li>
+                <li><span class="chord-badge">E</span></li>
+                <li><span class="chord-badge">G</span></li>
+                <li><span class="chord-badge">D</span></li>
+                <li><span class="chord-badge">F</span></li>
+                <li><span class="chord-badge">C</span></li>
+              </ul>
+              <progress class="song-card__progress" data-song-id="hotel-california" value="0" max="100" aria-label="Progresso em Hotel California: 0%">
+                0%
+              </progress>
+              <span class="song-card__progress-label" data-song-progress-label="hotel-california">0%</span>
+            </div>
+            <div class="song-card__actions">
+              <span class="difficulty-badge difficulty-badge--advanced">Avançado</span>
+              <button class="button button--primary" type="button" data-action="practice-song" data-song-action="hotel-california">
+                Praticar
+              </button>
+            </div>
+          </article>
+
+          <article class="song-card" data-level="beginner">
+            <span class="song-card__icon" aria-hidden="true">🎵</span>
+            <div class="song-card__content">
+              <h2 class="song-card__title">Brilha, Brilha, Estrelinha</h2>
+              <p class="song-card__artist">Tradicional</p>
+              <ul class="song-card__chords" aria-label="Acordes: C, F e G">
+                <li><span class="chord-badge">C</span></li>
+                <li><span class="chord-badge">F</span></li>
+                <li><span class="chord-badge">G</span></li>
+              </ul>
+              <progress class="song-card__progress" data-song-id="brilha-brilha-estrelinha" value="0" max="100" aria-label="Progresso em Brilha, Brilha, Estrelinha: 0%">
+                0%
+              </progress>
+              <span class="song-card__progress-label" data-song-progress-label="brilha-brilha-estrelinha">0%</span>
+            </div>
+            <div class="song-card__actions">
+              <span class="difficulty-badge difficulty-badge--easy">Iniciante</span>
+              <button class="button button--primary" type="button" data-action="practice-song" data-song-action="brilha-brilha-estrelinha">
+                Praticar
+              </button>
+            </div>
+          </article>
+        </section>
+
+        <p class="songs-empty-state" data-songs-empty role="status" aria-live="polite" hidden>
+          Nenhuma música nesse nível por enquanto.
+        </p>
+      </main>
+    </div>
+
+    <div class="app-feedback" data-app-feedback role="status" aria-live="polite" aria-atomic="true"></div>
+    <div
+      class="toast-region"
+      data-toast-container
+      role="status"
+      aria-live="polite"
+      aria-relevant="additions text"
+    ></div>
+  </body>
+</html>

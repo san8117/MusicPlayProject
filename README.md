@@ -325,13 +325,13 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 
 - [x] 0 — Estrutura inicial, arquivos de configuração e README completo (sem páginas HTML, CSS ou JS).
 
-### Fase 1 — Base visual e páginas públicas
+### Fase 1 — Estrutura HTML das páginas
 
 - [x] 1.1 — HTML da landing page, cadastro e login.
 - [x] 1.2 — HTML do onboarding de três passos.
 - [x] 1.3 — HTML do dashboard e da trilha Aprender.
 - [x] 1.4 — HTML da aula, jogos e Quiz Musical.
-- [ ] 1.5 — Base visual, estilos responsivos e revisão contra o Figma.
+- [x] 1.5 — HTML de Músicas, Conquistas e Perfil.
 
 ### Fase 2 — Área do aluno e aprendizagem
 
@@ -340,8 +340,8 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - [ ] 2.3 — Integração funcional do progresso e estados da trilha.
 - [ ] 2.4 — Comportamento da aula e conclusão.
 - [ ] 2.5 — Comportamento dos jogos.
-- [ ] 2.6 — Músicas.
-- [ ] 2.7 — Perfil, estatísticas e calendário.
+- [ ] 2.6 — Comportamento e progresso da biblioteca de músicas.
+- [ ] 2.7 — Integração de estatísticas, conquistas e calendário do perfil.
 
 ### Fase 3 — Dados e gamificação
 
@@ -377,6 +377,10 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - Aula, Jogos e Quiz repetem a mesma navegação autenticada de seis itens; a Aula ativa Aprender e Jogos/Quiz ativam Jogos.
 - A página da aula usa conteúdo de “Primeiros Acordes” como exemplo preenchido por padrão, marcadores `data-lesson`, player visual sem vídeo e cartões Am, Em e C com posições dos dedos.
 - O Quiz contém marcação para pergunta, alternativas, feedback correto/incorreto, avanço, resultado e confirmação de saída; os estados que não são iniciais ficam `hidden`.
+- Músicas, Conquistas e Perfil repetem a marcação padrão da navegação logada e indicam o item ativo com `aria-current="page"`.
+- A biblioteca de músicas inicia com oito cartões e progresso 0%; filtros e ações têm atributos para integração posterior, sem carregar biblioteca ou serviço externo nesta etapa HTML.
+- Conquistas inicia com 0 desbloqueadas e 12 bloqueadas. Datas de desbloqueio não são copiadas dos exemplos visuais do Figma; os campos ficam preparados para receber datas reais quando o aluno desbloquear cada conquista.
+- Perfil inicia sem dados pessoais reais, com estatísticas zeradas e contêiner de calendário vazio para preenchimento dinâmico.
 
 ### Suposições
 
@@ -387,14 +391,12 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - Como a trilha fornecida descreve apenas sete das 12 aulas totais, as cinco restantes não foram nomeadas ou representadas como conteúdo inventado.
 - A tela de resultado do Quiz não consta no Figma; para cumprir a etapa, foi proposta uma composição no mesmo padrão semântico, com acertos, XP, taxa de acerto, opção de jogar novamente e retorno aos jogos.
 - A página Jogos apresenta descrições textuais para os títulos fornecidos; os outros jogos ainda são links demonstrativos até suas experiências serem implementadas.
+- A lista de músicas solicitada enumera sete títulos distintos; para completar oito entradas, foi incluída “Brilha, Brilha, Estrelinha” (Tradicional), uma escolha estática de repertório tradicional, sem integração a catálogo ou biblioteca externa.
+- Os exemplos de datas de desbloqueio exibidos nas capturas do Figma representam dados de demonstração; no HTML de aluno novo, todos os registros começam bloqueados e sem uma data de desbloqueio.
 
 ## Pendências conhecidas
 
-- Há um frame do Figma com sidebar dentro de um celular; tratar como erro de design e usar barra inferior em mobile.
-- Os ícones de Músicas e Perfil aparecem como círculos/quebrados; usar nota musical e usuário em SVG.
-- “Setembro 2024” no calendário é dado de exemplo visual, não uma data fixa. O calendário deve representar os dados reais do aluno.
-- Conferir a fidelidade visual das páginas públicas com as referências do Figma antes ou durante a etapa de estilos; os detalhes de apresentação ainda não foram implementados nesta fase HTML.
-- As imagens do Figma não estavam acessíveis nos arquivos do workspace durante as etapas HTML; conferir todas as páginas com as referências visuais quando estiverem disponíveis no workspace.
+- Implementar estilos e conferir as páginas com as referências visuais do Figma em uma etapa própria; esta fase entrega somente estrutura HTML.
 - Os limites exatos de níveis, regras de sequência e critérios de desbloqueio de conquistas precisam ser definidos antes de codificar quando as referências não forem suficientes.
 
 ## Créditos

@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Conquistas | MUSICPLAY</title>
+    <meta
+      name="description"
+      content="Acompanhe suas conquistas musicais, veja o que já desbloqueou e descubra seus próximos desafios."
+    >
+    <link rel="stylesheet" href="../css/main.css">
+    <script type="module" src="../js/main.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Pular para o conteúdo</a>
+    <div class="app-shell">
+      <nav class="app-nav" aria-label="Navegação principal">
+        <a class="brand app-nav__brand" href="./dashboard.html" aria-label="MUSICPLAY, início">
+          <span class="brand__text">MUSICPLAY</span>
+        </a>
+        <ul class="app-nav__list">
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./dashboard.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m3 10 9-7 9 7"></path>
+                <path d="M5 9v11h14V9"></path>
+                <path d="M9 20v-6h6v6"></path>
+              </svg>
+              <span>Início</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./learn.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path>
+                <path d="M8 7h8M8 11h6"></path>
+              </svg>
+              <span>Aprender</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./games.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M6 12h4m-2-2v4"></path>
+                <path d="M15.5 11h.01M18 13.5h.01"></path>
+                <path d="M6.5 7h11a4.5 4.5 0 0 1 4.4 5.4l-1 4.5a2.5 2.5 0 0 1-4.1 1.3L14 16H10l-2.8 2.2a2.5 2.5 0 0 1-4.1-1.3l-1-4.5A4.5 4.5 0 0 1 6.5 7Z"></path>
+              </svg>
+              <span>Jogos</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./songs.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 18V5l12-2v13"></path>
+                <circle cx="6" cy="18" r="3"></circle>
+                <circle cx="18" cy="16" r="3"></circle>
+              </svg>
+              <span>Músicas</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./achievements.html" aria-current="page">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="8" r="6"></circle>
+                <path d="M8.2 13.2 7 22l5-3 5 3-1.2-8.8"></path>
+                <path d="m10 8 1.3 1.3L14 6.5"></path>
+              </svg>
+              <span>Conquistas</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./profile.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="8" r="4"></circle>
+                <path d="M4 21a8 8 0 0 1 16 0"></path>
+              </svg>
+              <span>Perfil</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <main class="app-main achievements-page" id="main-content">
+        <header class="achievements-header">
+          <h1 class="achievements-header__title">Conquistas 🏆</h1>
+          <p class="achievements-header__progress">
+            <span data-user="achievements-count">0</span> de 12 conquistas desbloqueadas
+          </p>
+          <progress
+            class="achievements-header__progress-bar"
+            data-achievements-progress
+            value="0"
+            max="12"
+            aria-label="Progresso das conquistas: 0 de 12 desbloqueadas"
+          >
+            0 de 12 conquistas
+          </progress>
+        </header>
+
+        <section class="achievement-section" aria-labelledby="unlocked-achievements-title">
+          <h2 class="achievement-section__title" id="unlocked-achievements-title">
+            ✓ Desbloqueadas (<span data-achievements-unlocked-count>0</span>)
+          </h2>
+          <ul class="achievement-grid" data-achievements-unlocked aria-label="Conquistas desbloqueadas"></ul>
+          <p class="achievement-empty-state" data-achievements-empty role="status" aria-live="polite" hidden>
+            Complete sua primeira aula para ganhar sua primeira conquista 🏆
+          </p>
+        </section>
+
+        <section class="achievement-section" aria-labelledby="locked-achievements-title">
+          <h2 class="achievement-section__title" id="locked-achievements-title">
+            🔒 Bloqueadas (<span data-achievements-locked-count>12</span>)
+          </h2>
+          <ul class="achievement-grid" data-achievements-locked aria-label="Conquistas bloqueadas">
+            <li class="achievement-card" data-achievement-id="first-lesson" data-state="locked">
+              <article class="achievement-card__content">
+                <span class="achievement-card__icon" aria-hidden="true">🏆</span>
+                <h3 class="achievement-card__title">Primeira Aula</h3>
+                <p class="achievement-card__description">Concluiu sua primeira aula</p>
+                <time class="achievement-card__date" data-achievement-date hidden></time>
+                <span class="achievement-card__status visually-hidden">Bloqueada</span>
+                <span class="achievement-card__lock" aria-label="Bloqueada">🔒</span>
+              </article>
+            </li>
+            <li class="achievement-card" data-achievement-id="three-day-streak" data-state="locked">
+              <article class="achievement-card__content">
+                <span class="achievement-card__icon" aria-hidden="true">🔥</span>
+                <h3 class="achievement-card__title">3 Dias Seguidos</h3>
+                <p class="achievement-card__description">Estudou por 3 dias consecutivos</p>
+                <time class="achievement-card__date" data-achievement-date hidden></time>
+                <span class="achievement-card__status visually-hidden">Bloqueada</span>
+                <span class="achievement-card__lock" aria-label="Bloqueada">🔒</span>
+              </article>
+            </li>
+            <li class="achievement-card" data-achievement-id="100-xp" data-state="locked">
+              <article class="achievement-card__content">
+                <span class="achievement-card__icon" aria-hidden="true">⭐</span>
+                <h3 class="achievement-card__title">100 XP</h3>
+                <p class="achievement-card__description">Conquistou 100 pontos de XP</p>
+                <time class="achievement-card__date" data-achievement-date hidden></time>
+                <span class="achievement-card__status visually-hidden">Bloqueada</span>
+                <span class="achievement-card__lock" aria-label="Bloqueada">🔒</span>
+              </article>
+            </li>
+            <li class="achievement-card" data-achievement-id="first-note" data-state="locked">
+              <article class="achievement-card__content">
+                <span class="achievement-card__icon" aria-hidden="true">🎵</span>
+                <h3 class="achievement-card__title">Primeira Nota</h3>
+                <p class="achievement-card__description">Aprendeu a tocar a primeira nota</p>
+                <time class="achievement-card__date" data-achievement-date hidden></time>
+                <span class="achievement-card__status visually-hidden">Bloqueada</span>
+                <span class="achievement-card__lock" aria-label="Bloqueada">🔒</span>
+              </article>
+            </li>
+            <li class="achievement-card" data-achievement-id="first-chord" data-state="locked">
+              <article class="achievement-card__content">
+                <span class="achievement-card__icon" aria-hidden="true">🎸</span>
+                <h3 class="achievement-card__title">Primeiro Acorde</h3>
+                <p class="achievement-card__description">Dominou seu primeiro acorde</p>
+                <time class="achievement-card__date" data-achievement-date hidden></time>
+                <span class="achievement-card__status visually-hidden">Bloqueada</span>
+                <span class="achievement-card__lock" aria-label="Bloqueada">🔒</span>
+              </article>
+            </li>
+            <li class="achievement-card" data-achievement-id="master-of-notes" data-state="locked">
+              <article class="achievement-card__content">
+                <span class="achievement-card__icon" aria-hidden="true">📚</span>
+                <h3 class="achievement-card__title">Mestre das Notas</h3>
+                <p class="achievement-card__description">Acertou 100% do quiz de notas</p>
+                <time class="achievement-card__date" data-achievement-date hidden></time>
+                <span class="achievement-card__status visually-hidden">Bloqueada</span>
+                <span class="achievement-card__lock" aria-label="Bloqueada">🔒</span>
+              </article>
+            </li>
+            <li class="achievement-card" data-achievement-id="seven-day-streak" data-state="locked">
+              <article class="achievement-card__content">
+                <span class="achievement-card__icon" aria-hidden="true">🔥</span>
+                <h3 class="achievement-card__title">7 Dias Seguidos</h3>
+                <p class="achievement-card__description">Estudou por 7 dias consecutivos</p>
+                <time class="achievement-card__date" data-achievement-date hidden></time>
+                <span class="achievement-card__status visually-hidden">Bloqueada</span>
+                <span class="achievement-card__lock" aria-label="Bloqueada">🔒</span>
+              </article>
+            </li>
+            <li class="achievement-card" data-achievement-id="sharpshooter" data-state="locked">
+              <article class="achievement-card__content">
+                <span class="achievement-card__icon" aria-hidden="true">🎯</span>
+                <h3 class="achievement-card__title">Atirador Certeiro</h3>
+                <p class="achievement-card__description">Acertou 10 questões seguidas</p>
+                <time class="achievement-card__date" data-achievement-date hidden></time>
+                <span class="achievement-card__status visually-hidden">Bloqueada</span>
+                <span class="achievement-card__lock" aria-label="Bloqueada">🔒</span>
+              </article>
+            </li>
+            <li class="achievement-card" data-achievement-id="first-song" data-state="locked">
+              <article class="achievement-card__content">
+                <span class="achievement-card__icon" aria-hidden="true">🎵</span>
+                <h3 class="achievement-card__title">Primeira Música</h3>
+                <p class="achievement-card__description">Completou o aprendizado de uma música</p>
+                <time class="achievement-card__date" data-achievement-date hidden></time>
+                <span class="achievement-card__status visually-hidden">Bloqueada</span>
+                <span class="achievement-card__lock" aria-label="Bloqueada">🔒</span>
+              </article>
+            </li>
+            <li class="achievement-card" data-achievement-id="speedster" data-state="locked">
+              <article class="achievement-card__content">
+                <span class="achievement-card__icon" aria-hidden="true">⚡</span>
+                <h3 class="achievement-card__title">Velocista</h3>
+                <p class="achievement-card__description">Completou uma aula em tempo recorde</p>
+                <time class="achievement-card__date" data-achievement-date hidden></time>
+                <span class="achievement-card__status visually-hidden">Bloqueada</span>
+                <span class="achievement-card__lock" aria-label="Bloqueada">🔒</span>
+              </article>
+            </li>
+            <li class="achievement-card" data-achievement-id="100-questions" data-state="locked">
+              <article class="achievement-card__content">
+                <span class="achievement-card__icon" aria-hidden="true">🧠</span>
+                <h3 class="achievement-card__title">100 Questões</h3>
+                <p class="achievement-card__description">Respondeu 100 questões nos quizzes</p>
+                <time class="achievement-card__date" data-achievement-date hidden></time>
+                <span class="achievement-card__status visually-hidden">Bloqueada</span>
+                <span class="achievement-card__lock" aria-label="Bloqueada">🔒</span>
+              </article>
+            </li>
+            <li class="achievement-card" data-achievement-id="module-complete" data-state="locked">
+              <article class="achievement-card__content">
+                <span class="achievement-card__icon" aria-hidden="true">🏅</span>
+                <h3 class="achievement-card__title">Módulo Completo</h3>
+                <p class="achievement-card__description">Finalizou o Módulo 1</p>
+                <time class="achievement-card__date" data-achievement-date hidden></time>
+                <span class="achievement-card__status visually-hidden">Bloqueada</span>
+                <span class="achievement-card__lock" aria-label="Bloqueada">🔒</span>
+              </article>
+            </li>
+          </ul>
+        </section>
+      </main>
+    </div>
+
+    <div class="app-feedback" data-app-feedback role="status" aria-live="polite" aria-atomic="true"></div>
+    <div
+      class="toast-region"
+      data-toast-container
+      role="status"
+      aria-live="polite"
+      aria-relevant="additions text"
+    ></div>
+  </body>
+</html>
