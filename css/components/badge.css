@@ -1,0 +1,96 @@
+.badge,
+.difficulty-badge,
+.game-xp,
+.game-popularity,
+.lesson-item__xp,
+.song-card__xp,
+.achievement-card__status-badge {
+  display: inline-flex;
+  min-height: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: 0.2rem 0.6rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.badge {
+  border-color: rgb(150 56 245 / 25%);
+  color: #c28aff;
+  background: var(--color-primary-soft);
+}
+
+.badge--purple {
+  color: #c28aff;
+  background: var(--color-primary-soft);
+}
+
+.badge--cyan {
+  color: var(--color-cyan);
+  background: var(--color-cyan-soft);
+}
+
+.badge--yellow {
+  color: var(--color-yellow);
+  background: var(--color-yellow-soft);
+}
+
+.badge--green,
+.difficulty-badge--easy {
+  color: var(--color-green);
+  background: var(--color-green-soft);
+}
+
+.badge--red,
+.difficulty-badge--hard {
+  color: var(--color-red);
+  background: var(--color-red-soft);
+}
+
+.badge--orange,
+.difficulty-badge--advanced {
+  color: var(--color-orange);
+  background: var(--color-orange-soft);
+}
+
+.difficulty-badge--medium,
+.difficulty-badge--intermediate {
+  color: var(--color-cyan);
+  background: var(--color-cyan-soft);
+}
+
+.difficulty-badge--varied {
+  color: var(--color-yellow);
+  background: var(--color-yellow-soft);
+}
+
+.game-xp {
+  color: #c28aff;
+  background: var(--color-primary-soft);
+}
+
+.game-popularity {
+  color: var(--color-cyan);
+  background: var(--color-cyan-soft);
+}
+
+.badge--active,
+.badge--completed {
+  color: var(--color-green);
+  background: var(--color-green-soft);
+}
+
+.badge--locked {
+  color: var(--color-text-secondary);
+  background: var(--color-surface-muted);
+}
+
+.badge--error {
+  color: var(--color-red);
+  background: var(--color-red-soft);
+}

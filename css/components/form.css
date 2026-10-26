@@ -1,0 +1,147 @@
+.form-field {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.form-field__label {
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
+.form-field__input,
+.form-field input:not([type="checkbox"]):not([type="radio"]),
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  background: var(--color-surface-raised);
+  transition:
+    border-color var(--duration-standard) var(--ease-standard),
+    box-shadow var(--duration-standard) var(--ease-standard),
+    background-color var(--duration-standard) var(--ease-standard);
+}
+
+.form-field__input::placeholder,
+.form-field input::placeholder,
+.form-field textarea::placeholder {
+  color: var(--color-text-subtle);
+  opacity: 1;
+}
+
+.form-field__input:hover,
+.form-field input:not([type="checkbox"]):not([type="radio"]):hover,
+.form-field select:hover,
+.form-field textarea:hover {
+  border-color: var(--color-primary);
+}
+
+.form-field__input:focus-visible,
+.form-field input:focus-visible,
+.form-field select:focus-visible,
+.form-field textarea:focus-visible {
+  border-color: var(--color-primary-hover);
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+.form-field__input:disabled,
+.form-field input:disabled,
+.form-field select:disabled,
+.form-field textarea:disabled {
+  color: var(--color-text-subtle);
+  background: var(--color-surface);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.form-field [aria-invalid="true"],
+.form-field__input[aria-invalid="true"],
+.form-field--error .form-field__input {
+  border-color: var(--color-red);
+  background: var(--color-red-soft);
+}
+
+.form-field__error,
+.choice-group__error {
+  min-height: 1.25em;
+  color: var(--color-red);
+  font-size: var(--font-size-xs);
+}
+
+.form-field__hint {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+.form-field__password {
+  position: relative;
+}
+
+.form-field__password .form-field__input {
+  padding-inline-end: 6rem;
+}
+
+.form-field__password-toggle {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: var(--space-2);
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  border: 0;
+  color: var(--color-primary-hover);
+  background: transparent;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+}
+
+.form-field__password-toggle:hover {
+  color: var(--color-cyan);
+}
+
+.form-field__password-toggle:active {
+  color: var(--color-primary-active);
+}
+
+.form-field__password-toggle:focus-visible {
+  border-radius: var(--radius-sm);
+  outline: 2px solid var(--color-cyan);
+  outline-offset: -2px;
+}
+
+.form-field--checkbox,
+.form-field__checkbox-control {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.form-field__checkbox,
+.choice-option__input {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex: 0 0 auto;
+  accent-color: var(--color-primary);
+}
+
+.form-field__label--checkbox {
+  line-height: 1.5;
+}
+
+.auth-form,
+.auth-card__header {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.auth-form__feedback:empty {
+  display: none;
+}
+
+.auth-form__feedback {
+  color: var(--color-red);
+}

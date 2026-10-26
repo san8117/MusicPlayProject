@@ -1,0 +1,12 @@
+.grid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.grid--two-columns {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid--auto-fit {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+}

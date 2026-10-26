@@ -1,0 +1,104 @@
+.button {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 0.7rem 1.15rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  transition:
+    color var(--duration-standard) var(--ease-standard),
+    background-color var(--duration-standard) var(--ease-standard),
+    border-color var(--duration-standard) var(--ease-standard),
+    box-shadow var(--duration-standard) var(--ease-standard),
+    transform var(--duration-standard) var(--ease-standard);
+}
+
+.button:hover {
+  text-decoration: none;
+}
+
+.button:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+.button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.button:disabled,
+.button[aria-disabled="true"] {
+  border-color: var(--color-border);
+  color: var(--color-text-subtle);
+  background: var(--color-surface-muted);
+  box-shadow: none;
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.button--primary {
+  border-color: transparent;
+  color: #fff;
+  background: var(--gradient-primary);
+  box-shadow: var(--shadow-button-primary);
+}
+
+.button--primary:hover:not(:disabled) {
+  color: #fff;
+  background: linear-gradient(105deg, #9236f4, #b153fa);
+  box-shadow: 0 0.65rem 1.5rem rgb(150 56 245 / 38%);
+}
+
+.button--secondary {
+  border-color: var(--color-border-strong);
+  color: var(--color-text);
+  background: var(--color-surface-raised);
+}
+
+.button--secondary:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  color: var(--color-text);
+  background: var(--color-primary-soft);
+}
+
+.button--outline {
+  border-color: var(--color-primary);
+  color: var(--color-primary-hover);
+  background: transparent;
+}
+
+.button--outline:hover:not(:disabled) {
+  color: var(--color-text);
+  background: var(--color-primary-soft);
+}
+
+.button--cyan {
+  color: #061317;
+  background: linear-gradient(105deg, #13aebd, #20c9d6);
+  box-shadow: 0 0.45rem 1.1rem rgb(32 201 214 / 20%);
+}
+
+.button--cyan:hover:not(:disabled) {
+  color: #061317;
+  background: linear-gradient(105deg, #22c3d0, #42dbe2);
+}
+
+.button--sm {
+  min-height: 2.75rem;
+  padding: 0.55rem 0.85rem;
+  font-size: var(--font-size-xs);
+}
+
+.button--lg {
+  min-height: 3rem;
+  padding: 0.85rem 1.5rem;
+  font-size: var(--font-size-md);
+}

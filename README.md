@@ -313,7 +313,7 @@ Como o projeto usa ES Modules, abrir `index.html` diretamente por `file://` não
 2. Iniciar a extensão Live Server (ou outro servidor estático local) na raiz do projeto.
 3. Acessar no navegador o endereço local informado pelo servidor.
 
-Não é necessário build ou backend. As páginas HTML públicas iniciais já existem; os arquivos CSS e JavaScript referenciados no HTML serão criados em etapas posteriores. Até que esses arquivos sejam implementados, as páginas não terão estilo nem comportamento funcional completo.
+Não é necessário build ou backend. As páginas HTML referenciam `css/main.css` e `js/main.js`. A fundação CSS já cobre tokens, reset, tipografia, utilitários e componentes compartilhados básicos; layouts, estilos específicos de cada página e comportamento JavaScript serão completados em etapas posteriores.
 
 ## Plano de desenvolvimento
 
@@ -335,9 +335,9 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 
 ### Fase 2 — Área do aluno e aprendizagem
 
-- [ ] 2.1 — Shell autenticado e navegação responsiva.
-- [ ] 2.2 — Integração funcional dos dados personalizados no dashboard.
-- [ ] 2.3 — Integração funcional do progresso e estados da trilha.
+- [x] 2.1 — Fundação CSS: tokens, reset, tipografia, utilitários e componentes base.
+- [ ] 2.2 — Shell autenticado e navegação responsiva.
+- [ ] 2.3 — Estilos específicos das páginas e comparação responsiva com o Figma.
 - [ ] 2.4 — Comportamento da aula e conclusão.
 - [ ] 2.5 — Comportamento dos jogos.
 - [ ] 2.6 — Comportamento e progresso da biblioteca de músicas.
@@ -381,6 +381,10 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - A biblioteca de músicas inicia com oito cartões e progresso 0%; filtros e ações têm atributos para integração posterior, sem carregar biblioteca ou serviço externo nesta etapa HTML.
 - Conquistas inicia com 0 desbloqueadas e 12 bloqueadas. Datas de desbloqueio não são copiadas dos exemplos visuais do Figma; os campos ficam preparados para receber datas reais quando o aluno desbloquear cada conquista.
 - Perfil inicia sem dados pessoais reais, com estatísticas zeradas e contêiner de calendário vazio para preenchimento dinâmico.
+- A fundação CSS usa tokens `--color-*`, `--font-*`, `--space-*`, `--radius-*`, `--shadow-*`, `--z-index-*` e `--duration-*`; cores e proporções iniciais foram aproximadas visualmente a partir das capturas do Figma.
+- A tipografia usa Poppins para títulos e Inter para textos via Google Fonts com `display=swap`, importadas pela folha `typography.css`, sem alterar a estrutura HTML.
+- `css/main.css` contém somente imports, agrupados na ordem base, layout, componentes e páginas; folhas de layout e páginas ainda não implementadas foram criadas como reservas importadas.
+- Componentes base incluem botões, cards, formulários, badges, progresso e toasts, com estados acessíveis, foco visível, transições e respeito a `prefers-reduced-motion`.
 
 ### Suposições
 
@@ -396,7 +400,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 
 ## Pendências conhecidas
 
-- Implementar estilos e conferir as páginas com as referências visuais do Figma em uma etapa própria; esta fase entrega somente estrutura HTML.
+- Completar estilos de layout e de cada página e conferir a renderização visual contra o Figma; a Etapa 2.1 cobre somente a fundação CSS e componentes base, não os layouts completos.
 - Os limites exatos de níveis, regras de sequência e critérios de desbloqueio de conquistas precisam ser definidos antes de codificar quando as referências não forem suficientes.
 
 ## Créditos

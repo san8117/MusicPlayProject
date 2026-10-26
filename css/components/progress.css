@@ -1,0 +1,55 @@
+progress {
+  display: block;
+  width: 100%;
+  height: 0.5rem;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-pill);
+  color: var(--color-primary);
+  background: var(--color-surface-muted);
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+progress::-webkit-progress-bar {
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-muted);
+}
+
+progress::-webkit-progress-value {
+  border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, var(--color-primary), var(--color-cyan));
+  transition: width var(--duration-slow) var(--ease-emphasized);
+}
+
+progress::-moz-progress-bar {
+  border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, var(--color-primary), var(--color-cyan));
+  transition: width var(--duration-slow) var(--ease-emphasized);
+}
+
+.quiz-progress__segments {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.quiz-progress__segment {
+  min-height: 0.3rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-muted);
+}
+
+.quiz-progress__segment[data-state="current"],
+.quiz-progress__segment[data-state="completed"] {
+  background: var(--gradient-primary);
+}
+
+.quiz-progress__segment--active,
+.quiz-progress__segment--completed {
+  background: var(--gradient-primary);
+}
+
+.quiz-progress__segment--completed {
+  filter: saturate(0.75);
+}
