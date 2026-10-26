@@ -84,6 +84,8 @@
 
   --container-width: 80rem;
   --container-gutter: clamp(1rem, 4vw, 2rem);
+  --bottom-nav-height: 4.5rem;
+  --sidebar-width: 15rem;
 
   /* Breakpoints: 640px (mobile amplo), 768px (tablet), 1024px (desktop), 1280px (desktop amplo). */
 }

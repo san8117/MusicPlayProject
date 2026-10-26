@@ -338,8 +338,8 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - [x] 2.1 — Fundação CSS: tokens, reset, tipografia, utilitários e componentes base.
 - [x] 2.2 — Estilos da landing page, cadastro e login.
 - [x] 2.3 — Estilos do onboarding.
-- [ ] 2.4 — Estilos do dashboard e da trilha Aprender.
-- [ ] 2.5 — Estilos da aula, jogos e Quiz Musical.
+- [x] 2.4 — App shell autenticado e navegação responsiva.
+- [ ] 2.5 — Estilos do dashboard, trilha Aprender, aula, jogos e Quiz Musical.
 - [ ] 2.6 — Estilos de Músicas, Conquistas e Perfil.
 - [ ] 2.7 — Revisão responsiva e comparação das páginas com o Figma.
 
@@ -394,6 +394,10 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - Inputs de escolha permanecem focáveis por teclado, visualmente ocultos sem `display: none`, com foco visível aplicado ao card; estados selecionados incluem borda, brilho e marca de seleção.
 - No onboarding, instrumentos usam uma coluna no mobile e duas a partir de 768 px; níveis passam a três colunas nesse breakpoint; objetivos permanecem em uma grade 2 × 2.
 - A entrada do passo ativo recebe uma animação curta respeitando `prefers-reduced-motion`; a área permanece sem navegação do app.
+- O shell autenticado usa `--bottom-nav-height: 4.5rem` para reservar espaço à navegação inferior, somando `env(safe-area-inset-bottom, 0px)` tanto no conteúdo quanto na barra.
+- A partir de 1024 px (`64rem`), `--sidebar-width: 15rem` define uma sidebar fixa com scroll interno; abaixo desse breakpoint, a mesma navegação torna-se barra inferior fixa com seis colunas.
+- Os estilos de navegação compartilham `.app-nav__*`; ícones SVG são normalizados em 24 px no mobile e 20 px na sidebar, com cor por `currentColor`, foco visível e estado ativo reforçado por indicador não cromático.
+- Foram conferidas as oito páginas logadas: todas têm um `<nav class="app-nav">` com os mesmos seis destinos, logo e estrutura de lista; cada uma muda somente o link com `aria-current="page"` conforme sua área. Músicas usa nota musical e Perfil usa usuário, ambos SVGs com `stroke="currentColor"` e traço 1.8.
 
 ### Suposições
 
@@ -410,7 +414,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 
 ## Pendências conhecidas
 
-- Completar estilos das páginas logadas e conferir a renderização responsiva de todas as telas contra o Figma na Etapa 2.7.
+- Completar estilos das páginas de conteúdo e conferir a renderização responsiva de todas as telas contra o Figma na Etapa 2.7.
 - Os limites exatos de níveis, regras de sequência e critérios de desbloqueio de conquistas precisam ser definidos antes de codificar quando as referências não forem suficientes.
 
 ## Créditos

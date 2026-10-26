@@ -1,1 +1,25 @@
-/* Reserved for the authenticated application shell layout. */
+.app-shell {
+  min-height: 100vh;
+  min-height: 100svh;
+  background: var(--color-background);
+}
+
+.app-main {
+  min-width: 0;
+  padding: clamp(1.25rem, 4vw, 2rem) var(--container-gutter)
+    calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px) + var(--space-6));
+}
+
+@media (min-width: 64rem) {
+  .app-shell {
+    display: grid;
+    grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+  }
+
+  .app-main {
+    grid-column: 2;
+    width: min(100%, 96rem);
+    margin-inline: auto;
+    padding: clamp(2rem, 4vw, 3.5rem);
+  }
+}
