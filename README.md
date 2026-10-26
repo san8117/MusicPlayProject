@@ -339,9 +339,10 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - [x] 2.2 — Estilos da landing page, cadastro e login.
 - [x] 2.3 — Estilos do onboarding.
 - [x] 2.4 — App shell autenticado e navegação responsiva.
-- [ ] 2.5 — Estilos do dashboard, trilha Aprender, aula, jogos e Quiz Musical.
-- [ ] 2.6 — Estilos de Músicas, Conquistas e Perfil.
-- [ ] 2.7 — Revisão responsiva e comparação das páginas com o Figma.
+- [x] 2.5 — Estilos do dashboard e da trilha Aprender.
+- [ ] 2.6 — Estilos da aula, jogos e Quiz Musical.
+- [ ] 2.7 — Estilos de Músicas, Conquistas e Perfil.
+- [ ] 2.8 — Revisão responsiva e comparação das páginas com o Figma.
 
 ### Fase 3 — Dados e gamificação
 
@@ -398,6 +399,12 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - A partir de 1024 px (`64rem`), `--sidebar-width: 15rem` define uma sidebar fixa com scroll interno; abaixo desse breakpoint, a mesma navegação torna-se barra inferior fixa com seis colunas.
 - Os estilos de navegação compartilham `.app-nav__*`; ícones SVG são normalizados em 24 px no mobile e 20 px na sidebar, com cor por `currentColor`, foco visível e estado ativo reforçado por indicador não cromático.
 - Foram conferidas as oito páginas logadas: todas têm um `<nav class="app-nav">` com os mesmos seis destinos, logo e estrutura de lista; cada uma muda somente o link com `aria-current="page"` conforme sua área. Músicas usa nota musical e Perfil usa usuário, ambos SVGs com `stroke="currentColor"` e traço 1.8.
+- A Etapa 2.5 estiliza Dashboard e Aprender com os componentes reutilizáveis de estatísticas, cards, badges, botões e progresso, respeitando o shell autenticado da Etapa 2.4.
+- Os cards estatísticos têm valores com numerais tabulares e acentos de cor; os ícones decorativos da dashboard são aplicados por pseudo-elementos sem introduzir marcação ou alterar o HTML.
+- No dashboard, estatísticas mantêm três colunas inclusive em telas estreitas; recomendações passam a três colunas e atalhos a quatro em 768 px. Em desktop, continuar e dica ficam lado a lado, assim como atalhos e conquistas recentes.
+- O estado vazio de conquistas recentes usa um card discreto quando exibido; a lista prevê rolagem horizontal interna para não ampliar a página.
+- Na trilha, estados `completed`, `current` e `locked` recebem sinais visuais e textuais/ícones; módulos ficam em duas colunas a partir de 1024 px. Inputs, estados e estrutura HTML existentes foram preservados.
+- O HTML da trilha só fornece o texto “Em andamento” para a aula atual e não define percentual de conclusão; o CSS não inventa “75%”, mantendo coerência com o progresso inicial zerado. Uma porcentagem poderá ser exibida quando o HTML/JS fornecer um valor real.
 
 ### Suposições
 
@@ -414,7 +421,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 
 ## Pendências conhecidas
 
-- Completar estilos das páginas de conteúdo e conferir a renderização responsiva de todas as telas contra o Figma na Etapa 2.7.
+- Completar estilos das páginas de aula, jogos, Quiz, Músicas, Conquistas e Perfil; conferir a renderização responsiva de todas as telas contra o Figma na Etapa 2.8.
 - Os limites exatos de níveis, regras de sequência e critérios de desbloqueio de conquistas precisam ser definidos antes de codificar quando as referências não forem suficientes.
 
 ## Créditos
