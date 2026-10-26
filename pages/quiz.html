@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quiz Musical | MUSICPLAY</title>
+    <meta
+      name="description"
+      content="Responda ao Quiz Musical do MUSICPLAY, aprenda com cada explicação e ganhe XP."
+    >
+    <link rel="stylesheet" href="../css/main.css">
+    <script type="module" src="../js/main.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Pular para o conteúdo</a>
+    <div class="app-shell">
+      <nav class="app-nav" aria-label="Navegação principal">
+        <a class="brand app-nav__brand" href="./dashboard.html" aria-label="MUSICPLAY, início">
+          <span class="brand__text">MUSICPLAY</span>
+        </a>
+        <ul class="app-nav__list">
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./dashboard.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m3 10 9-7 9 7"></path>
+                <path d="M5 9v11h14V9"></path>
+                <path d="M9 20v-6h6v6"></path>
+              </svg>
+              <span>Início</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./learn.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path>
+                <path d="M8 7h8M8 11h6"></path>
+              </svg>
+              <span>Aprender</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./games.html" aria-current="page">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M6 12h4m-2-2v4"></path>
+                <path d="M15.5 11h.01M18 13.5h.01"></path>
+                <path d="M6.5 7h11a4.5 4.5 0 0 1 4.4 5.4l-1 4.5a2.5 2.5 0 0 1-4.1 1.3L14 16H10l-2.8 2.2a2.5 2.5 0 0 1-4.1-1.3l-1-4.5A4.5 4.5 0 0 1 6.5 7Z"></path>
+              </svg>
+              <span>Jogos</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./songs.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 18V5l12-2v13"></path>
+                <circle cx="6" cy="18" r="3"></circle>
+                <circle cx="18" cy="16" r="3"></circle>
+              </svg>
+              <span>Músicas</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./achievements.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="8" r="6"></circle>
+                <path d="M8.2 13.2 7 22l5-3 5 3-1.2-8.8"></path>
+                <path d="m10 8 1.3 1.3L14 6.5"></path>
+              </svg>
+              <span>Conquistas</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./profile.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="8" r="4"></circle>
+                <path d="M4 21a8 8 0 0 1 16 0"></path>
+              </svg>
+              <span>Perfil</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <main class="app-main quiz-page" id="main-content">
+        <header class="quiz-header">
+          <a class="quiz-header__back-link" href="./games.html" data-action="request-quiz-exit">
+            ← Voltar para os jogos
+          </a>
+          <div class="quiz-header__title-row">
+            <h1 class="quiz-header__title">Quiz Musical 🧠</h1>
+            <p class="quiz-header__xp" data-quiz="xp">⭐ 0 XP</p>
+          </div>
+          <div class="quiz-progress" aria-label="Progresso do quiz">
+            <ol class="quiz-progress__segments" aria-hidden="true">
+              <li class="quiz-progress__segment" data-quiz-segment="1" data-state="current"></li>
+              <li class="quiz-progress__segment" data-quiz-segment="2" data-state="upcoming"></li>
+              <li class="quiz-progress__segment" data-quiz-segment="3" data-state="upcoming"></li>
+            </ol>
+            <p class="quiz-progress__counter" data-quiz="counter" aria-live="polite" aria-atomic="true">1 / 3</p>
+          </div>
+        </header>
+
+        <section class="quiz-question" data-quiz-question-panel aria-labelledby="quiz-question-title">
+          <div class="quiz-question__card">
+            <span class="quiz-question__icon" aria-hidden="true">❓</span>
+            <h2 class="quiz-question__title" id="quiz-question-title" data-quiz="question">
+              Qual destas é a nota Dó na 6ª corda do violão?
+            </h2>
+          </div>
+          <div class="quiz-options" role="group" aria-label="Escolha uma resposta">
+            <button class="quiz-option" type="button" data-quiz-option="A">
+              <span class="quiz-option__letter">A</span>
+              <span class="quiz-option__text">3º traste</span>
+            </button>
+            <button class="quiz-option" type="button" data-quiz-option="B">
+              <span class="quiz-option__letter">B</span>
+              <span class="quiz-option__text">5º traste</span>
+            </button>
+            <button class="quiz-option" type="button" data-quiz-option="C">
+              <span class="quiz-option__letter">C</span>
+              <span class="quiz-option__text">8º traste</span>
+            </button>
+            <button class="quiz-option" type="button" data-quiz-option="D">
+              <span class="quiz-option__letter">D</span>
+              <span class="quiz-option__text">10º traste</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="quiz-feedback" data-quiz-feedback aria-label="Feedback da resposta" aria-live="polite" aria-atomic="true" hidden>
+          <div class="quiz-feedback__variant quiz-feedback__variant--incorrect" data-quiz-feedback-state="incorrect" hidden>
+            <h2 class="quiz-feedback__title">❌ Não foi dessa vez...</h2>
+            <p class="quiz-feedback__explanation" data-quiz-explanation="incorrect">
+              A nota Dó está no 8º traste da 6ª corda, que é afinada em Mi.
+            </p>
+          </div>
+          <div class="quiz-feedback__variant quiz-feedback__variant--correct" data-quiz-feedback-state="correct" hidden>
+            <h2 class="quiz-feedback__title">✅ Resposta correta!</h2>
+            <p class="quiz-feedback__xp">+20 XP ganhos! 🎉</p>
+            <p class="quiz-feedback__explanation" data-quiz-explanation="correct">
+              A nota Dó está no 8º traste da 6ª corda, que é afinada em Mi.
+            </p>
+          </div>
+        </section>
+
+        <button class="button button--primary quiz-page__next" type="button" data-action="next-question" hidden>
+          Próxima pergunta →
+        </button>
+
+        <section class="quiz-result" data-quiz-result aria-labelledby="quiz-result-title" hidden>
+          <p class="quiz-result__eyebrow">Fim do desafio</p>
+          <h2 class="quiz-result__title" id="quiz-result-title">Seu resultado</h2>
+          <dl class="quiz-result__stats">
+            <div class="quiz-result__stat">
+              <dt>Acertos</dt>
+              <dd data-quiz-result="correct">0 de 3</dd>
+            </div>
+            <div class="quiz-result__stat">
+              <dt>XP ganho</dt>
+              <dd data-quiz-result="xp">0 XP</dd>
+            </div>
+            <div class="quiz-result__stat">
+              <dt>Taxa de acerto</dt>
+              <dd data-quiz-result="accuracy">0%</dd>
+            </div>
+          </dl>
+          <div class="quiz-result__actions">
+            <button class="button button--primary" type="button" data-action="restart-quiz">Jogar de novo</button>
+            <a class="button button--secondary" href="./games.html">Voltar aos jogos</a>
+          </div>
+        </section>
+
+        <dialog class="quiz-exit-dialog" data-quiz-exit-dialog aria-labelledby="quiz-exit-title" aria-describedby="quiz-exit-description">
+          <form method="dialog" class="quiz-exit-dialog__content">
+            <h2 class="quiz-exit-dialog__title" id="quiz-exit-title">Sair do quiz?</h2>
+            <p class="quiz-exit-dialog__description" id="quiz-exit-description">
+              Seu progresso neste quiz pode ser perdido. Você quer continuar jogando ou sair?
+            </p>
+            <div class="quiz-exit-dialog__actions">
+              <button class="button button--secondary" type="submit" value="continue" data-action="continue-quiz">
+                Continuar jogando
+              </button>
+              <button class="button button--primary" type="submit" value="exit" data-action="exit-quiz">
+                Sair
+              </button>
+            </div>
+          </form>
+        </dialog>
+      </main>
+    </div>
+
+    <div class="app-feedback" data-app-feedback role="status" aria-live="polite" aria-atomic="true"></div>
+    <div
+      class="toast-region"
+      data-toast-container
+      role="status"
+      aria-live="polite"
+      aria-relevant="additions text"
+    ></div>
+  </body>
+</html>

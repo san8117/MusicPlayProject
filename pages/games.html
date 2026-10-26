@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Jogos musicais | MUSICPLAY</title>
+    <meta
+      name="description"
+      content="Pratique música com jogos e desafios divertidos e ganhe XP a cada rodada."
+    >
+    <link rel="stylesheet" href="../css/main.css">
+    <script type="module" src="../js/main.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Pular para o conteúdo</a>
+    <div class="app-shell">
+      <nav class="app-nav" aria-label="Navegação principal">
+        <a class="brand app-nav__brand" href="./dashboard.html" aria-label="MUSICPLAY, início">
+          <span class="brand__text">MUSICPLAY</span>
+        </a>
+        <ul class="app-nav__list">
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./dashboard.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m3 10 9-7 9 7"></path>
+                <path d="M5 9v11h14V9"></path>
+                <path d="M9 20v-6h6v6"></path>
+              </svg>
+              <span>Início</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./learn.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path>
+                <path d="M8 7h8M8 11h6"></path>
+              </svg>
+              <span>Aprender</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./games.html" aria-current="page">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M6 12h4m-2-2v4"></path>
+                <path d="M15.5 11h.01M18 13.5h.01"></path>
+                <path d="M6.5 7h11a4.5 4.5 0 0 1 4.4 5.4l-1 4.5a2.5 2.5 0 0 1-4.1 1.3L14 16H10l-2.8 2.2a2.5 2.5 0 0 1-4.1-1.3l-1-4.5A4.5 4.5 0 0 1 6.5 7Z"></path>
+              </svg>
+              <span>Jogos</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./songs.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 18V5l12-2v13"></path>
+                <circle cx="6" cy="18" r="3"></circle>
+                <circle cx="18" cy="16" r="3"></circle>
+              </svg>
+              <span>Músicas</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./achievements.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="8" r="6"></circle>
+                <path d="M8.2 13.2 7 22l5-3 5 3-1.2-8.8"></path>
+                <path d="m10 8 1.3 1.3L14 6.5"></path>
+              </svg>
+              <span>Conquistas</span>
+            </a>
+          </li>
+          <li class="app-nav__item">
+            <a class="app-nav__link" href="./profile.html">
+              <svg class="app-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="8" r="4"></circle>
+                <path d="M4 21a8 8 0 0 1 16 0"></path>
+              </svg>
+              <span>Perfil</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <main class="app-main games-page" id="main-content">
+        <header class="games-page__header">
+          <h1 class="games-page__title">Sala de Jogos 🎮</h1>
+          <p class="games-page__description">Aprenda jogando — cada jogo vale XP real!</p>
+        </header>
+
+        <section class="featured-game" aria-labelledby="featured-game-title">
+          <p class="featured-game__eyebrow">Jogo em destaque</p>
+          <h2 class="featured-game__title" id="featured-game-title">Monte o Acorde</h2>
+          <p class="featured-game__description">
+            Descubra as notas e posições que formam cada acorde. Aprenda enquanto se diverte.
+          </p>
+          <ul class="game-badges" aria-label="Informações do jogo em destaque">
+            <li><span class="difficulty-badge difficulty-badge--easy">Fácil</span></li>
+            <li><span class="game-xp">+20 XP por rodada</span></li>
+            <li><span class="game-popularity">🔥 Popular hoje</span></li>
+          </ul>
+          <a class="button button--primary" href="#game-list">Jogar agora</a>
+        </section>
+
+        <section class="games-section" id="game-list" aria-labelledby="games-list-title">
+          <h2 class="games-section__title" id="games-list-title">Todos os jogos</h2>
+          <ul class="games-grid">
+            <li>
+              <article class="game-card" data-game-id="note-game">
+                <svg class="game-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M9 18V5l12-2v13"></path>
+                  <circle cx="6" cy="18" r="3"></circle>
+                  <circle cx="18" cy="16" r="3"></circle>
+                </svg>
+                <h3 class="game-card__title">Jogo das Notas</h3>
+                <p class="game-card__description">Reconheça as notas musicais e pratique sua leitura.</p>
+                <ul class="game-badges" aria-label="Dificuldade e recompensa">
+                  <li><span class="difficulty-badge difficulty-badge--easy">Fácil</span></li>
+                  <li><span class="game-xp">+15 XP</span></li>
+                </ul>
+                <a class="game-card__link" href="#game-list">Jogar</a>
+              </article>
+            </li>
+            <li>
+              <article class="game-card" data-game-id="rhythm-challenge">
+                <svg class="game-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 8h16l-2 11H6L4 8Z"></path>
+                  <path d="M4 8c0-2 3.6-3.5 8-3.5S20 6 20 8s-3.6 3.5-8 3.5S4 10 4 8Z"></path>
+                  <path d="m8 3 8 5M16 3 8 8"></path>
+                </svg>
+                <h3 class="game-card__title">Desafio do Ritmo</h3>
+                <p class="game-card__description">Pratique percepção rítmica acompanhando os desafios.</p>
+                <ul class="game-badges" aria-label="Dificuldade e recompensa">
+                  <li><span class="difficulty-badge difficulty-badge--medium">Médio</span></li>
+                  <li><span class="game-xp">+25 XP</span></li>
+                </ul>
+                <a class="game-card__link" href="#game-list">Jogar</a>
+              </article>
+            </li>
+            <li>
+              <article class="game-card" data-game-id="chord-builder">
+                <svg class="game-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="m14 4 6 6"></path>
+                  <path d="m12 6 6 6"></path>
+                  <path d="M11 7c-2-2-4-1-5 1-1 1-1 3 0 4l-3 3a3 3 0 0 0 4 4l3-3c1 1 3 1 4 0 2-1 3-3 1-5"></path>
+                  <path d="m8 16 1 1"></path>
+                </svg>
+                <h3 class="game-card__title">Monte o Acorde</h3>
+                <p class="game-card__description">Monte acordes e conheça as posições de cada nota.</p>
+                <ul class="game-badges" aria-label="Dificuldade e recompensa">
+                  <li><span class="difficulty-badge difficulty-badge--easy">Fácil</span></li>
+                  <li><span class="game-xp">+20 XP</span></li>
+                </ul>
+                <a class="game-card__link" href="#game-list">Jogar</a>
+              </article>
+            </li>
+            <li>
+              <article class="game-card" data-game-id="music-quiz">
+                <svg class="game-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9"></circle>
+                  <path d="M9.6 9a2.5 2.5 0 1 1 4.2 1.8c-1.1 1-1.8 1.4-1.8 3"></path>
+                  <path d="M12 17h.01"></path>
+                </svg>
+                <h3 class="game-card__title">Quiz Musical</h3>
+                <p class="game-card__description">Teste seus conhecimentos com perguntas de música.</p>
+                <ul class="game-badges" aria-label="Dificuldade e recompensa">
+                  <li><span class="difficulty-badge difficulty-badge--varied">Variado</span></li>
+                  <li><span class="game-xp">+20 XP</span></li>
+                </ul>
+                <a class="game-card__link" href="./quiz.html">Jogar quiz</a>
+              </article>
+            </li>
+            <li>
+              <article class="game-card" data-game-id="ear-training">
+                <svg class="game-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 11a8 8 0 0 1 16 0c0 3-2 4-4 5-1.5.8-2 1.5-2 3a2 2 0 0 1-4 0"></path>
+                  <path d="M8 11a4 4 0 0 1 8 0c0 1.5-.8 2.2-2 3"></path>
+                </svg>
+                <h3 class="game-card__title">Treinamento Auditivo</h3>
+                <p class="game-card__description">Treine seu ouvido para reconhecer sons e intervalos.</p>
+                <ul class="game-badges" aria-label="Dificuldade e recompensa">
+                  <li><span class="difficulty-badge difficulty-badge--hard">Difícil</span></li>
+                  <li><span class="game-xp">+35 XP</span></li>
+                </ul>
+                <a class="game-card__link" href="#game-list">Jogar</a>
+              </article>
+            </li>
+            <li>
+              <article class="game-card" data-game-id="perfect-pitch">
+                <svg class="game-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M9 4v11"></path>
+                  <path d="M15 4v11"></path>
+                  <path d="M9 8h6"></path>
+                  <circle cx="9" cy="18" r="3"></circle>
+                  <circle cx="15" cy="18" r="3"></circle>
+                </svg>
+                <h3 class="game-card__title">Afinação Perfeita</h3>
+                <p class="game-card__description">Pratique a percepção das notas e da afinação.</p>
+                <ul class="game-badges" aria-label="Dificuldade e recompensa">
+                  <li><span class="difficulty-badge difficulty-badge--easy">Fácil</span></li>
+                  <li><span class="game-xp">+10 XP</span></li>
+                </ul>
+                <a class="game-card__link" href="#game-list">Jogar</a>
+              </article>
+            </li>
+          </ul>
+        </section>
+      </main>
+    </div>
+
+    <div class="app-feedback" data-app-feedback role="status" aria-live="polite" aria-atomic="true"></div>
+    <div
+      class="toast-region"
+      data-toast-container
+      role="status"
+      aria-live="polite"
+      aria-relevant="additions text"
+    ></div>
+  </body>
+</html>

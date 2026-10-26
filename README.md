@@ -330,7 +330,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - [x] 1.1 — HTML da landing page, cadastro e login.
 - [x] 1.2 — HTML do onboarding de três passos.
 - [x] 1.3 — HTML do dashboard e da trilha Aprender.
-- [ ] 1.4 — Componentes e layouts compartilhados.
+- [x] 1.4 — HTML da aula, jogos e Quiz Musical.
 - [ ] 1.5 — Base visual, estilos responsivos e revisão contra o Figma.
 
 ### Fase 2 — Área do aluno e aprendizagem
@@ -338,8 +338,8 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - [ ] 2.1 — Shell autenticado e navegação responsiva.
 - [ ] 2.2 — Integração funcional dos dados personalizados no dashboard.
 - [ ] 2.3 — Integração funcional do progresso e estados da trilha.
-- [ ] 2.4 — Aula e conclusão.
-- [ ] 2.5 — Jogos.
+- [ ] 2.4 — Comportamento da aula e conclusão.
+- [ ] 2.5 — Comportamento dos jogos.
 - [ ] 2.6 — Músicas.
 - [ ] 2.7 — Perfil, estatísticas e calendário.
 
@@ -374,6 +374,9 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - Dashboard e Aprender compartilham a mesma marcação de navegação com seis itens e ícones SVG em traço consistente; cada página marca o item atual com `aria-current="page"`.
 - O dashboard usa valores neutros de aluno novo, mantém o estado vazio de conquistas oculto por padrão e oferece marcadores `data-*` para preenchimento posterior.
 - A trilha apresenta as sete aulas especificadas, com a Aula 1 em andamento e as demais bloqueadas; o progresso total permanece em 0 / 12 e não foram inventadas as cinco aulas não descritas.
+- Aula, Jogos e Quiz repetem a mesma navegação autenticada de seis itens; a Aula ativa Aprender e Jogos/Quiz ativam Jogos.
+- A página da aula usa conteúdo de “Primeiros Acordes” como exemplo preenchido por padrão, marcadores `data-lesson`, player visual sem vídeo e cartões Am, Em e C com posições dos dedos.
+- O Quiz contém marcação para pergunta, alternativas, feedback correto/incorreto, avanço, resultado e confirmação de saída; os estados que não são iniciais ficam `hidden`.
 
 ### Suposições
 
@@ -382,10 +385,11 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - O checklist 1.1–1.5 foi alinhado à divisão de etapas informada para esta implementação; as páginas futuras continuam pendentes.
 - O detalhe “48 aulas disponíveis” é exibido somente para Violão, como exemplo informado, sem inferir a quantidade de aulas dos outros instrumentos.
 - Como a trilha fornecida descreve apenas sete das 12 aulas totais, as cinco restantes não foram nomeadas ou representadas como conteúdo inventado.
+- A tela de resultado do Quiz não consta no Figma; para cumprir a etapa, foi proposta uma composição no mesmo padrão semântico, com acertos, XP, taxa de acerto, opção de jogar novamente e retorno aos jogos.
+- A página Jogos apresenta descrições textuais para os títulos fornecidos; os outros jogos ainda são links demonstrativos até suas experiências serem implementadas.
 
 ## Pendências conhecidas
 
-- A tela de resultado do quiz não existe no Figma; propor uma solução no mesmo estilo e avisar antes de implementar.
 - Há um frame do Figma com sidebar dentro de um celular; tratar como erro de design e usar barra inferior em mobile.
 - Os ícones de Músicas e Perfil aparecem como círculos/quebrados; usar nota musical e usuário em SVG.
 - “Setembro 2024” no calendário é dado de exemplo visual, não uma data fixa. O calendário deve representar os dados reais do aluno.
