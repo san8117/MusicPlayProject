@@ -337,7 +337,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 
 - [x] 2.1 — Fundação CSS: tokens, reset, tipografia, utilitários e componentes base.
 - [x] 2.2 — Estilos da landing page, cadastro e login.
-- [ ] 2.3 — Estilos do onboarding.
+- [x] 2.3 — Estilos do onboarding.
 - [ ] 2.4 — Estilos do dashboard e da trilha Aprender.
 - [ ] 2.5 — Estilos da aula, jogos e Quiz Musical.
 - [ ] 2.6 — Estilos de Músicas, Conquistas e Perfil.
@@ -389,6 +389,11 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - Os destaques da landing passam de uma coluna para três em 768 px; etapas passam a quatro colunas em 1024 px; recursos ficam em duas colunas no mobile e três em 768 px.
 - O botão “Entrar” do cabeçalho da landing fica oculto até 640 px. A área de autenticação coloca nome e sobrenome lado a lado no mobile e, em desktop, mantém o título à esquerda e o formulário em card à direita.
 - Os estados de erro das páginas de autenticação reaproveitam os estilos de `.form-field` e acrescentam um ícone de alerta antes da mensagem não vazia; os botões e cards reutilizam os componentes compartilhados.
+- O onboarding foi estilizado sem alterações no HTML, com progresso e marca centralizados, passos responsivos e opções construídas sobre os componentes base de card, botão e progresso.
+- Os ícones dos instrumentos, níveis e objetivos são emojis decorativos gerados em CSS, pois os labels existentes não continham elementos de ícone; os textos associados continuam sendo o nome acessível de cada opção.
+- Inputs de escolha permanecem focáveis por teclado, visualmente ocultos sem `display: none`, com foco visível aplicado ao card; estados selecionados incluem borda, brilho e marca de seleção.
+- No onboarding, instrumentos usam uma coluna no mobile e duas a partir de 768 px; níveis passam a três colunas nesse breakpoint; objetivos permanecem em uma grade 2 × 2.
+- A entrada do passo ativo recebe uma animação curta respeitando `prefers-reduced-motion`; a área permanece sem navegação do app.
 
 ### Suposições
 
@@ -405,7 +410,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 
 ## Pendências conhecidas
 
-- Completar estilos do onboarding e das páginas logadas, e conferir a renderização responsiva de todas as telas contra o Figma na Etapa 2.7.
+- Completar estilos das páginas logadas e conferir a renderização responsiva de todas as telas contra o Figma na Etapa 2.7.
 - Os limites exatos de níveis, regras de sequência e critérios de desbloqueio de conquistas precisam ser definidos antes de codificar quando as referências não forem suficientes.
 
 ## Créditos
