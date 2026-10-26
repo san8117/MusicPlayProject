@@ -155,7 +155,7 @@ O quiz usa o título “Quiz Musical 🧠”, badge de XP (por exemplo, “⭐ 0
 | Errou | Alternativa escolhida em vermelho, com borda e fundo rosado; correta em verde; demais neutras; alternativas travadas. Exibir caixa vermelha “❌ Não foi dessa vez...” com explicação e botão “Próxima pergunta →”. | Não ganha XP. |
 | Acertou | Alternativa escolhida em verde. Exibir caixa verde “✅ Resposta correta!”, “+20 XP ganhos! 🎉” e explicação; atualizar badge de XP com animação leve e botão “Próxima pergunta →”. | Ganha 20 XP. |
 
-Na última pergunta, o botão passa a ser “Ver resultado”. A tela de resultado não existe no Figma: sua proposta deverá ser apresentada e alinhada antes de implementar a tela, sem inventar detalhes visuais que dependam de referências ausentes. O estado de resposta é comunicado em região `aria-live`.
+Na última pergunta, o botão passa a ser “Ver resultado”. A tela de resultado não existe no Figma; a marcação existente registra uma proposta simples com acertos, XP, taxa de acerto, opção de jogar novamente e retorno aos jogos. O resultado deve ser tratado como suposição de produto e pode ser ajustado após validação com os responsáveis. O estado de resposta é comunicado em região `aria-live`.
 
 ## Aula
 
@@ -340,7 +340,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - [x] 2.3 — Estilos do onboarding.
 - [x] 2.4 — App shell autenticado e navegação responsiva.
 - [x] 2.5 — Estilos do dashboard e da trilha Aprender.
-- [ ] 2.6 — Estilos da aula, jogos e Quiz Musical.
+- [x] 2.6 — Estilos da aula, jogos e Quiz Musical.
 - [ ] 2.7 — Estilos de Músicas, Conquistas e Perfil.
 - [ ] 2.8 — Revisão responsiva e comparação das páginas com o Figma.
 
@@ -405,6 +405,12 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - O estado vazio de conquistas recentes usa um card discreto quando exibido; a lista prevê rolagem horizontal interna para não ampliar a página.
 - Na trilha, estados `completed`, `current` e `locked` recebem sinais visuais e textuais/ícones; módulos ficam em duas colunas a partir de 1024 px. Inputs, estados e estrutura HTML existentes foram preservados.
 - O HTML da trilha só fornece o texto “Em andamento” para a aula atual e não define percentual de conclusão; o CSS não inventa “75%”, mantendo coerência com o progresso inicial zerado. Uma porcentagem poderá ser exibida quando o HTML/JS fornecer um valor real.
+- A Etapa 2.6 estiliza Aula, Jogos e Quiz reutilizando o shell, badges, cards, botões e progresso. A aula usa uma coluna no mobile e, a partir de 1024 px, distribui player/prática/ações à esquerda e objetivos/acordes à direita.
+- Na página Jogos, os cards formam uma coluna no mobile e duas a partir de 768 px; o destaque usa um emoji de guitarra decorativo por pseudo-elemento. Os selos mantêm o nome da dificuldade visível e usam cor como reforço, não como único sinal.
+- O Quiz mantém opções em grade 2 × 2, com estados de resposta preparados por `.quiz-option--correct` / `.quiz-option--incorrect` ou `data-state="correct"` / `data-state="incorrect"`; travamento usa `disabled` ou `aria-disabled="true"`. O feedback utiliza as variantes existentes e o atributo `hidden`.
+- O pulso do XP pode ser ativado por `.quiz-header__xp--updated` ou `data-state="updated"`; movimento é removido com `prefers-reduced-motion`. Resultado e diálogo foram estilizados usando as classes e elementos já existentes.
+- O botão de conclusão da aula aceita `data-state="completed"` ou `.lesson-actions__complete--completed` como gancho futuro; a marcação HTML inicial não define esse estado. Nenhuma estrutura HTML foi alterada nesta etapa.
+- As imagens anexadas do Figma não estão disponíveis como arquivos de imagem dentro da pasta do projeto; a comparação visual renderizada destas telas permanece pendente para a Etapa 2.8. A composição segue os detalhes e tokens descritos nas especificações.
 
 ### Suposições
 
@@ -417,11 +423,11 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - A página Jogos apresenta descrições textuais para os títulos fornecidos; os outros jogos ainda são links demonstrativos até suas experiências serem implementadas.
 - A lista de músicas solicitada enumera sete títulos distintos; para completar oito entradas, foi incluída “Brilha, Brilha, Estrelinha” (Tradicional), uma escolha estática de repertório tradicional, sem integração a catálogo ou biblioteca externa.
 - Os exemplos de datas de desbloqueio exibidos nas capturas do Figma representam dados de demonstração; no HTML de aluno novo, todos os registros começam bloqueados e sem uma data de desbloqueio.
-- A composição visual foi implementada a partir da identidade e dos requisitos descritos; a comparação pixel a pixel com as capturas ainda precisa ser feita na revisão responsiva da Etapa 2.7.
+- A composição visual das páginas já estilizadas foi implementada a partir da identidade e dos requisitos descritos; a comparação pixel a pixel com as capturas ainda precisa ser feita na revisão responsiva da Etapa 2.8.
 
 ## Pendências conhecidas
 
-- Completar estilos das páginas de aula, jogos, Quiz, Músicas, Conquistas e Perfil; conferir a renderização responsiva de todas as telas contra o Figma na Etapa 2.8.
+- Completar estilos de Músicas, Conquistas e Perfil; conferir a renderização responsiva de todas as telas contra o Figma na Etapa 2.8.
 - Os limites exatos de níveis, regras de sequência e critérios de desbloqueio de conquistas precisam ser definidos antes de codificar quando as referências não forem suficientes.
 
 ## Créditos
