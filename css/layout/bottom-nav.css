@@ -108,3 +108,17 @@
     display: none;
   }
 }
+
+@media (max-width: 20rem) {
+  .app-nav {
+    padding-inline: var(--space-1);
+  }
+
+  .app-nav__list {
+    gap: 0;
+  }
+
+  .app-nav__link > span {
+    font-size: 0.5rem;
+  }
+}

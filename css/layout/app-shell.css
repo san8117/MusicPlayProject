@@ -1,6 +1,7 @@
 .app-shell {
   min-height: 100vh;
   min-height: 100svh;
+  min-height: 100dvh;
   background: var(--color-background);
 }
 
@@ -8,6 +9,19 @@
   min-width: 0;
   padding: clamp(1.25rem, 4vw, 2rem) var(--container-gutter)
     calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px) + var(--space-6));
+}
+
+@media (min-width: 48rem) and (max-width: 63.99rem) {
+  .app-main {
+    max-width: 60rem;
+    margin-inline: auto;
+  }
+}
+
+@media (max-width: 63.99rem) and (max-height: 24rem) and (orientation: landscape) {
+  .app-shell {
+    --bottom-nav-height: 3.75rem;
+  }
 }
 
 @media (min-width: 64rem) {

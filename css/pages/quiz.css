@@ -244,6 +244,10 @@
 .quiz-exit-dialog {
   width: min(calc(100% - (var(--container-gutter) * 2)), 30rem);
   max-width: none;
+  max-height: calc(100vh - (var(--space-4) * 2));
+  max-height: calc(100dvh - (var(--space-4) * 2));
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 0;
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-xl);

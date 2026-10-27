@@ -43,6 +43,12 @@ Desenvolver mobile first, considerando aproximadamente 360 px como largura inici
 
 Os breakpoints são referências de projeto; cada componente deve responder ao espaço disponível sem perder legibilidade ou funcionalidade.
 
+- A barra inferior permanece abaixo de 1024 px; a sidebar entra em `64rem` (1024 px).
+- A navegação inferior reserva `--bottom-nav-height` (4,5 rem) mais a área segura do dispositivo; em paisagem de baixa altura, a variável cai para 3,75 rem sem reduzir o alvo mínimo de toque de 2,75 rem.
+- Em 320 px, a navegação inferior reduz somente o espaçamento horizontal e tipográfico dos rótulos para manter os seis itens na mesma linha.
+- O shell autenticado limita o conteúdo a 60 rem em tablets (768–1023 px) e a 96 rem em desktop; a landing usa `--container-width` de 80 rem e autenticação/onboarding mantêm máximos próprios.
+- `100vh` é mantido como fallback, seguido por `100svh` quando necessário e `100dvh` como referência dinâmica nos shells, páginas de autenticação e navegação lateral.
+
 ## Telas do projeto
 
 | Tela | Arquivo | Acesso | Descrição |
@@ -380,6 +386,14 @@ Não é necessário build ou backend. As páginas HTML referenciam `css/main.css
 5. No Perfil, confira o mês local atual, hoje destacado e os dias estudados marcados; em um perfil novo, a mensagem de estado vazio aparece. Para conferir o deslocamento, teste `buildMonthCalendar(2026, 11, "2026-12-01", [])`: dezembro de 2026 tem 31 dias e dois espaços antes de terça-feira, totalizando 33 células. Também confira fevereiro de 2024 para o ano bissexto.
 6. Repita as ações com dois alunos no mesmo navegador e confira que conquistas, músicas, XP, dias de estudo e calendário ficam isolados por usuário.
 
+### Teste manual da Etapa 4.1
+
+1. No DevTools, confira as larguras 320, 360, 390, 768, 1024, 1280 e 1440 px em todas as 12 páginas; verifique `scrollWidth <= clientWidth`, conteúdo centralizado em tablet/desktop e ausência de texto ou controle cortado.
+2. Em 320 px, teste estatísticas, acordes, opções/resultado do quiz, calendário, filtros, formulários e os seis itens da navegação inferior; confirme leitura, quebra de texto e ausência de sobreposição.
+3. Nas páginas logadas, role até o fim e confirme que último conteúdo, ações da aula e avanço do quiz ficam acima da barra inferior; em 1024 px ou mais, confirme sidebar e ausência da barra inferior.
+4. Em celular paisagem com altura próxima de 360 px, percorra o onboarding e abra o diálogo de saída do quiz; confirme que o conteúdo pode rolar e os controles continuam acessíveis.
+5. Aplique zoom de 200% e fonte grande do sistema; confira navegação por teclado, foco visível, alvos de toque e que nenhum texto ou controle seja cortado.
+
 ## Plano de desenvolvimento
 
 Executar somente a etapa solicitada. Ao concluir cada etapa, parar, listar os arquivos alterados (incluindo este README), resumir decisões e suposições em 3 a 5 linhas, encerrar com “✅ Etapa X concluída. Pode fazer o commit.” e sugerir uma mensagem Conventional Commits. Esperar “continuar” antes de avançar. Não executar comandos Git.
@@ -419,7 +433,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 
 ### Fase 4 — Revisão e entrega
 
-- [ ] 4.1 — Revisão de acessibilidade e navegação por teclado.
+- [x] 4.1 — Auditoria estática de responsividade nas páginas e larguras de referência.
 - [ ] 4.2 — Revisão responsiva contra referências do Figma.
 - [ ] 4.3 — Validação de persistência e isolamento entre alunos.
 - [ ] 4.4 — Revisão de conteúdo, estados vazios e mensagens.
@@ -514,6 +528,9 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - O player é uma simulação local sem vídeo: avança em intervalos de 60 segundos e persiste marcos de 25%, 50%, 75% e 100%. O botão de exercício mostra o aviso de disponibilidade futura e salva 50% como progresso parcial.
 - O módulo `toast.js` utiliza a região `aria-live` existente (ou cria uma se ausente), usa `textContent`, permite dispensar avisos e remove cada toast após cerca de 3,5 segundos, mesmo sob movimento reduzido.
 - A Etapa 3.4 reutiliza títulos, descrições, objetivos, acordes, XP e duração já presentes em `lessons.js`. As descrições das Aulas 1, 2, 3, 5, 6 e 7 foram criadas como conteúdo-base na Etapa 3.1, pois não havia detalhes dessas aulas no Figma; não foram adicionadas novas afirmações teóricas ou conteúdos além desses registros.
+- A Etapa 4.1 removeu a largura mínima global de 320 px, habilitou quebra segura de palavras longas e acrescentou `100dvh` depois dos fallbacks legados. O conteúdo logado fica limitado a 60 rem no tablet e 96 rem no desktop; os contêineres públicos preservam o máximo de 80 rem.
+- Em paisagem de baixa altura (até 384 px) abaixo do breakpoint desktop, `--bottom-nav-height` passa de 4,5 rem para 3,75 rem, preservando o mínimo de 44 px dos alvos. O diálogo do quiz ganha limite de altura dinâmica e rolagem própria; onboarding reduz espaçamentos verticais nesse cenário.
+- A inspeção da Etapa 4.1 foi estática, baseada em HTML/CSS; não houve validação renderizada no navegador. A verificação visual nas larguras de referência, com zoom, fonte grande e orientação paisagem permanece no checklist manual e a comparação pixel a pixel com o Figma fica na Etapa 4.2.
 
 ### Suposições
 
@@ -526,7 +543,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - A página Jogos apresenta descrições textuais para os títulos fornecidos; somente Quiz Musical é jogável nesta etapa e os demais cards avisam que chegam em breve.
 - A lista de músicas solicitada enumera sete títulos distintos; para completar oito entradas, foi incluída “Brilha, Brilha, Estrelinha” (Tradicional), uma escolha estática de repertório tradicional, sem integração a catálogo ou biblioteca externa.
 - Os exemplos de datas de desbloqueio exibidos nas capturas do Figma representam dados de demonstração; no HTML de aluno novo, todos os registros começam bloqueados e sem uma data de desbloqueio.
-- A composição visual das páginas estilizadas foi implementada a partir da identidade e dos requisitos descritos; a comparação pixel a pixel com as capturas ainda precisa ser feita na revisão responsiva da Etapa 4.2.
+- A composição visual das páginas estilizadas foi implementada a partir da identidade e dos requisitos descritos; a comparação pixel a pixel com as capturas ainda precisa ser feita na Etapa 4.2.
 
 ## Pendências conhecidas
 

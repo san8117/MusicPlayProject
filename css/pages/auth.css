@@ -1,6 +1,7 @@
 .auth-page {
   min-height: 100vh;
   min-height: 100svh;
+  min-height: 100dvh;
   padding: var(--space-6) var(--container-gutter);
   background:
     radial-gradient(ellipse at 50% 0%, rgb(150 56 245 / 12%), transparent 38%),
@@ -10,7 +11,9 @@
 .auth-page__container {
   display: grid;
   width: min(100%, 32rem);
+  min-height: calc(100vh - (var(--space-6) * 2));
   min-height: calc(100svh - (var(--space-6) * 2));
+  min-height: calc(100dvh - (var(--space-6) * 2));
   align-content: start;
   justify-items: center;
   gap: var(--space-6);
@@ -74,7 +77,9 @@
 
   .auth-page__container {
     width: min(100%, 72rem);
+    min-height: min(46rem, calc(100vh - (var(--space-8) * 2)));
     min-height: min(46rem, calc(100svh - (var(--space-8) * 2)));
+    min-height: min(46rem, calc(100dvh - (var(--space-8) * 2)));
     grid-template-columns: minmax(0, 0.9fr) minmax(24rem, 1.1fr);
     grid-template-rows: auto 1fr;
     column-gap: clamp(3rem, 8vw, 7rem);

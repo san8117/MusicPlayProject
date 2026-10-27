@@ -1,6 +1,7 @@
 .onboarding {
   min-height: 100vh;
   min-height: 100svh;
+  min-height: 100dvh;
   padding: clamp(1.5rem, 5vw, 3rem) var(--container-gutter);
   background:
     radial-gradient(ellipse at 50% 0%, rgb(150 56 245 / 10%), transparent 42%),
@@ -454,5 +455,20 @@
 @media (prefers-reduced-motion: reduce) {
   .onboarding-step {
     animation: none;
+  }
+}
+
+@media (max-height: 24rem) and (orientation: landscape) {
+  .onboarding {
+    padding-block: var(--space-4);
+  }
+
+  .onboarding__header {
+    gap: var(--space-3);
+    margin-block-end: var(--space-5);
+  }
+
+  .onboarding-step__header {
+    margin-block-end: var(--space-4);
   }
 }
