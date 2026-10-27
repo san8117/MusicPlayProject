@@ -29,6 +29,7 @@ export function emptyProgress() {
     songProgress: {},
     unlockedAchievements: {},
     studyMinutes: 0,
+    firstAccessSeen: false,
   };
 }
 
@@ -68,7 +69,6 @@ export function createUser(data) {
       goals: Array.isArray(data.goals) ? data.goals.filter((goal) => typeof goal === "string") : [],
       onboardingDraft: { step: 1, instrument: null, level: null, goals: [] },
       progress: emptyProgress(),
-      firstAccessSeen: false,
     };
 
     users[email] = user;

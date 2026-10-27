@@ -115,6 +115,7 @@ Os dados mostrados nas telas do Figma — João Silva, 850 XP, quatro dias de se
 - O nome vem do cadastro. No dashboard, a saudação usa o primeiro nome (por exemplo, “Olá, Guilherme! 👋”); no perfil aparecem nome completo, e-mail e avatar com a inicial.
 - Normalizar o nome: aplicar `trim`, reduzir espaços duplicados e capitalizar as palavras. As partículas “de”, “da” e “do” ficam minúsculas (ex.: “guilherme souza” → “Guilherme Souza”).
 - A saudação do primeiro acesso é “Bem-vindo, [primeiro nome]!”; nos acessos seguintes é “Bem-vindo de volta”.
+- O marcador `progress.firstAccessSeen` registra se a primeira saudação do dashboard já foi exibida.
 - No HTML, usar marcadores como `data-user="first-name"`, `data-user="full-name"`, `data-user="email"`, `data-user="initial"`, `data-user="xp"` e `data-user="streak"`. O texto inicial deve ser neutro, como “Aluno”, nunca “João”.
 - Inserir valores do aluno com `textContent`; não usar `innerHTML` com dados do usuário.
 
@@ -183,7 +184,7 @@ Ao concluir a aula, mostrar toast “+40 XP”, alterar o botão para “Conclu�
 - Resposta correta do quiz concede 20 XP; resposta incorreta não altera XP.
 - Concluir uma aula concede 40 XP.
 - Ganho de XP, subida de nível e conquista nova devem ter feedback imediato por toast acessível.
-- A sequência conta dias de estudo e começa em zero. A tabela de XP foi definida na Etapa 3.1; a regra de continuidade da sequência ainda precisa ser decidida antes de implementar essa mecânica.
+- A sequência conta dias de estudo e começa em zero. A tabela de XP foi definida na Etapa 3.1; a regra implementada na Etapa 3.3 mantém a contagem se o último estudo foi hoje ou ontem e a zera visualmente após um intervalo maior, sem apagar o histórico.
 
 ### Conquistas previstas
 
@@ -287,6 +288,7 @@ A Etapa 3.1 implementa o armazenamento local versionado: `musicplay:v1` contém 
         "level": 1,
         "streak": 0,
         "lastStudyDate": null,
+        "firstAccessSeen": false,
         "studyDays": [],
         "unlockedLessons": ["lesson-1"],
         "completedLessons": [],
@@ -302,8 +304,7 @@ A Etapa 3.1 implementa o armazenamento local versionado: `musicplay:v1` contém 
         "songProgress": {},
         "unlockedAchievements": {},
         "studyMinutes": 0
-      },
-      "firstAccessSeen": false
+      }
     }
   }
 }
@@ -334,6 +335,14 @@ Não é necessário build ou backend. As páginas HTML referenciam `css/main.css
 5. Saia e tente cadastrar novamente o mesmo e-mail: a aplicação deve informar que já existe uma conta. Tente também uma senha curta e confirme a mensagem no campo, sem criação da conta.
 6. Para exercitar o caso de e-mail repetido independentemente, `js/dev/devtools.js` contém comandos para criar usuários de teste isolados e removê-los ao final.
 7. Esse arquivo também descreve testes de formatação de nome e recuperação de JSON corrompido, preservando o conteúdo anterior do storage. Não é importado pelas páginas.
+
+### Teste manual da Etapa 3.3
+
+1. Com uma conta recém-criada e onboarding concluído, abra o dashboard: confira “Bem-vindo, Guilherme!”, Nível 1, 0 XP, 0 dias e a indicação da Aula 1. Recarregue para conferir “Bem-vindo de volta”.
+2. No perfil, confira nome, e-mail, inicial e os oito indicadores zerados; o calendário permanece no estado inicial até a Etapa 3.6.
+3. Faça logout, tente abrir diretamente `pages/dashboard.html` sem sessão e confirme o redirecionamento ao login. Crie outra conta sem concluir o onboarding e tente abrir uma página logada; o destino deve ser onboarding.
+4. Entre com dois e-mails diferentes no mesmo navegador, conclua onboarding com instrumentos distintos e confira que nome, instrumento, XP, aulas e demais dados não se misturam após logout/login.
+5. Teste os itens de navegação: Aula deve ativar Aprender, Quiz deve ativar Jogos e apenas o link correspondente deve manter `aria-current="page"`. Recarregue páginas logadas para confirmar que a sessão continua e não ganha dias de estudo apenas por visita.
 
 ## Plano de desenvolvimento
 
@@ -367,8 +376,8 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 
 - [x] 3.1 — Base JavaScript: storage, state, utilitários e dados.
 - [x] 3.2 — Autenticação local e onboarding.
-- [ ] 3.3 — XP e níveis.
-- [ ] 3.4 — Sequência de estudos.
+- [x] 3.3 — Navegação protegida, personalização, dashboard, perfil e base da sequência.
+- [ ] 3.4 — Integração das ações de estudo e sequência nas atividades.
 - [ ] 3.5 — Conquistas.
 - [ ] 3.6 — Integração e feedback de estados.
 
@@ -435,7 +444,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - No perfil desktop, dados do aluno e nível ficam à esquerda, estatísticas à direita e calendário em largura total; o grid de estatísticas permanece em duas colunas para caber na coluna lateral sem comprimir rótulos.
 - Todas as etapas de implementação de CSS da Fase 2 (2.1–2.7) estão concluídas; a comparação visual com as capturas continua no checklist de revisão final 4.2.
 - As imagens do Figma não estão disponíveis como arquivos no workspace; os estilos seguem as especificações fornecidas, mas a comparação visual renderizada permanece para a revisão final da Etapa 4.2.
-- A Etapa 3.1 cria ES Modules para storage, estado, utilitários, XP e dados. O ponto de entrada só consulta o usuário da sessão e não altera a interface; os testes de console ficam em `js/dev/devtools.js`, fora dos imports das páginas.
+- A Etapa 3.1 cria ES Modules para storage, estado, utilitários, XP e dados. Os testes de console ficam em `js/dev/devtools.js`, fora dos imports das páginas.
 - O storage guarda o objeto `{ schemaVersion, users }` em `musicplay:v1` e o e-mail da sessão em `musicplay:session`. As funções retornam fallback, booleano, `false` ou `null` em erros, removem somente a chave de aplicação inválida quando possível e nunca apagam outras chaves do navegador.
 - A conta guarda `level` da escolha de onboarding; `progress.level` representa o nível numérico de XP. O progresso inicial possui 0 XP, nível 1, sequência zerada e somente `lesson-1` liberada; cópias são devolvidas para evitar mutações acidentais.
 - Os dados imutáveis incluem dez instrumentos, três níveis e quatro objetivos, sete aulas disponíveis na trilha de violão (com conteúdo detalhado da Aula 4), três perguntas e sete músicas originais do Figma. Instrumentos sem conteúdo de aula recebem lista vazia; a música “Brilha, Brilha, Estrelinha”, adicionada anteriormente para completar oito cards HTML, não entra no conjunto fonte solicitado de sete faixas.
@@ -446,9 +455,14 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - Cadastro valida nome e sobrenome com letras Unicode (mínimo duas letras em cada), e-mail, senha de pelo menos seis caracteres e aceite dos termos. Login valida e-mail/senha e apresenta mensagem genérica para combinação incorreta, sem revelar qual dado falhou.
 - Erros por campo são associados aos elementos já existentes por `data-field-error`, `aria-invalid` e `.form-field--error`; o primeiro inválido recebe foco. Os formulários validam no blur, durante edição de campos com erro e no envio. O feedback geral informa e-mail repetido e falhas de persistência sem culpar a pessoa.
 - A visibilidade de senha atualiza o tipo, o rótulo acessível e `aria-pressed`. Durante o envio, o botão mostra “Criando sua conta...” ou “Entrando...”; links da landing já apontavam para cadastro e login corretos.
-- O `main.js` identifica a tela pelo caminho, pois os HTML não têm `data-page`, e inicia apenas o fluxo de cadastro, login ou onboarding correspondente. Rotas relativas funcionam tanto na raiz quanto em `pages/`; uma ação de sair é ligada por delegação quando a página contém `data-action="logout"`.
+- Na Etapa 3.2, `main.js` identificava as telas públicas pelo caminho. A Etapa 3.3 adiciona `data-page` ao `<body>` das 12 páginas e roteia cada tela por esse identificador. Rotas relativas funcionam tanto na raiz quanto em `pages/`; logout continua ligado uma única vez por delegação quando a página contém `data-action="logout"`.
 - O wizard salva instrumento, nível, objetivos e passo em `onboardingDraft` a cada escolha/avanço, restaura os controles no retorno, atualiza progresso e foco do título e só conclui com ao menos um objetivo. “48 aulas disponíveis” vem dos dados do violão e é atualizado no ponto já existente do HTML.
 - As páginas já têm os pontos de ligação necessários; não houve mudança em HTML ou CSS. Não foi iniciada a autenticação de servidor, que não faz parte deste projeto sem backend.
+- A Etapa 3.3 protege as oito páginas logadas: sem sessão, direciona para login; com onboarding incompleto, direciona para onboarding. A navegação ativa mantém `aria-current="page"` e Aula/Aprender e Quiz/Jogos compartilham seus destinos de navegação.
+- A personalização global preenche os marcadores `data-user` por `textContent`, deriva nível/título a partir do XP e do instrumento e mostra a saudação de primeiro acesso uma única vez. O dashboard destaca a aula atual ou a Aula 1, recomenda a próxima aula, um jogo e uma música compatível com o nível escolhido, e mantém a mensagem vazia de conquistas quando não há desbloqueios.
+- O perfil calcula aulas, músicas concluídas, jogos, taxa de acerto, sequência, XP, conquistas e tempo de estudo; valores de tempo são exibidos como `0min`, `45min` ou `3h 20min`. O calendário permanece sem integração nesta etapa para ser conectado na 3.6.
+- A sequência usa datas locais `YYYY-MM-DD`: estudar hoje ou ontem mantém a contagem consecutiva; se o último estudo foi anteontem ou antes, a sequência exibida é zero sem apagar o histórico. `registerVisit()` recalcula a sequência sem registrar estudo; somente `registerStudy()` acrescenta o dia, no máximo uma vez por data.
+- O registro das datas e o cálculo da sequência são separados para permitir testes com datas fornecidas; as atividades das etapas posteriores devem chamar `registerStudy()` somente após uma ação real de estudo, nunca ao abrir uma página.
 
 ### Suposições
 
@@ -466,7 +480,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 ## Pendências conhecidas
 
 - Conferir a renderização responsiva de todas as telas contra o Figma na Etapa 4.2, quando as capturas de referência estiverem acessíveis.
-- A regra de continuidade da sequência de estudos precisa ser definida antes de implementar o cálculo; os critérios adotados para conquistas e XP nesta etapa são propostas documentadas e podem ser ajustados.
+- Os critérios de algumas conquistas sem definição explícita no Figma continuam sendo as suposições já documentadas e poderão ser ajustados durante a implementação da Etapa 3.5.
 - SHA-256 local é somente uma demonstração educacional, não uma proteção de contas ou senhas reais.
 
 ## Créditos
