@@ -131,6 +131,8 @@ Cadastro e login são locais, demonstrativos e armazenados no navegador. A senha
 
 **Aviso de segurança:** hash SHA-256 no navegador, sem backend, salt/gerenciamento de credenciais e controles de servidor, não constitui autenticação segura. Os dados podem ser inspecionados ou alterados pelo usuário no próprio navegador. Trata-se de um projeto educacional, não apropriado para proteger contas ou informações reais.
 
+Na Etapa 3.2, o cadastro exige nome e sobrenome com no mínimo duas letras cada, e-mail válido, senha de no mínimo seis caracteres e aceite dos termos. Os erros são mostrados junto ao campo e o primeiro inválido recebe foco; e-mail repetido recebe mensagem geral amigável. O login mostra a mensagem genérica “Não encontramos essa combinação de e-mail e senha. Confira e tente de novo.” quando a combinação não confere. Se Web Crypto não estiver disponível, a interface orienta abrir a aplicação em localhost ou HTTPS.
+
 ## UX e acessibilidade
 
 - Tom acolhedor e encorajador, em segunda pessoa informal (“você”); erros não culpam a pessoa. Exemplo: “Ops, esse e-mail parece incompleto. Exemplo: nome@email.com”.
@@ -268,12 +270,18 @@ A Etapa 3.1 implementa o armazenamento local versionado: `musicplay:v1` contém 
     "aluno@email.com": {
       "name": "Guilherme Souza",
       "email": "aluno@email.com",
-      "passwordHash": null,
+      "passwordHash": "sha256-em-hexadecimal",
       "createdAt": "2026-10-26T12:00:00.000Z",
       "onboardingDone": false,
       "instrument": null,
       "level": null,
       "goals": [],
+      "onboardingDraft": {
+        "step": 1,
+        "instrument": null,
+        "level": null,
+        "goals": []
+      },
       "progress": {
         "xp": 0,
         "level": 1,
@@ -305,7 +313,7 @@ A Etapa 3.1 implementa o armazenamento local versionado: `musicplay:v1` contém 
 "aluno@email.com"
 ```
 
-O `level` no topo do usuário guarda a escolha do onboarding (`never-played`, `beginner` ou `some-experience`); `progress.level` é o nível numérico derivado do XP. `passwordHash` começa como `null` e será preenchido na etapa de autenticação. Encerrar a sessão remove somente `musicplay:session`; `clearAll()` limpa somente as duas chaves do MUSICPLAY, sem afetar outros dados do navegador.
+O `level` no topo do usuário guarda a escolha do onboarding (`never-played`, `beginner` ou `some-experience`); `progress.level` é o nível numérico derivado do XP. Após cadastro bem-sucedido, `passwordHash` contém o SHA-256 em hexadecimal da senha, nunca a senha original. `onboardingDraft` salva passo e escolhas para retomar o fluxo após recarregar a página; ao concluir, o rascunho é limpo. Encerrar a sessão remove somente `musicplay:session`; `clearAll()` limpa somente as duas chaves do MUSICPLAY, sem afetar outros dados do navegador.
 
 ## Como rodar
 
@@ -316,6 +324,16 @@ Como o projeto usa ES Modules, abrir `index.html` diretamente por `file://` não
 3. Acessar no navegador o endereço local informado pelo servidor.
 
 Não é necessário build ou backend. As páginas HTML referenciam `css/main.css` e `js/main.js`; a etapa 3.1 criou a base de módulos JavaScript, o armazenamento, o estado multiusuário e os dados iniciais. As próximas etapas conectam esse estado às interações da interface.
+
+### Teste manual de cadastro, login e onboarding
+
+1. Abra `pages/signup.html`, cadastre **Guilherme Oliveira** com um e-mail de teste, senha com pelo menos seis caracteres e aceite os termos; a conta deve iniciar o onboarding.
+2. Selecione um instrumento e nível, avance, marque um ou mais objetivos e recarregue a página. O passo e as escolhas devem continuar selecionados.
+3. Termine o onboarding; o fluxo deve abrir o dashboard. Vá ao Perfil e use **Sair**; a tela de login deve aparecer.
+4. Entre com o mesmo e-mail e senha. Como o onboarding foi concluído, o destino deve ser o dashboard. Se errar e-mail ou senha, a mesma mensagem genérica deve aparecer.
+5. Saia e tente cadastrar novamente o mesmo e-mail: a aplicação deve informar que já existe uma conta. Tente também uma senha curta e confirme a mensagem no campo, sem criação da conta.
+6. Para exercitar o caso de e-mail repetido independentemente, `js/dev/devtools.js` contém comandos para criar usuários de teste isolados e removê-los ao final.
+7. Esse arquivo também descreve testes de formatação de nome e recuperação de JSON corrompido, preservando o conteúdo anterior do storage. Não é importado pelas páginas.
 
 ## Plano de desenvolvimento
 
@@ -348,7 +366,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 ### Fase 3 — Dados e gamificação
 
 - [x] 3.1 — Base JavaScript: storage, state, utilitários e dados.
-- [ ] 3.2 — Quiz Musical e resultado.
+- [x] 3.2 — Autenticação local e onboarding.
 - [ ] 3.3 — XP e níveis.
 - [ ] 3.4 — Sequência de estudos.
 - [ ] 3.5 — Conquistas.
@@ -424,6 +442,13 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - As faixas de XP são 0, 100, 250, 450, 700 e 1.000 XP para os níveis 1 a 6; acima disso, a progressão extrapola em incrementos de 300 XP. Títulos são Iniciante até o nível 3, Intermediário do 4 ao 6 e Avançado a partir do 7.
 - Duas perguntas adicionais de violão foram criadas para completar o mínimo solicitado de três. Regras sem critério explícito foram assumidas como: primeira nota tocada, primeiro acorde aprendido e conclusão de aula em até 10 minutos para “Velocista”.
 - A etapa não altera HTML/CSS nem adiciona dependências; a chave de sessão separada preserva o modelo já documentado e a implementação usa apenas APIs nativas do navegador.
+- A Etapa 3.2 implementa cadastro e login em ES Modules, hashing SHA-256 via Web Crypto e sessão local. O comentário de `auth.js` alerta que o hash no cliente, sem backend, não oferece segurança real; sem `crypto.subtle`, a interface recebe uma mensagem que orienta usar localhost ou HTTPS.
+- Cadastro valida nome e sobrenome com letras Unicode (mínimo duas letras em cada), e-mail, senha de pelo menos seis caracteres e aceite dos termos. Login valida e-mail/senha e apresenta mensagem genérica para combinação incorreta, sem revelar qual dado falhou.
+- Erros por campo são associados aos elementos já existentes por `data-field-error`, `aria-invalid` e `.form-field--error`; o primeiro inválido recebe foco. Os formulários validam no blur, durante edição de campos com erro e no envio. O feedback geral informa e-mail repetido e falhas de persistência sem culpar a pessoa.
+- A visibilidade de senha atualiza o tipo, o rótulo acessível e `aria-pressed`. Durante o envio, o botão mostra “Criando sua conta...” ou “Entrando...”; links da landing já apontavam para cadastro e login corretos.
+- O `main.js` identifica a tela pelo caminho, pois os HTML não têm `data-page`, e inicia apenas o fluxo de cadastro, login ou onboarding correspondente. Rotas relativas funcionam tanto na raiz quanto em `pages/`; uma ação de sair é ligada por delegação quando a página contém `data-action="logout"`.
+- O wizard salva instrumento, nível, objetivos e passo em `onboardingDraft` a cada escolha/avanço, restaura os controles no retorno, atualiza progresso e foco do título e só conclui com ao menos um objetivo. “48 aulas disponíveis” vem dos dados do violão e é atualizado no ponto já existente do HTML.
+- As páginas já têm os pontos de ligação necessários; não houve mudança em HTML ou CSS. Não foi iniciada a autenticação de servidor, que não faz parte deste projeto sem backend.
 
 ### Suposições
 
@@ -442,6 +467,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 
 - Conferir a renderização responsiva de todas as telas contra o Figma na Etapa 4.2, quando as capturas de referência estiverem acessíveis.
 - A regra de continuidade da sequência de estudos precisa ser definida antes de implementar o cálculo; os critérios adotados para conquistas e XP nesta etapa são propostas documentadas e podem ser ajustados.
+- SHA-256 local é somente uma demonstração educacional, não uma proteção de contas ou senhas reais.
 
 ## Créditos
 

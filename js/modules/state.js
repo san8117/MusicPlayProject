@@ -66,6 +66,7 @@ export function createUser(data) {
       instrument: typeof data.instrument === "string" ? data.instrument : null,
       level: typeof data.level === "string" ? data.level : null,
       goals: Array.isArray(data.goals) ? data.goals.filter((goal) => typeof goal === "string") : [],
+      onboardingDraft: { step: 1, instrument: null, level: null, goals: [] },
       progress: emptyProgress(),
       firstAccessSeen: false,
     };
@@ -134,6 +135,32 @@ export function saveUser(user) {
     }
 
     users[email] = userCopy;
+    return storage.setItem("users", users);
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Removes a user record without changing the current session.
+ *
+ * @param {string} email User email.
+ * @returns {boolean} Whether the user record was removed.
+ */
+export function removeUser(email) {
+  try {
+    const normalizedEmail = normalizeEmail(email);
+    const users = storage.getItem("users", {});
+
+    if (!normalizedEmail || !users || typeof users !== "object" || Array.isArray(users)) {
+      return false;
+    }
+
+    if (!Object.hasOwn(users, normalizedEmail)) {
+      return true;
+    }
+
+    delete users[normalizedEmail];
     return storage.setItem("users", users);
   } catch {
     return false;
