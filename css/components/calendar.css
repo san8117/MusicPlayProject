@@ -39,7 +39,7 @@
 .study-calendar__day[data-state="studied"] {
   border-color: rgb(150 56 245 / 28%);
   color: var(--color-text);
-  background: #351c50;
+  background: var(--color-surface-purple-selected);
   font-weight: 700;
 }
 
@@ -88,7 +88,7 @@
 
 .study-calendar__legend-swatch--studied {
   border: 1px solid rgb(150 56 245 / 28%);
-  background: #351c50;
+  background: var(--color-surface-purple-selected);
 }
 
 .study-calendar__legend-swatch--not-studied {

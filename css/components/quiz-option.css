@@ -23,7 +23,7 @@
 
 .quiz-option:hover:not(:disabled, [aria-disabled="true"]) {
   border-color: var(--color-primary-hover);
-  background: #321b4b;
+  background: var(--color-surface-purple-hover);
   box-shadow: var(--shadow-card-highlight);
 }
 

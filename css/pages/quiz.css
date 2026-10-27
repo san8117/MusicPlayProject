@@ -287,7 +287,7 @@
 
 .quiz-exit-dialog__actions [data-action="continue-quiz"] {
   border-color: transparent;
-  color: #fff;
+  color: var(--color-white);
   background: var(--gradient-primary);
   box-shadow: var(--shadow-button-primary);
 }

@@ -94,7 +94,7 @@
   border-color: rgb(150 56 245 / 42%);
   background:
     radial-gradient(ellipse at 100% 0%, rgb(150 56 245 / 17%), transparent 48%),
-    linear-gradient(135deg, #201333, var(--color-surface-raised) 64%, #10172a);
+    linear-gradient(135deg, var(--color-surface-purple-deep), var(--color-surface-raised) 64%, var(--color-surface-blue-deep));
   box-shadow: var(--shadow-card-highlight);
 }
 

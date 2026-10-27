@@ -266,7 +266,9 @@ musicplay/
 
 ## Convenções de código
 
-- Classes CSS em BEM; design tokens em custom properties.
+- Classes CSS em BEM (`bloco__elemento--modificador`), em inglês e kebab-case; utilitários globais como `.visually-hidden`, `.skip-link` e `.text-secondary` são exceções intencionais.
+- Tokens em custom properties com prefixos consistentes: `--color-*`, `--font-family-*`, `--font-size-*`, `--space-*`, `--radius-*`, `--shadow-*`, `--duration-*`, `--ease-*`, `--z-index-*` e `--gradient-*`.
+- Atributos de integração JavaScript usam `data-*` com domínios por área, como `data-user`, `data-lesson`, `data-quiz`, `data-stat`, `data-calendar`, `data-action` e `data-page`.
 - CSS sem `!important`, seletores de ID ou aninhamento profundo; priorizar unidades relativas (`rem`, `%`, `fr` e `clamp`).
 - ES Modules, sem variáveis globais, funções pequenas, delegação de eventos e atributos `data-*` para conectar HTML e JavaScript.
 - Não usar `innerHTML` com dados fornecidos pelo usuário; preferir `textContent` e `createElement`.
@@ -310,6 +312,28 @@ As razões são valores calculados sobre as cores sólidas dos tokens e o ponto 
 5. Repita o reflow com zoom de 200% e texto grande nas larguras verificadas na Etapa 4.1.
 
 Uma inspeção estática e a medição de tokens não substituem testes com tecnologias assistivas, cores reais de gradientes/transparências ou dispositivos. A confirmação manual fica pendente; não houve validação renderizada com leitor de tela nem navegador nesta etapa.
+
+## Performance e consistência
+
+- As páginas compartilham o mesmo cabeçalho de recursos: `main.css`, preconnect para Google Fonts, folha de fontes, favicon SVG em data URI, `theme-color` e `color-scheme`. O script é `type="module"`, que é deferido por padrão.
+- Pesos efetivamente usados: Inter 400, 500, 600 e 700; Poppins 700 e 800. A URL do Google Fonts solicita seis pesos em vez dos nove que a URL anterior declarava, e usa `display=swap`.
+- `main.js` não importa módulos de páginas estaticamente: a inicialização carrega dinamicamente apenas o código da página atual, além dos módulos compartilhados necessários. `js/dev/devtools.js` continua fora da entrada da aplicação; não há chamadas de `console.log`/`console.debug` no código de aplicação.
+- `main.css` importa 30 folhas locais uma única vez, em ordem de base, layout, componentes e páginas. Não há folhas CSS vazias; os `.gitkeep` mantêm pastas versionáveis. Existem SVGs inline repetidos na navegação, sem arquivos de imagem raster no projeto.
+- As cores sólidas compartilhadas que estavam repetidas fora de `tokens.css` foram centralizadas em tokens, incluindo cores de texto/branco, tinta escura, tons de marca, superfícies profundas e gradientes de botões. Cores com transparência em efeitos decorativos ainda têm valores alpha locais porque cada opacidade compõe um efeito visual diferente; consolidá-las em dezenas de tokens adicionais traria complexidade sem reduzir chamadas de rede.
+- Os tamanhos em bytes dos arquivos não foram medidos nesta etapa. Contagem que pode ser comparada pelo código: nove pesos de fontes declarados antes e seis solicitados agora; 13 imports estáticos no ponto de entrada foram substituídos por zero imports estáticos e imports dinâmicos condicionais. A contagem de folhas CSS permanece em 31 requisições (arquivo principal mais 30 imports), além da folha do Google Fonts; a folha de fontes agora pode iniciar em paralelo à folha local graças ao preconnect.
+
+### Otimizações futuras, não aplicadas
+
+- Vale avaliar juntar/minificar CSS em um artefato de produção: hoje os 30 `@import` locais são requisições encadeadas e podem atrasar a descoberta de estilos. Um bundle reduz requisições e tamanho transmitido, mas exige uma etapa de build, altera o modo de desenvolvimento e contraria o requisito atual de não ter build step. A estrutura foi mantida; qualquer mudança deve ser autorizada antes.
+- Um sprite SVG poderia reduzir duplicação de ícones da navegação, mas acrescentaria um arquivo externo e mudaria como os ícones são incorporados; mantidos SVGs inline, conforme o escopo.
+- Minificação, cache e compressão dependem de hospedagem/servidor e não podem ser comprovados no projeto estático. Não foram adicionadas ferramentas ou dependências.
+
+### Checklist manual
+
+1. Abrir as 12 páginas por servidor estático e confirmar no Network que fonts CSS carrega com os seis pesos e que o favicon aparece.
+2. Conferir cada fluxo de autenticação, navegação e páginas de atividade após os imports dinâmicos; observar a aba Console por falhas de import.
+3. Comparar fontes/cores com as capturas existentes e confirmar que nenhuma diferença visual foi introduzida; verificar funcionamento quando Google Fonts não responde (fallback do sistema).
+4. Medir tempo e tamanho de resposta no DevTools em uma hospedagem representativa antes de decidir sobre bundling ou minificação.
 
 ## Modelo de dados (`localStorage`)
 
@@ -470,7 +494,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 
 - [x] 4.1 — Auditoria estática de responsividade nas páginas e larguras de referência.
 - [x] 4.2 — Auditoria estática de acessibilidade (meta WCAG 2.1 AA).
-- [ ] 4.3 — Validação de persistência e isolamento entre alunos.
+- [x] 4.3 — Auditoria de performance e consistência.
 - [ ] 4.4 — Revisão de conteúdo, estados vazios e mensagens.
 - [ ] 4.5 — Verificação final e documentação.
 
@@ -496,7 +520,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - Conquistas inicia com 0 desbloqueadas e 12 bloqueadas. Datas de desbloqueio não são copiadas dos exemplos visuais do Figma; os campos ficam preparados para receber datas reais quando o aluno desbloquear cada conquista.
 - Perfil inicia sem dados pessoais reais, com estatísticas zeradas e contêiner de calendário vazio para preenchimento dinâmico.
 - A fundação CSS usa tokens `--color-*`, `--font-*`, `--space-*`, `--radius-*`, `--shadow-*`, `--z-index-*` e `--duration-*`; cores e proporções iniciais foram aproximadas visualmente a partir das capturas do Figma.
-- A tipografia usa Poppins para títulos e Inter para textos via Google Fonts com `display=swap`, importadas pela folha `typography.css`, sem alterar a estrutura HTML.
+- A tipografia usa Poppins para títulos e Inter para textos via Google Fonts com `display=swap`, carregadas pelos cabeçalhos HTML compartilhados.
 - `css/main.css` contém somente imports, agrupados na ordem base, layout, componentes e páginas; folhas de layout e páginas ainda não implementadas foram criadas como reservas importadas.
 - Componentes base incluem botões, cards, formulários, badges, progresso e toasts, com estados acessíveis, foco visível, transições e respeito a `prefers-reduced-motion`.
 - A Etapa 2.2 estiliza a landing e as páginas de cadastro e login sem alterar a semântica HTML; foi adicionado apenas um `span` no título da landing para aplicar o gradiente somente a “forma incrível”.
@@ -569,6 +593,10 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - A Etapa 4.2 acrescentou `tabindex="-1"` ao `<main>` de cada página e consolidou um único `<h1>` acessível no onboarding, com títulos dos passos como `<h2>`. O CSS compartilhado apresenta foco ciano, suporte básico a alto contraste/cores forçadas, e reduz opacidades que prejudicavam textos desabilitados ou bloqueados.
 - Os tokens `--color-text-subtle` (`#64708f` → `#7b86a3`), `--color-primary-hover` (`#a64cf9` → `#b86cff`), `--color-border` (`#2e2743` → `#6b617f`) e `--color-border-strong` (`#45365e` → `#81768f`) foram clareados para cumprir contraste mínimo nos pares testados. Toasts agora pausam sua expiração quando recebem foco ou ponteiro, e têm botão de fechamento com alvo de 44 px.
 - A acessibilidade da Etapa 4.2 foi auditada estaticamente; a lista de verificação manual no README cobre teclado, leitor de tela, zoom e alto contraste. Não foi feita validação renderizada nem teste com tecnologia assistiva.
+- Na Etapa 4.3, o ponto de entrada passou a importar dinamicamente o inicializador da página atual; as páginas públicas não carregam os módulos da área autenticada, e somente Perfil importa o fluxo de logout. Cabeçalhos HTML receberam preconnect, folha Google Fonts com `display=swap`, favicon SVG, tema e color-scheme consistentes.
+- Foram mantidos apenas os pesos presentes no CSS: Inter 400/500/600/700 e Poppins 700/800. Tokens cobrem famílias, tamanhos, espaçamentos, raios, sombras, duração, easing, z-index, gradientes e cores sólidas repetidas. A auditoria identificou valores RGB com alfa para sobreposições e brilhos decorativos que continuam locais para preservar transparências específicas.
+- `main.css` mantém 30 imports únicos na ordem base → layout → componentes → páginas. A cadeia pode gerar atraso de descoberta, mas não foi consolidada porque bundling introduziria um build step proibido pelo escopo atual; sprite SVG e minificação também ficaram como sugestões sem alteração estrutural.
+- A contagem de pesos solicitados caiu de nove para seis; os 13 imports estáticos da entrada foram substituídos por imports dinâmicos. Tamanho total em bytes, cachê, compressão, tempo de carregamento e número real de requisições de fonte dependem de execução/hospedagem e não foram medidos nesta auditoria estática.
 
 ### Suposições
 

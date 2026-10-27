@@ -87,7 +87,7 @@
 .achievement-card[data-achievement-id="first-chord"],
 .achievement-card[data-achievement-id="master-of-notes"],
 .achievement-card[data-achievement-id="100-questions"] {
-  --achievement-accent: #bd83ff;
+  --achievement-accent: var(--color-achievement-purple);
   --achievement-surface: var(--color-primary-soft);
 }
 

@@ -21,12 +21,12 @@
 
 .badge {
   border-color: rgb(150 56 245 / 25%);
-  color: #c28aff;
+  color: var(--color-brand-light);
   background: var(--color-primary-soft);
 }
 
 .badge--purple {
-  color: #c28aff;
+  color: var(--color-brand-light);
   background: var(--color-primary-soft);
 }
 
@@ -70,7 +70,7 @@
 }
 
 .game-xp {
-  color: #c28aff;
+  color: var(--color-brand-light);
   background: var(--color-primary-soft);
 }
 

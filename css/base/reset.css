@@ -93,8 +93,8 @@ dialog {
 }
 
 ::selection {
-  color: var(--color-text, #f7f5fc);
-  background: var(--color-primary, #9638f5);
+  color: var(--color-text);
+  background: var(--color-primary);
 }
 
 @media (prefers-reduced-motion: reduce) {

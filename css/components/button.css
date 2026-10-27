@@ -45,14 +45,14 @@
 
 .button--primary {
   border-color: transparent;
-  color: #fff;
+  color: var(--color-white);
   background: var(--gradient-primary);
   box-shadow: var(--shadow-button-primary);
 }
 
 .button--primary:hover:not(:disabled) {
-  color: #fff;
-  background: linear-gradient(105deg, #9236f4, #b153fa);
+  color: var(--color-white);
+  background: var(--gradient-primary-hover);
   box-shadow: 0 0.65rem 1.5rem rgb(150 56 245 / 38%);
 }
 
@@ -80,14 +80,14 @@
 }
 
 .button--cyan {
-  color: #061317;
-  background: linear-gradient(105deg, #13aebd, #20c9d6);
+  color: var(--color-ink);
+  background: var(--gradient-cyan);
   box-shadow: 0 0.45rem 1.1rem rgb(32 201 214 / 20%);
 }
 
 .button--cyan:hover:not(:disabled) {
-  color: #061317;
-  background: linear-gradient(105deg, #22c3d0, #42dbe2);
+  color: var(--color-ink);
+  background: var(--gradient-cyan-hover);
 }
 
 .button--sm {

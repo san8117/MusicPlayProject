@@ -55,7 +55,7 @@
 
 .chord-card--am {
   border-color: rgb(162 76 255 / 40%);
-  background: #1b112c;
+  background: var(--color-surface-purple-raised);
 }
 
 .chord-card--em {

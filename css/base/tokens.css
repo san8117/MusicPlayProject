@@ -32,9 +32,27 @@
   --color-red-soft: #30141e;
   --color-cyan: #20c9d6;
   --color-cyan-soft: #0b202a;
+  --color-white: #fff;
+  --color-ink: #061317;
+  --color-brand-light: #c28aff;
+  --color-achievement-purple: #bd83ff;
+  --color-surface-purple-deep: #201333;
+  --color-surface-blue-deep: #10172a;
+  --color-surface-blue-midnight: #101326;
+  --color-surface-purple-raised: #1b112c;
+  --color-surface-purple-selected: #351c50;
+  --color-surface-purple-hover: #321b4b;
+  --color-primary-hover-start: #9236f4;
+  --color-primary-hover-end: #b153fa;
+  --color-cyan-button-start: #13aebd;
+  --color-cyan-button-hover-start: #22c3d0;
+  --color-cyan-button-hover-end: #42dbe2;
+  --gradient-primary-hover: linear-gradient(105deg, var(--color-primary-hover-start), var(--color-primary-hover-end));
+  --gradient-cyan: linear-gradient(105deg, var(--color-cyan-button-start), var(--color-cyan));
+  --gradient-cyan-hover: linear-gradient(105deg, var(--color-cyan-button-hover-start), var(--color-cyan-button-hover-end));
 
-  --font-family-heading: "Poppins", "Segoe UI", sans-serif;
-  --font-family-body: "Inter", "Segoe UI", sans-serif;
+  --font-family-heading: "Poppins", system-ui, sans-serif;
+  --font-family-body: "Inter", system-ui, sans-serif;
 
   --font-size-xs: clamp(0.6875rem, 0.66rem + 0.08vw, 0.75rem);
   --font-size-sm: clamp(0.75rem, 0.71rem + 0.12vw, 0.875rem);

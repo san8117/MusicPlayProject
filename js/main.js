@@ -1,52 +1,76 @@
-import { login, logout, redirectAuthenticatedUser, signup, getPageRoute } from "./modules/auth.js";
-import { initializeAuthForm, initializeLogout } from "./modules/form-ui.js";
-import { initializeNavigation } from "./modules/navigation.js";
-import { initializeOnboarding } from "./modules/onboarding.js";
-import { populateUserUI } from "./modules/user-ui.js";
-import { initializeDashboard } from "./pages/dashboard.js";
-import { initializeLearnPage } from "./pages/learn.js";
-import { initializeLessonPage } from "./pages/lesson.js";
-import { initializeProfile } from "./pages/profile.js";
-import { initializeGamesPage } from "./pages/games.js";
-import { initializeQuizPage } from "./pages/quiz.js";
-import { initializeAchievementsPage } from "./pages/achievements.js";
-import { initializeSongsPage } from "./pages/songs.js";
-
 const page = document.body.dataset.page;
 
-if (page === "signup" || page === "login") {
-  if (!redirectAuthenticatedUser()) {
-    const formName = page;
-    const form = document.querySelector(`[data-form="${formName}"]`);
+await initializePage(page);
 
-    if (form) {
-      initializeAuthForm(form, formName === "signup" ? signup : login);
+async function initializePage(currentPage) {
+  if (currentPage === "signup" || currentPage === "login") {
+    const [{ login, redirectAuthenticatedUser, signup }, { initializeAuthForm }] = await Promise.all([
+      import("./modules/auth.js"),
+      import("./modules/form-ui.js"),
+    ]);
+
+    if (!redirectAuthenticatedUser()) {
+      const form = document.querySelector(`[data-form="${currentPage}"]`);
+
+      if (form) {
+        initializeAuthForm(form, currentPage === "signup" ? signup : login);
+      }
     }
-  }
-} else if (page === "onboarding") {
-  initializeOnboarding(document);
-} else if (initializeNavigation(page)) {
-  if (["dashboard", "learn", "lesson", "games", "quiz", "songs", "achievements", "profile"].includes(page)) {
-    populateUserUI(document);
+
+    return;
   }
 
-  if (page === "dashboard") {
-    initializeDashboard(document);
-  } else if (page === "learn") {
-    initializeLearnPage(document);
-  } else if (page === "lesson") {
-    initializeLessonPage(document);
-  } else if (page === "profile") {
-    initializeProfile(document);
-  } else if (page === "games") {
-    initializeGamesPage(document);
-  } else if (page === "quiz") {
-    initializeQuizPage(document);
-  } else if (page === "achievements") {
-    initializeAchievementsPage(document);
-  } else if (page === "songs") {
-    initializeSongsPage(document);
+  if (currentPage === "onboarding") {
+    const { initializeOnboarding } = await import("./modules/onboarding.js");
+    initializeOnboarding(document);
+    return;
+  }
+
+  const pageInitializers = {
+    dashboard: () => import("./pages/dashboard.js"),
+    learn: () => import("./pages/learn.js"),
+    lesson: () => import("./pages/lesson.js"),
+    profile: () => import("./pages/profile.js"),
+    games: () => import("./pages/games.js"),
+    quiz: () => import("./pages/quiz.js"),
+    achievements: () => import("./pages/achievements.js"),
+    songs: () => import("./pages/songs.js"),
+  };
+  const loadPage = pageInitializers[currentPage];
+
+  if (!loadPage) {
+    return;
+  }
+
+  const { initializeNavigation } = await import("./modules/navigation.js");
+
+  if (!initializeNavigation(currentPage)) {
+    return;
+  }
+
+  const [{ populateUserUI }, pageModule] = await Promise.all([
+    import("./modules/user-ui.js"),
+    loadPage(),
+  ]);
+
+  populateUserUI(document);
+  const initializerName = {
+    dashboard: "initializeDashboard",
+    learn: "initializeLearnPage",
+    lesson: "initializeLessonPage",
+    profile: "initializeProfile",
+    games: "initializeGamesPage",
+    quiz: "initializeQuizPage",
+    achievements: "initializeAchievementsPage",
+    songs: "initializeSongsPage",
+  }[currentPage];
+  pageModule[initializerName](document);
+
+  if (currentPage === "profile") {
+    const [{ logout, getPageRoute }, { initializeLogout }] = await Promise.all([
+      import("./modules/auth.js"),
+      import("./modules/form-ui.js"),
+    ]);
+    initializeLogout(document, logout, getPageRoute);
   }
 }
-
-initializeLogout(document, logout, getPageRoute);
