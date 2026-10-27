@@ -43,7 +43,6 @@
   background: var(--color-surface-raised);
   box-shadow: none;
   cursor: default;
-  opacity: 0.68;
 }
 
 .quiz-option__letter {

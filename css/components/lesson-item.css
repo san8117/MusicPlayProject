@@ -166,7 +166,6 @@
   background: var(--color-surface);
   box-shadow: none;
   cursor: not-allowed;
-  opacity: 0.62;
 }
 
 .lesson-item--locked .lesson-item__number,
@@ -184,7 +183,6 @@
 .lesson-list__item[data-state="locked"] .lesson-item__xp {
   color: var(--color-orange);
   background: var(--color-orange-soft);
-  opacity: 0.7;
 }
 
 .lesson-item[href]:hover,

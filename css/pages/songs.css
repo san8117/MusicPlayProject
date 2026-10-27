@@ -70,7 +70,6 @@
 
 .song-filters__button:disabled {
   cursor: not-allowed;
-  opacity: 0.55;
 }
 
 .songs-list {
@@ -227,7 +226,6 @@
 .song-card[data-state="locked"],
 .song-card--locked {
   color: var(--color-text-subtle);
-  opacity: 0.62;
 }
 
 .song-card[data-state="error"],

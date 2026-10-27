@@ -276,6 +276,41 @@ musicplay/
 - Mensagens de commit no padrão Conventional Commits (ex.: `feat(quiz): add answer feedback states`).
 - Não criar commits durante as etapas de implementação; os commits são feitos pelos criadores.
 
+## Acessibilidade
+
+A implementação segue os critérios WCAG 2.1 AA como meta. Todas as 12 páginas definem `lang="pt-BR"`, título descritivo, link de salto no primeiro ponto de foco e um único `<main id="main-content" tabindex="-1">`. No onboarding, um título principal oculto fornece o contexto da página e os títulos dos passos são `<h2>`, mantendo um único `<h1>` acessível por vez sem alterar a apresentação.
+
+- Navegação principal e navegação do rodapé têm nomes acessíveis; o item ativo usa `aria-current`. SVGs e ícones puramente decorativos são ocultados das tecnologias assistivas; links e ações usam elementos nativos.
+- Campos têm labels, `required`, autocomplete adequado e descrição associada para erros. A validação foca o primeiro campo inválido; erros gerais de autenticação são anunciados em região `status` educada, não assertiva.
+- Os passos do onboarding, respostas/resultados do quiz, filtros e calendário comunicam estado por texto e atributos ARIA. A troca de etapa/pergunta move o foco; o diálogo nativo do quiz mantém Escape e restaura o foco ao controle de origem.
+- Indicadores `:focus-visible` usam ciano; `prefers-contrast: more` reforça bordas e `forced-colors` mapeia foco e contornos aos valores do sistema. `prefers-reduced-motion` reduz transições/animações; toasts podem ser fechados e pausam o temporizador quando recebem foco ou ponteiro.
+- Contrastes foram calculados para pares principais e ajustados quando necessário. Texto de elementos desabilitados/bloqueados não é esmaecido por opacidade. Os toasts têm botão de fechar com alvo mínimo de 44 × 44 px.
+
+| Par de cores | Antes | Depois | Critério AA |
+|---|---:|---:|---|
+| Texto principal `--color-text` / fundo `--color-background` | 18,6:1 | 18,6:1 | Passa (4,5:1) |
+| Texto secundário `--color-text-secondary` / fundo | 6,4:1 | 6,4:1 | Passa (4,5:1) |
+| Texto sutil `--color-text-subtle` / fundo | 4,0:1 | 5,5:1 | Passa (4,5:1) |
+| Link roxo `--color-primary-hover` / superfície elevada | 4,3:1 | 5,6:1 | Passa (4,5:1) |
+| Borda `--color-border` / superfície elevada | 1,3:1 | 3,1:1 | Passa (3:1, componente) |
+| Borda forte `--color-border-strong` / superfície elevada | 1,7:1 | 4,2:1 | Passa (3:1, componente) |
+| Ciano `--color-cyan` / fundo | 9,9:1 | 9,9:1 | Passa (4,5:1) |
+| Laranja `--color-orange` / fundo | 7,1:1 | 7,1:1 | Passa (4,5:1) |
+| Vermelho `--color-red` / fundo | 6,4:1 | 6,4:1 | Passa (4,5:1) |
+| Texto branco / extremidade mais clara do gradiente primário | 4,6:1 | 4,6:1 | Passa (4,5:1) |
+
+As razões são valores calculados sobre as cores sólidas dos tokens e o ponto mais desfavorável dos gradientes indicados; efeitos de transparência, estados de hover, configurações do sistema e renderização real devem ser confirmados no navegador.
+
+### Teste manual de acessibilidade
+
+1. Use somente teclado em cada tela: confirme que Tab começa no link de salto, que ele move o foco ao conteúdo e que controles têm indicador de foco visível. Teste os cards do onboarding, quiz, filtros, itens bloqueados, navegação e fechar toast.
+2. No quiz, abra o diálogo após responder, teste Escape e confirme retorno do foco ao link que iniciou a navegação; percorra as opções e a tela de resultado sem mouse. No onboarding, mude de passo e confirme o foco no título do passo ativo.
+3. Use leitor de tela (NVDA/VoiceOver): confira nomes de controles, labels/erros, progresso, estado de filtros e anúncios do quiz/toasts/calendário sem repetição excessiva.
+4. Ative alto contraste/cores forçadas, `prefers-contrast: more` e `prefers-reduced-motion`; confirme contornos, estados e leitura sem depender de cor ou animação.
+5. Repita o reflow com zoom de 200% e texto grande nas larguras verificadas na Etapa 4.1.
+
+Uma inspeção estática e a medição de tokens não substituem testes com tecnologias assistivas, cores reais de gradientes/transparências ou dispositivos. A confirmação manual fica pendente; não houve validação renderizada com leitor de tela nem navegador nesta etapa.
+
 ## Modelo de dados (`localStorage`)
 
 A Etapa 3.1 implementa o armazenamento local versionado: `musicplay:v1` contém `schemaVersion` e o mapa de usuários indexado pelo e-mail normalizado; `musicplay:session` contém somente o e-mail da sessão atual. O progresso é isolado por conta. O wrapper recupera JSON corrompido, tenta remover a chave inválida e retorna fallback sem deixar erros de armazenamento escaparem.
@@ -434,7 +469,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 ### Fase 4 — Revisão e entrega
 
 - [x] 4.1 — Auditoria estática de responsividade nas páginas e larguras de referência.
-- [ ] 4.2 — Revisão responsiva contra referências do Figma.
+- [x] 4.2 — Auditoria estática de acessibilidade (meta WCAG 2.1 AA).
 - [ ] 4.3 — Validação de persistência e isolamento entre alunos.
 - [ ] 4.4 — Revisão de conteúdo, estados vazios e mensagens.
 - [ ] 4.5 — Verificação final e documentação.
@@ -492,8 +527,8 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - Os filtros de música usam `aria-pressed`; o JS pode usar `data-level="beginner|intermediate|advanced"` e `.song-card[data-state="studied|completed|locked|error"]` (ou modificadores equivalentes) para os estados. Conquistas usam `.achievement-card[data-state="unlocked|locked"]`, `data-achievement-id` e classes/atributos de cor opcionais.
 - As células do calendário devem ser geradas pelo JS com `.study-calendar__day`, `.study-calendar__day--studied`, `.study-calendar__day--today` e `.study-calendar__day--empty` (ou atributos equivalentes descritos no CSS). O HTML não contém cabeçalho dos dias da semana, por isso ele não foi acrescentado por CSS nem por mudança estrutural.
 - No perfil desktop, dados do aluno e nível ficam à esquerda, estatísticas à direita e calendário em largura total; o grid de estatísticas permanece em duas colunas para caber na coluna lateral sem comprimir rótulos.
-- Todas as etapas de implementação de CSS da Fase 2 (2.1–2.7) estão concluídas; a comparação visual com as capturas continua no checklist de revisão final 4.2.
-- As imagens do Figma não estão disponíveis como arquivos no workspace; os estilos seguem as especificações fornecidas, mas a comparação visual renderizada permanece para a revisão final da Etapa 4.2.
+- Todas as etapas de implementação de CSS da Fase 2 (2.1–2.7) estão concluídas; a comparação visual com as capturas continua no checklist de revisão final.
+- As imagens do Figma não estão disponíveis como arquivos no workspace; os estilos seguem as especificações fornecidas, mas a comparação visual renderizada permanece para a revisão final.
 - A Etapa 3.1 cria ES Modules para storage, estado, utilitários, XP e dados. Os testes de console ficam em `js/dev/devtools.js`, fora dos imports das páginas.
 - O storage guarda o objeto `{ schemaVersion, users }` em `musicplay:v1` e o e-mail da sessão em `musicplay:session`. As funções retornam fallback, booleano, `false` ou `null` em erros, removem somente a chave de aplicação inválida quando possível e nunca apagam outras chaves do navegador.
 - A conta guarda `level` da escolha de onboarding; `progress.level` representa o nível numérico de XP. O progresso inicial possui 0 XP, nível 1, sequência zerada e somente `lesson-1` liberada; cópias são devolvidas para evitar mutações acidentais.
@@ -530,7 +565,10 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - A Etapa 3.4 reutiliza títulos, descrições, objetivos, acordes, XP e duração já presentes em `lessons.js`. As descrições das Aulas 1, 2, 3, 5, 6 e 7 foram criadas como conteúdo-base na Etapa 3.1, pois não havia detalhes dessas aulas no Figma; não foram adicionadas novas afirmações teóricas ou conteúdos além desses registros.
 - A Etapa 4.1 removeu a largura mínima global de 320 px, habilitou quebra segura de palavras longas e acrescentou `100dvh` depois dos fallbacks legados. O conteúdo logado fica limitado a 60 rem no tablet e 96 rem no desktop; os contêineres públicos preservam o máximo de 80 rem.
 - Em paisagem de baixa altura (até 384 px) abaixo do breakpoint desktop, `--bottom-nav-height` passa de 4,5 rem para 3,75 rem, preservando o mínimo de 44 px dos alvos. O diálogo do quiz ganha limite de altura dinâmica e rolagem própria; onboarding reduz espaçamentos verticais nesse cenário.
-- A inspeção da Etapa 4.1 foi estática, baseada em HTML/CSS; não houve validação renderizada no navegador. A verificação visual nas larguras de referência, com zoom, fonte grande e orientação paisagem permanece no checklist manual e a comparação pixel a pixel com o Figma fica na Etapa 4.2.
+- A inspeção da Etapa 4.1 foi estática, baseada em HTML/CSS; não houve validação renderizada no navegador. A verificação visual nas larguras de referência, com zoom, fonte grande e orientação paisagem permanece no checklist manual e a comparação pixel a pixel com o Figma fica para a revisão final.
+- A Etapa 4.2 acrescentou `tabindex="-1"` ao `<main>` de cada página e consolidou um único `<h1>` acessível no onboarding, com títulos dos passos como `<h2>`. O CSS compartilhado apresenta foco ciano, suporte básico a alto contraste/cores forçadas, e reduz opacidades que prejudicavam textos desabilitados ou bloqueados.
+- Os tokens `--color-text-subtle` (`#64708f` → `#7b86a3`), `--color-primary-hover` (`#a64cf9` → `#b86cff`), `--color-border` (`#2e2743` → `#6b617f`) e `--color-border-strong` (`#45365e` → `#81768f`) foram clareados para cumprir contraste mínimo nos pares testados. Toasts agora pausam sua expiração quando recebem foco ou ponteiro, e têm botão de fechamento com alvo de 44 px.
+- A acessibilidade da Etapa 4.2 foi auditada estaticamente; a lista de verificação manual no README cobre teclado, leitor de tela, zoom e alto contraste. Não foi feita validação renderizada nem teste com tecnologia assistiva.
 
 ### Suposições
 
@@ -543,11 +581,11 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - A página Jogos apresenta descrições textuais para os títulos fornecidos; somente Quiz Musical é jogável nesta etapa e os demais cards avisam que chegam em breve.
 - A lista de músicas solicitada enumera sete títulos distintos; para completar oito entradas, foi incluída “Brilha, Brilha, Estrelinha” (Tradicional), uma escolha estática de repertório tradicional, sem integração a catálogo ou biblioteca externa.
 - Os exemplos de datas de desbloqueio exibidos nas capturas do Figma representam dados de demonstração; no HTML de aluno novo, todos os registros começam bloqueados e sem uma data de desbloqueio.
-- A composição visual das páginas estilizadas foi implementada a partir da identidade e dos requisitos descritos; a comparação pixel a pixel com as capturas ainda precisa ser feita na Etapa 4.2.
+- A composição visual das páginas estilizadas foi implementada a partir da identidade e dos requisitos descritos; a comparação pixel a pixel com as capturas ainda precisa ser feita na verificação final.
 
 ## Pendências conhecidas
 
-- Conferir a renderização responsiva de todas as telas contra o Figma na Etapa 4.2, quando as capturas de referência estiverem acessíveis.
+- Conferir a renderização responsiva de todas as telas contra o Figma na verificação final, quando as capturas de referência estiverem acessíveis.
 - SHA-256 local é somente uma demonstração educacional, não uma proteção de contas ou senhas reais.
 
 ## Créditos

@@ -1,5 +1,6 @@
 const TOAST_DURATION = 3500;
 const TOAST_TYPES = new Set(["xp", "level", "achievement", "info"]);
+const toastTimers = new WeakMap();
 
 /**
  * Shows a dismissible live-region toast that expires automatically.
@@ -25,7 +26,6 @@ export function showToast(message, options = {}) {
   if (reducedMotion) {
     toast.style.animation = "none";
   }
-  toast.setAttribute("role", "status");
   content.className = "toast__message";
   content.textContent = message;
   closeButton.className = "toast__close";
@@ -36,7 +36,11 @@ export function showToast(message, options = {}) {
 
   toast.append(content, closeButton);
   container.append(toast);
-  globalThis.setTimeout(() => dismissToast(toast), TOAST_DURATION);
+  scheduleToastDismissal(toast);
+  toast.addEventListener("pointerenter", pauseToastDismissal);
+  toast.addEventListener("pointerleave", resumeToastDismissal);
+  toast.addEventListener("focusin", pauseToastDismissal);
+  toast.addEventListener("focusout", resumeToastDismissal);
   return toast;
 }
 
@@ -77,6 +81,8 @@ function dismissToast(toast) {
     return;
   }
 
+  globalThis.clearTimeout(toastTimers.get(toast));
+  toastTimers.delete(toast);
   const reducedMotion = globalThis.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
 
   if (reducedMotion) {
@@ -86,4 +92,28 @@ function dismissToast(toast) {
 
   toast.classList.add("toast--leaving");
   globalThis.setTimeout(() => toast.remove(), 300);
+}
+
+function scheduleToastDismissal(toast) {
+  globalThis.clearTimeout(toastTimers.get(toast));
+  toastTimers.set(toast, globalThis.setTimeout(() => dismissToast(toast), TOAST_DURATION));
+}
+
+function pauseToastDismissal(event) {
+  globalThis.clearTimeout(toastTimers.get(event.currentTarget));
+  toastTimers.delete(event.currentTarget);
+}
+
+function resumeToastDismissal(event) {
+  const toast = event.currentTarget;
+  const nextTarget = event.relatedTarget;
+
+  if (
+    toast.matches(":hover, :focus-within")
+    || (nextTarget instanceof Node && toast.contains(nextTarget))
+  ) {
+    return;
+  }
+
+  scheduleToastDismissal(toast);
 }

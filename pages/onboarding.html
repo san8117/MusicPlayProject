@@ -13,7 +13,8 @@
   </head>
   <body data-page="onboarding">
     <a class="skip-link" href="#main-content">Pular para o conteúdo</a>
-    <main class="onboarding" id="main-content">
+    <main class="onboarding" id="main-content" tabindex="-1">
+      <h1 class="visually-hidden">Configure sua jornada musical</h1>
       <div class="onboarding__container">
         <header class="onboarding__header">
           <a class="brand onboarding__brand" href="../index.html" aria-label="MUSICPLAY, página inicial">
@@ -41,9 +42,9 @@
         <form class="onboarding-form" data-form="onboarding" novalidate>
           <section class="onboarding-step" data-step="1" aria-labelledby="instrument-title">
             <header class="onboarding-step__header">
-              <h1 class="onboarding-step__title" id="instrument-title">
+              <h2 class="onboarding-step__title" id="instrument-title">
                 Qual instrumento você quer aprender?
-              </h1>
+              </h2>
               <p class="onboarding-step__description">Escolha o instrumento para começar.</p>
             </header>
 
@@ -219,7 +220,7 @@
             hidden
           >
             <header class="onboarding-step__header">
-              <h1 class="onboarding-step__title" id="level-title">Qual é o seu nível?</h1>
+              <h2 class="onboarding-step__title" id="level-title">Qual é o seu nível?</h2>
               <p class="onboarding-step__description" id="level-description">
                 Seja honesto — vamos montar o plano ideal para você.
               </p>
@@ -306,7 +307,7 @@
             hidden
           >
             <header class="onboarding-step__header">
-              <h1 class="onboarding-step__title" id="goals-title">Qual é o seu objetivo?</h1>
+              <h2 class="onboarding-step__title" id="goals-title">Qual é o seu objetivo?</h2>
               <p class="onboarding-step__description" id="goals-description">
                 Selecione tudo que se aplica a você.
               </p>

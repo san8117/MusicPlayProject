@@ -184,7 +184,6 @@
 .achievement-card--locked .achievement-card__content {
   border-color: var(--color-border);
   box-shadow: none;
-  opacity: 0.62;
 }
 
 .achievement-card[data-state="locked"] .achievement-card__icon,

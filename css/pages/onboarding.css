@@ -369,7 +369,6 @@
   color: var(--color-text-subtle);
   background: var(--color-surface-muted);
   box-shadow: none;
-  opacity: 0.55;
   cursor: not-allowed;
   transform: none;
 }

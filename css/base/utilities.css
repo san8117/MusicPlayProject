@@ -34,3 +34,23 @@
 .text-secondary {
   color: var(--color-text-secondary);
 }
+
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 0.18rem solid var(--color-cyan);
+  outline-offset: 0.15rem;
+}
+
+@media (forced-colors: active) {
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline-color: Highlight;
+  }
+
+  :where(.card, .lesson-item, .quiz-option, .choice-option__label, .song-card, .achievement-card__content, .stat-card, .profile-stat-card) {
+    border-color: CanvasText;
+  }
+
+  :where(button, .button, .song-filters__button) {
+    border: 1px solid ButtonText;
+    forced-color-adjust: auto;
+  }
+}

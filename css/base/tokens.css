@@ -5,15 +5,15 @@
   --color-surface: #120f20;
   --color-surface-raised: #19142a;
   --color-surface-muted: #211a35;
-  --color-border: #2e2743;
-  --color-border-strong: #45365e;
+  --color-border: #6b617f;
+  --color-border-strong: #81768f;
 
   --color-text: #f7f5fc;
   --color-text-secondary: #8792b1;
-  --color-text-subtle: #64708f;
+  --color-text-subtle: #7b86a3;
 
   --color-primary: #9638f5;
-  --color-primary-hover: #a64cf9;
+  --color-primary-hover: #b86cff;
   --color-primary-active: #7d27dc;
   --color-primary-soft: #28143e;
   --color-brand-start: #a24cff;
@@ -88,4 +88,11 @@
   --sidebar-width: 15rem;
 
   /* Breakpoints: 640px (mobile amplo), 768px (tablet), 1024px (desktop), 1280px (desktop amplo). */
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --color-border: #9187a4;
+    --color-border-strong: #b0a7bf;
+  }
 }

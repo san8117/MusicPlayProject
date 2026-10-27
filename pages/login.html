@@ -13,7 +13,7 @@
   </head>
   <body data-page="login">
     <a class="skip-link" href="#main-content">Pular para o conteúdo</a>
-    <main class="auth-page" id="main-content">
+    <main class="auth-page" id="main-content" tabindex="-1">
       <div class="auth-page__container">
         <a class="brand auth-page__brand" href="../index.html" aria-label="MUSICPLAY, página inicial">
           <span class="brand__text">MUSICPLAY</span>
@@ -68,7 +68,7 @@
               <p class="form-field__error" id="login-password-error" data-field-error="password" aria-live="polite"></p>
             </div>
 
-            <p class="auth-form__feedback" data-form-feedback role="alert" aria-live="assertive" aria-atomic="true"></p>
+            <p class="auth-form__feedback" data-form-feedback role="status" aria-live="polite" aria-atomic="true"></p>
             <button class="button button--primary auth-form__submit" type="submit" data-action="login">
               Entrar
             </button>

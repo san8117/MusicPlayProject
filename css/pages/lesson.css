@@ -320,7 +320,8 @@
 }
 
 .lesson-practice .button--primary:focus-visible {
-  box-shadow: 0 0 0 0.2rem rgb(32 201 214 / 35%);
+  outline: 0.18rem solid var(--color-cyan);
+  outline-offset: 0.15rem;
 }
 
 .lesson-actions {
