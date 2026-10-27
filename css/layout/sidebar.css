@@ -4,8 +4,10 @@
     z-index: var(--z-index-navigation);
     inset-block: 0;
     inset-inline-start: 0;
+    inset-inline-end: auto;
     display: flex;
     width: var(--sidebar-width);
+    height: auto;
     min-height: 100vh;
     min-height: 100svh;
     min-height: 100dvh;
