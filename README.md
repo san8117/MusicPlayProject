@@ -181,7 +181,7 @@ Ao concluir a aula, mostrar toast “+40 XP”, alterar o botão para “Conclu�
 - Resposta correta do quiz concede 20 XP; resposta incorreta não altera XP.
 - Concluir uma aula concede 40 XP.
 - Ganho de XP, subida de nível e conquista nova devem ter feedback imediato por toast acessível.
-- A sequência conta dias de estudo e começa em zero. A regra exata para calcular XP por nível e continuidade da sequência ainda precisa ser definida antes de implementar essas mecânicas.
+- A sequência conta dias de estudo e começa em zero. A tabela de XP foi definida na Etapa 3.1; a regra de continuidade da sequência ainda precisa ser decidida antes de implementar essa mecânica.
 
 ### Conquistas previstas
 
@@ -238,11 +238,11 @@ musicplay/
 │   └── main.css                       # somente @import
 └── js/
     ├── main.js                        # ponto de entrada dos módulos
-    ├── modules/                       # storage, state, auth, onboarding, quiz,
-    │                                  # lessons, achievements, xp, navigation,
-    │                                  # calendar, toast, ui
+    ├── modules/                       # storage, state, utils, xp e módulos futuros
+    ├── dev/
+    │   └── devtools.js                # testes manuais no Console; não importado
     └── data/                          # instruments, lessons, quiz-questions,
-                                       # achievements, songs
+                                       # achievements, songs, levels
 ```
 
 ## Convenções de código
@@ -259,51 +259,53 @@ musicplay/
 
 ## Modelo de dados (`localStorage`)
 
-Rascunho inicial; validar e implementar em uma etapa própria. Guardar os dados de todos os usuários na chave versionada `musicplay:v1` e o identificador do usuário autenticado na chave separada `musicplay:session`. O progresso pertence ao usuário correspondente e não pode ser compartilhado acidentalmente entre contas.
+A Etapa 3.1 implementa o armazenamento local versionado: `musicplay:v1` contém `schemaVersion` e o mapa de usuários indexado pelo e-mail normalizado; `musicplay:session` contém somente o e-mail da sessão atual. O progresso é isolado por conta. O wrapper recupera JSON corrompido, tenta remover a chave inválida e retorna fallback sem deixar erros de armazenamento escaparem.
 
 ```json
 {
   "schemaVersion": 1,
   "users": {
     "aluno@email.com": {
-      "profile": {
-        "fullName": "Guilherme Souza",
-        "email": "aluno@email.com",
-        "instrument": "guitar",
-        "level": "beginner",
-        "goals": []
-      },
-      "credentials": {
-        "passwordHash": "sha256-hash"
-      },
+      "name": "Guilherme Souza",
+      "email": "aluno@email.com",
+      "passwordHash": null,
+      "createdAt": "2026-10-26T12:00:00.000Z",
+      "onboardingDone": false,
+      "instrument": null,
+      "level": null,
+      "goals": [],
       "progress": {
         "xp": 0,
         "level": 1,
-        "streakDays": 0,
+        "streak": 0,
         "lastStudyDate": null,
+        "studyDays": [],
         "unlockedLessons": ["lesson-1"],
         "completedLessons": [],
-        "achievements": [],
+        "currentLessonId": "lesson-1",
+        "lessonProgress": {},
+        "gamesPlayed": 0,
         "quizStats": {
           "answered": 0,
-          "correct": 0
+          "correct": 0,
+          "bestStreak": 0,
+          "perfectQuizzes": 0
         },
-        "studyDates": []
+        "songProgress": {},
+        "unlockedAchievements": {},
+        "studyMinutes": 0
       },
-      "createdAt": "ISO-8601",
-      "lastLoginAt": null
+      "firstAccessSeen": false
     }
   }
 }
 ```
 
 ```json
-{
-  "userEmail": "aluno@email.com"
-}
+"aluno@email.com"
 ```
 
-`musicplay:v1` contém o objeto versionado com contas e progresso. `musicplay:session` contém somente a referência à conta atual; encerrar a sessão remove essa referência, sem apagar os dados de progresso. O formato acima é um rascunho de documentação, não uma implementação nem garantia de segurança.
+O `level` no topo do usuário guarda a escolha do onboarding (`never-played`, `beginner` ou `some-experience`); `progress.level` é o nível numérico derivado do XP. `passwordHash` começa como `null` e será preenchido na etapa de autenticação. Encerrar a sessão remove somente `musicplay:session`; `clearAll()` limpa somente as duas chaves do MUSICPLAY, sem afetar outros dados do navegador.
 
 ## Como rodar
 
@@ -313,7 +315,7 @@ Como o projeto usa ES Modules, abrir `index.html` diretamente por `file://` não
 2. Iniciar a extensão Live Server (ou outro servidor estático local) na raiz do projeto.
 3. Acessar no navegador o endereço local informado pelo servidor.
 
-Não é necessário build ou backend. As páginas HTML referenciam `css/main.css` e `js/main.js`. A fundação CSS já cobre tokens, reset, tipografia, utilitários e componentes compartilhados básicos; layouts, estilos específicos de cada página e comportamento JavaScript serão completados em etapas posteriores.
+Não é necessário build ou backend. As páginas HTML referenciam `css/main.css` e `js/main.js`; a etapa 3.1 criou a base de módulos JavaScript, o armazenamento, o estado multiusuário e os dados iniciais. As próximas etapas conectam esse estado às interações da interface.
 
 ## Plano de desenvolvimento
 
@@ -345,7 +347,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 
 ### Fase 3 — Dados e gamificação
 
-- [ ] 3.1 — Persistência local, contas e sessão.
+- [x] 3.1 — Base JavaScript: storage, state, utilitários e dados.
 - [ ] 3.2 — Quiz Musical e resultado.
 - [ ] 3.3 — XP e níveis.
 - [ ] 3.4 — Sequência de estudos.
@@ -415,6 +417,13 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - No perfil desktop, dados do aluno e nível ficam à esquerda, estatísticas à direita e calendário em largura total; o grid de estatísticas permanece em duas colunas para caber na coluna lateral sem comprimir rótulos.
 - Todas as etapas de implementação de CSS da Fase 2 (2.1–2.7) estão concluídas; a comparação visual com as capturas continua no checklist de revisão final 4.2.
 - As imagens do Figma não estão disponíveis como arquivos no workspace; os estilos seguem as especificações fornecidas, mas a comparação visual renderizada permanece para a revisão final da Etapa 4.2.
+- A Etapa 3.1 cria ES Modules para storage, estado, utilitários, XP e dados. O ponto de entrada só consulta o usuário da sessão e não altera a interface; os testes de console ficam em `js/dev/devtools.js`, fora dos imports das páginas.
+- O storage guarda o objeto `{ schemaVersion, users }` em `musicplay:v1` e o e-mail da sessão em `musicplay:session`. As funções retornam fallback, booleano, `false` ou `null` em erros, removem somente a chave de aplicação inválida quando possível e nunca apagam outras chaves do navegador.
+- A conta guarda `level` da escolha de onboarding; `progress.level` representa o nível numérico de XP. O progresso inicial possui 0 XP, nível 1, sequência zerada e somente `lesson-1` liberada; cópias são devolvidas para evitar mutações acidentais.
+- Os dados imutáveis incluem dez instrumentos, três níveis e quatro objetivos, sete aulas disponíveis na trilha de violão (com conteúdo detalhado da Aula 4), três perguntas e sete músicas originais do Figma. Instrumentos sem conteúdo de aula recebem lista vazia; a música “Brilha, Brilha, Estrelinha”, adicionada anteriormente para completar oito cards HTML, não entra no conjunto fonte solicitado de sete faixas.
+- As faixas de XP são 0, 100, 250, 450, 700 e 1.000 XP para os níveis 1 a 6; acima disso, a progressão extrapola em incrementos de 300 XP. Títulos são Iniciante até o nível 3, Intermediário do 4 ao 6 e Avançado a partir do 7.
+- Duas perguntas adicionais de violão foram criadas para completar o mínimo solicitado de três. Regras sem critério explícito foram assumidas como: primeira nota tocada, primeiro acorde aprendido e conclusão de aula em até 10 minutos para “Velocista”.
+- A etapa não altera HTML/CSS nem adiciona dependências; a chave de sessão separada preserva o modelo já documentado e a implementação usa apenas APIs nativas do navegador.
 
 ### Suposições
 
@@ -432,7 +441,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 ## Pendências conhecidas
 
 - Conferir a renderização responsiva de todas as telas contra o Figma na Etapa 4.2, quando as capturas de referência estiverem acessíveis.
-- Os limites exatos de níveis, regras de sequência e critérios de desbloqueio de conquistas precisam ser definidos antes de codificar quando as referências não forem suficientes.
+- A regra de continuidade da sequência de estudos precisa ser definida antes de implementar o cálculo; os critérios adotados para conquistas e XP nesta etapa são propostas documentadas e podem ser ajustados.
 
 ## Créditos
 
