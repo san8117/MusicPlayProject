@@ -174,7 +174,7 @@ Composição para mobile e desktop, nesta ordem:
 8. Card “Agora é sua vez! 🎸” com botão “Iniciar exercício prático”.
 9. Rodapé com “✓ Marcar como concluída” e “Próxima aula →” lado a lado.
 
-Ao concluir a aula, mostrar toast “+40 XP”, alterar o botão para “Concluída ✓” e liberar a próxima aula.
+Ao concluir a aula, mostrar toast com o XP definido nos dados daquela aula, alterar o botão para “Concluída ✓” e liberar a próxima aula.
 
 ## Gamificação
 
@@ -182,7 +182,7 @@ Ao concluir a aula, mostrar toast “+40 XP”, alterar o botão para “Conclu�
 
 - Novo aluno começa com 0 XP e Nível 1.
 - Resposta correta do quiz concede 20 XP; resposta incorreta não altera XP.
-- Concluir uma aula concede 40 XP.
+- Concluir uma aula concede o XP definido no registro da aula (30 ou 40 XP na trilha atual); uma aula já concluída não concede XP novamente.
 - Ganho de XP, subida de nível e conquista nova devem ter feedback imediato por toast acessível.
 - A sequência conta dias de estudo e começa em zero. A tabela de XP foi definida na Etapa 3.1; a regra implementada na Etapa 3.3 mantém a contagem se o último estudo foi hoje ou ontem e a zera visualmente após um intervalo maior, sem apagar o histórico.
 
@@ -314,7 +314,7 @@ A Etapa 3.1 implementa o armazenamento local versionado: `musicplay:v1` contém 
 "aluno@email.com"
 ```
 
-O `level` no topo do usuário guarda a escolha do onboarding (`never-played`, `beginner` ou `some-experience`); `progress.level` é o nível numérico derivado do XP. Após cadastro bem-sucedido, `passwordHash` contém o SHA-256 em hexadecimal da senha, nunca a senha original. `onboardingDraft` salva passo e escolhas para retomar o fluxo após recarregar a página; ao concluir, o rascunho é limpo. Encerrar a sessão remove somente `musicplay:session`; `clearAll()` limpa somente as duas chaves do MUSICPLAY, sem afetar outros dados do navegador.
+O `level` no topo do usuário guarda a escolha do onboarding (`never-played`, `beginner` ou `some-experience`); `progress.level` é o nível numérico derivado do XP. Após cadastro bem-sucedido, `passwordHash` contém o SHA-256 em hexadecimal da senha, nunca a senha original. `onboardingDraft` salva passo e escolhas para retomar o fluxo após recarregar a página; ao concluir, o rascunho é limpo. Encerrar a sessão remove somente `musicplay:session`; `clearAll()` limpa somente as duas chaves do MUSICPLAY, sem afetar outros dados do navegador. Na trilha atual, `progress.lessonProgress` mapeia IDs de aula a percentuais de 0 a 100; `currentLessonId` identifica a aula atual liberada ou fica `null` quando não há outra aula.
 
 ## Como rodar
 
@@ -343,6 +343,15 @@ Não é necessário build ou backend. As páginas HTML referenciam `css/main.css
 3. Faça logout, tente abrir diretamente `pages/dashboard.html` sem sessão e confirme o redirecionamento ao login. Crie outra conta sem concluir o onboarding e tente abrir uma página logada; o destino deve ser onboarding.
 4. Entre com dois e-mails diferentes no mesmo navegador, conclua onboarding com instrumentos distintos e confira que nome, instrumento, XP, aulas e demais dados não se misturam após logout/login.
 5. Teste os itens de navegação: Aula deve ativar Aprender, Quiz deve ativar Jogos e apenas o link correspondente deve manter `aria-current="page"`. Recarregue páginas logadas para confirmar que a sessão continua e não ganha dias de estudo apenas por visita.
+
+### Teste manual da Etapa 3.4
+
+1. Crie ou selecione um aluno novo com Violão e abra Aprender: a trilha deve mostrar `0 / 7 aulas`, Aula 1 atual e Aulas 2 a 7 bloqueadas. A barra deve expor `aria-valuenow="0"`.
+2. Tente abrir a Aula 5 diretamente por `pages/lesson.html?lesson=lesson-5`; deve voltar à trilha e mostrar o aviso para concluir a aula anterior.
+3. Conclua as Aulas 1, 2, 3, 4 e 5 pela ação de conclusão, avançando pelo botão de próxima aula. Confirme que cada aula soma o XP definido nos dados, registra o dia de estudo (sequência passa a 1 na primeira conclusão), e que o Módulo 2 libera ao completar a Aula 5.
+4. Abra uma aula já concluída e pressione novamente sua ação de conclusão (se necessário, teste `completeLesson("lesson-1")` no Console); XP não pode aumentar pela segunda vez.
+5. Inicie o player simulado e confirme que ele salva marcos percentuais; use “Iniciar exercício prático” para conferir o aviso e o mínimo de 50% salvo.
+6. Repita com dois alunos diferentes no mesmo navegador, concluindo aulas para um deles; após alternar sessão, o outro deve manter seu próprio XP, aulas concluídas, progresso e sequência.
 
 ## Plano de desenvolvimento
 
@@ -377,7 +386,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - [x] 3.1 — Base JavaScript: storage, state, utilitários e dados.
 - [x] 3.2 — Autenticação local e onboarding.
 - [x] 3.3 — Navegação protegida, personalização, dashboard, perfil e base da sequência.
-- [ ] 3.4 — Integração das ações de estudo e sequência nas atividades.
+- [x] 3.4 — Trilha Aprender, aulas e registro de conclusão/progresso.
 - [ ] 3.5 — Conquistas.
 - [ ] 3.6 — Integração e feedback de estados.
 
@@ -432,7 +441,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - No dashboard, estatísticas mantêm três colunas inclusive em telas estreitas; recomendações passam a três colunas e atalhos a quatro em 768 px. Em desktop, continuar e dica ficam lado a lado, assim como atalhos e conquistas recentes.
 - O estado vazio de conquistas recentes usa um card discreto quando exibido; a lista prevê rolagem horizontal interna para não ampliar a página.
 - Na trilha, estados `completed`, `current` e `locked` recebem sinais visuais e textuais/ícones; módulos ficam em duas colunas a partir de 1024 px. Inputs, estados e estrutura HTML existentes foram preservados.
-- O HTML da trilha só fornece o texto “Em andamento” para a aula atual e não define percentual de conclusão; o CSS não inventa “75%”, mantendo coerência com o progresso inicial zerado. Uma porcentagem poderá ser exibida quando o HTML/JS fornecer um valor real.
+- O HTML da trilha fornece um gancho de estado para a aula atual; a integração JS atualiza esse status para “Em andamento • n% concluído” e a barra geral conforme o progresso salvo.
 - A Etapa 2.6 estiliza Aula, Jogos e Quiz reutilizando o shell, badges, cards, botões e progresso. A aula usa uma coluna no mobile e, a partir de 1024 px, distribui player/prática/ações à esquerda e objetivos/acordes à direita.
 - Na página Jogos, os cards formam uma coluna no mobile e duas a partir de 768 px; o destaque usa um emoji de guitarra decorativo por pseudo-elemento. Os selos mantêm o nome da dificuldade visível e usam cor como reforço, não como único sinal.
 - O Quiz mantém opções em grade 2 × 2, com estados de resposta preparados por `.quiz-option--correct` / `.quiz-option--incorrect` ou `data-state="correct"` / `data-state="incorrect"`; travamento usa `disabled` ou `aria-disabled="true"`. O feedback utiliza as variantes existentes e o atributo `hidden`.
@@ -462,7 +471,14 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - A personalização global preenche os marcadores `data-user` por `textContent`, deriva nível/título a partir do XP e do instrumento e mostra a saudação de primeiro acesso uma única vez. O dashboard destaca a aula atual ou a Aula 1, recomenda a próxima aula, um jogo e uma música compatível com o nível escolhido, e mantém a mensagem vazia de conquistas quando não há desbloqueios.
 - O perfil calcula aulas, músicas concluídas, jogos, taxa de acerto, sequência, XP, conquistas e tempo de estudo; valores de tempo são exibidos como `0min`, `45min` ou `3h 20min`. O calendário permanece sem integração nesta etapa para ser conectado na 3.6.
 - A sequência usa datas locais `YYYY-MM-DD`: estudar hoje ou ontem mantém a contagem consecutiva; se o último estudo foi anteontem ou antes, a sequência exibida é zero sem apagar o histórico. `registerVisit()` recalcula a sequência sem registrar estudo; somente `registerStudy()` acrescenta o dia, no máximo uma vez por data.
-- O registro das datas e o cálculo da sequência são separados para permitir testes com datas fornecidas; as atividades das etapas posteriores devem chamar `registerStudy()` somente após uma ação real de estudo, nunca ao abrir uma página.
+- O registro das datas e o cálculo da sequência são separados para permitir testes com datas fornecidas; o botão de conclusão da aula chama `registerStudy()`, enquanto abrir ou reproduzir a prévia não registra estudo.
+- A Etapa 3.4 implementa `getLessonStates`, `getNextLesson`, `getLessonById` e `getModuleProgress` a partir da trilha cadastrada. Aula 1 inicia como atual; só completar uma aula libera a seguinte; as concluídas permanecem concluídas e acessíveis. O Módulo 2 libera ao completar as cinco aulas do Módulo 1.
+- O total real da trilha de violão é sete aulas (cinco no Módulo 1 e duas no Módulo 2), embora o Figma/HTML de referência indique 12. A interface da trilha exibe o total existente, 7, sem criar cinco aulas não descritas.
+- Para instrumentos sem trilha cadastrada, a página oculta os módulos de violão de exemplo, mostra 0 aulas e exibe “As aulas para este instrumento chegam em breve.” em vez de apresentar conteúdo de outro instrumento.
+- A conclusão soma uma única vez o XP cadastrado por aula (30 ou 40), o tempo estimado daquela aula e o registro de estudo do dia; `saveLessonProgress()` aceita 0–100 e não reduz um progresso maior já salvo. Conquistas são retornadas como lista vazia até a integração da Etapa 3.6.
+- O player é uma simulação local sem vídeo: avança em intervalos de 60 segundos e persiste marcos de 25%, 50%, 75% e 100%. O botão de exercício mostra o aviso de disponibilidade futura e salva 50% como progresso parcial.
+- O módulo `toast.js` utiliza a região `aria-live` existente (ou cria uma se ausente), usa `textContent`, permite dispensar avisos e remove cada toast após cerca de 3,5 segundos, mesmo sob movimento reduzido.
+- A Etapa 3.4 reutiliza títulos, descrições, objetivos, acordes, XP e duração já presentes em `lessons.js`. As descrições das Aulas 1, 2, 3, 5, 6 e 7 foram criadas como conteúdo-base na Etapa 3.1, pois não havia detalhes dessas aulas no Figma; não foram adicionadas novas afirmações teóricas ou conteúdos além desses registros.
 
 ### Suposições
 
