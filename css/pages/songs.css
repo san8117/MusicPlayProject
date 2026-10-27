@@ -1,1 +1,268 @@
-/* Reserved for songs page styles. */
+.songs-page {
+  display: grid;
+  align-content: start;
+  gap: var(--space-6);
+}
+
+.songs-page__header {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.songs-page__title {
+  margin: 0;
+  font-size: var(--font-size-3xl);
+}
+
+.songs-page__description {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+.song-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.song-filters__button {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  color: var(--color-text-secondary);
+  background: var(--color-surface);
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  transition:
+    color var(--duration-standard) var(--ease-standard),
+    background-color var(--duration-standard) var(--ease-standard),
+    border-color var(--duration-standard) var(--ease-standard),
+    box-shadow var(--duration-standard) var(--ease-standard);
+}
+
+.song-filters__button[aria-pressed="true"] {
+  border-color: var(--color-primary);
+  color: var(--color-text);
+  background: var(--gradient-primary);
+}
+
+.song-filters__button:hover:not(:disabled):not([aria-pressed="true"]) {
+  border-color: var(--color-border-strong);
+  color: var(--color-text);
+  background: var(--color-surface-raised);
+}
+
+.song-filters__button:focus-visible {
+  outline: 2px solid var(--color-cyan);
+  outline-offset: 3px;
+  box-shadow: var(--shadow-focus);
+}
+
+.song-filters__button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.song-filters__button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.songs-list {
+  display: grid;
+  min-width: 0;
+  gap: var(--space-4);
+}
+
+.song-card {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: 2.75rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  transition:
+    border-color var(--duration-standard) var(--ease-standard),
+    box-shadow var(--duration-standard) var(--ease-standard),
+    background-color var(--duration-standard) var(--ease-standard);
+}
+
+.song-card__icon {
+  display: grid;
+  width: 2.75rem;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid rgb(150 56 245 / 25%);
+  border-radius: var(--radius-md);
+  background: var(--color-primary-soft);
+  font-size: 1.35rem;
+}
+
+.song-card__content {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: var(--space-2);
+  row-gap: var(--space-1);
+}
+
+.song-card__title,
+.song-card__artist,
+.song-card__chords {
+  min-width: 0;
+  grid-column: 1 / -1;
+}
+
+.song-card__title {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: var(--font-size-md);
+}
+
+.song-card__artist {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.song-card__chords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chord-badge {
+  display: inline-flex;
+  min-height: 1.35rem;
+  align-items: center;
+  padding: 0.1rem 0.45rem;
+  border: 1px solid rgb(150 56 245 / 24%);
+  border-radius: var(--radius-sm);
+  color: #c28aff;
+  background: var(--color-primary-soft);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+}
+
+.song-card__progress {
+  height: 0.35rem;
+  margin: var(--space-1) 0;
+}
+
+.song-card__progress-label {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.song-card__progress[value="100"]::-webkit-progress-value,
+.song-card[data-state="studied"] .song-card__progress::-webkit-progress-value,
+.song-card[data-state="completed"] .song-card__progress::-webkit-progress-value,
+.song-card--studied .song-card__progress::-webkit-progress-value,
+.song-card--completed .song-card__progress::-webkit-progress-value {
+  background: var(--color-green);
+}
+
+.song-card__progress[value="100"]::-moz-progress-bar,
+.song-card[data-state="studied"] .song-card__progress::-moz-progress-bar,
+.song-card[data-state="completed"] .song-card__progress::-moz-progress-bar,
+.song-card--studied .song-card__progress::-moz-progress-bar,
+.song-card--completed .song-card__progress::-moz-progress-bar {
+  background: var(--color-green);
+}
+
+.song-card__progress[value="100"] {
+  color: var(--color-green);
+}
+
+.song-card__progress[value="100"] + .song-card__progress-label,
+.song-card[data-state="studied"] .song-card__progress-label,
+.song-card[data-state="completed"] .song-card__progress-label,
+.song-card--studied .song-card__progress-label,
+.song-card--completed .song-card__progress-label {
+  color: var(--color-green);
+}
+
+.song-card__actions {
+  display: grid;
+  justify-items: end;
+  gap: var(--space-2);
+}
+
+.song-card__actions .button {
+  min-width: 5.25rem;
+  min-height: 2.75rem;
+  padding-inline: var(--space-3);
+  font-size: var(--font-size-xs);
+}
+
+.difficulty-badge--beginner,
+.song-card[data-level="beginner"] .difficulty-badge {
+  color: var(--color-green);
+  background: var(--color-green-soft);
+}
+
+.difficulty-badge--intermediate,
+.song-card[data-level="intermediate"] .difficulty-badge {
+  color: var(--color-yellow);
+  background: var(--color-yellow-soft);
+}
+
+.difficulty-badge--advanced,
+.song-card[data-level="advanced"] .difficulty-badge {
+  color: var(--color-orange);
+  background: var(--color-orange-soft);
+}
+
+.song-card[data-state="locked"],
+.song-card--locked {
+  color: var(--color-text-subtle);
+  opacity: 0.62;
+}
+
+.song-card[data-state="error"],
+.song-card--error {
+  border-color: var(--color-red);
+}
+
+.songs-empty-state {
+  max-width: 40rem;
+  margin: var(--space-4) auto;
+  padding: var(--space-6);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  color: var(--color-text-secondary);
+  background: var(--color-surface);
+  text-align: center;
+}
+
+.songs-empty-state[hidden] {
+  display: none;
+}
+
+@media (min-width: 64rem) {
+  .songs-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .song-filters__button,
+  .song-card {
+    transition-duration: var(--duration-reduced-motion);
+  }
+
+  .song-filters__button:active:not(:disabled) {
+    transform: none;
+  }
+}

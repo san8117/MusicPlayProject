@@ -1,1 +1,116 @@
-/* Reserved for the study calendar grid and legend. */
+.study-calendar {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+  padding: clamp(var(--space-4), 3vw, var(--space-6));
+}
+
+.study-calendar__title {
+  margin: 0;
+  font-size: var(--font-size-lg);
+}
+
+.study-calendar__grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: clamp(0.25rem, 1.2vw, 0.5rem);
+}
+
+/* O JS deve gerar .study-calendar__day, --studied, --today e --empty conforme o dia. */
+.study-calendar__day {
+  display: grid;
+  min-width: 0;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-subtle);
+  background: var(--color-surface-muted);
+  font-size: clamp(0.65rem, 2.4vw, var(--font-size-sm));
+  font-variant-numeric: tabular-nums;
+  transition:
+    color var(--duration-standard) var(--ease-standard),
+    background-color var(--duration-standard) var(--ease-standard),
+    border-color var(--duration-standard) var(--ease-standard),
+    box-shadow var(--duration-standard) var(--ease-standard);
+}
+
+.study-calendar__day--studied,
+.study-calendar__day[data-state="studied"] {
+  border-color: rgb(150 56 245 / 28%);
+  color: var(--color-text);
+  background: #351c50;
+  font-weight: 700;
+}
+
+.study-calendar__day--today,
+.study-calendar__day[data-state="today"],
+.study-calendar__day[data-today="true"] {
+  z-index: 1;
+  border-color: var(--color-primary-hover);
+  border-radius: var(--radius-pill);
+  color: var(--color-text);
+  background: var(--gradient-primary);
+  box-shadow: 0 0 0.85rem rgb(150 56 245 / 38%);
+  font-weight: 700;
+}
+
+.study-calendar__day--empty,
+.study-calendar__day[data-empty="true"] {
+  border-color: transparent;
+  background: transparent;
+  pointer-events: none;
+}
+
+.study-calendar__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-5);
+  margin: 0;
+  padding: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  list-style: none;
+}
+
+.study-calendar__legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.study-calendar__legend-swatch {
+  width: 0.75rem;
+  aspect-ratio: 1;
+  border-radius: 0.2rem;
+  background: var(--color-surface-muted);
+}
+
+.study-calendar__legend-swatch--studied {
+  border: 1px solid rgb(150 56 245 / 28%);
+  background: #351c50;
+}
+
+.study-calendar__legend-swatch--not-studied {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-muted);
+}
+
+.study-calendar__empty-state {
+  margin: 0;
+  padding: var(--space-4);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.study-calendar__empty-state[hidden] {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .study-calendar__day {
+    transition-duration: var(--duration-reduced-motion);
+  }
+}

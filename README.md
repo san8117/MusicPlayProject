@@ -341,8 +341,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - [x] 2.4 — App shell autenticado e navegação responsiva.
 - [x] 2.5 — Estilos do dashboard e da trilha Aprender.
 - [x] 2.6 — Estilos da aula, jogos e Quiz Musical.
-- [ ] 2.7 — Estilos de Músicas, Conquistas e Perfil.
-- [ ] 2.8 — Revisão responsiva e comparação das páginas com o Figma.
+- [x] 2.7 — Estilos de Músicas, Conquistas e Perfil.
 
 ### Fase 3 — Dados e gamificação
 
@@ -410,7 +409,12 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - O Quiz mantém opções em grade 2 × 2, com estados de resposta preparados por `.quiz-option--correct` / `.quiz-option--incorrect` ou `data-state="correct"` / `data-state="incorrect"`; travamento usa `disabled` ou `aria-disabled="true"`. O feedback utiliza as variantes existentes e o atributo `hidden`.
 - O pulso do XP pode ser ativado por `.quiz-header__xp--updated` ou `data-state="updated"`; movimento é removido com `prefers-reduced-motion`. Resultado e diálogo foram estilizados usando as classes e elementos já existentes.
 - O botão de conclusão da aula aceita `data-state="completed"` ou `.lesson-actions__complete--completed` como gancho futuro; a marcação HTML inicial não define esse estado. Nenhuma estrutura HTML foi alterada nesta etapa.
-- As imagens anexadas do Figma não estão disponíveis como arquivos de imagem dentro da pasta do projeto; a comparação visual renderizada destas telas permanece pendente para a Etapa 2.8. A composição segue os detalhes e tokens descritos nas especificações.
+- A Etapa 2.7 estiliza Músicas, Conquistas e Perfil sem alterar HTML, reutilizando os componentes de botão, card, badge, progresso, estatísticas e o app shell.
+- Os filtros de música usam `aria-pressed`; o JS pode usar `data-level="beginner|intermediate|advanced"` e `.song-card[data-state="studied|completed|locked|error"]` (ou modificadores equivalentes) para os estados. Conquistas usam `.achievement-card[data-state="unlocked|locked"]`, `data-achievement-id` e classes/atributos de cor opcionais.
+- As células do calendário devem ser geradas pelo JS com `.study-calendar__day`, `.study-calendar__day--studied`, `.study-calendar__day--today` e `.study-calendar__day--empty` (ou atributos equivalentes descritos no CSS). O HTML não contém cabeçalho dos dias da semana, por isso ele não foi acrescentado por CSS nem por mudança estrutural.
+- No perfil desktop, dados do aluno e nível ficam à esquerda, estatísticas à direita e calendário em largura total; o grid de estatísticas permanece em duas colunas para caber na coluna lateral sem comprimir rótulos.
+- Todas as etapas de implementação de CSS da Fase 2 (2.1–2.7) estão concluídas; a comparação visual com as capturas continua no checklist de revisão final 4.2.
+- As imagens do Figma não estão disponíveis como arquivos no workspace; os estilos seguem as especificações fornecidas, mas a comparação visual renderizada permanece para a revisão final da Etapa 4.2.
 
 ### Suposições
 
@@ -423,11 +427,11 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - A página Jogos apresenta descrições textuais para os títulos fornecidos; os outros jogos ainda são links demonstrativos até suas experiências serem implementadas.
 - A lista de músicas solicitada enumera sete títulos distintos; para completar oito entradas, foi incluída “Brilha, Brilha, Estrelinha” (Tradicional), uma escolha estática de repertório tradicional, sem integração a catálogo ou biblioteca externa.
 - Os exemplos de datas de desbloqueio exibidos nas capturas do Figma representam dados de demonstração; no HTML de aluno novo, todos os registros começam bloqueados e sem uma data de desbloqueio.
-- A composição visual das páginas já estilizadas foi implementada a partir da identidade e dos requisitos descritos; a comparação pixel a pixel com as capturas ainda precisa ser feita na revisão responsiva da Etapa 2.8.
+- A composição visual das páginas estilizadas foi implementada a partir da identidade e dos requisitos descritos; a comparação pixel a pixel com as capturas ainda precisa ser feita na revisão responsiva da Etapa 4.2.
 
 ## Pendências conhecidas
 
-- Completar estilos de Músicas, Conquistas e Perfil; conferir a renderização responsiva de todas as telas contra o Figma na Etapa 2.8.
+- Conferir a renderização responsiva de todas as telas contra o Figma na Etapa 4.2, quando as capturas de referência estiverem acessíveis.
 - Os limites exatos de níveis, regras de sequência e critérios de desbloqueio de conquistas precisam ser definidos antes de codificar quando as referências não forem suficientes.
 
 ## Créditos
