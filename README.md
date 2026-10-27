@@ -557,4 +557,7 @@ O histórico Git não foi consultado nesta revisão, portanto os exemplos são m
 
 **Projeto Integrador de Ciência da Computação**
 
-Autor: **[SEU NOME]**
+Criadores:
+
+- Pedro Henrique Gomes
+- Guilherme Oliveira de Santana
