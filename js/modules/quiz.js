@@ -15,7 +15,8 @@ import { unlockAchievements } from "./achievements.js";
  */
 export function startQuiz(questions = QUIZ_QUESTIONS, options = {}) {
   const requestedCount = Number.isFinite(options?.count) ? Math.max(0, Math.floor(options.count)) : 3;
-  const selectedQuestions = shuffle(Array.isArray(questions) ? questions : [])
+  const validQuestions = (Array.isArray(questions) ? questions : []).filter(isValidQuestion);
+  const selectedQuestions = shuffle(validQuestions)
     .slice(0, requestedCount)
     .map((question) => {
       const correctOptionId = question.options[question.correctIndex]?.id;
@@ -47,10 +48,11 @@ export function startQuiz(questions = QUIZ_QUESTIONS, options = {}) {
  */
 export function answerQuestion(quizState, optionIndex) {
   const currentQuestion = quizState?.questions?.[quizState.index];
-  const alreadyAnswered = quizState?.answers?.some((answer) => answer.questionId === currentQuestion?.id);
+  const answers = Array.isArray(quizState?.answers) ? quizState.answers : [];
+  const alreadyAnswered = answers.some((answer) => answer.questionId === currentQuestion?.id);
 
   if (
-    !currentQuestion
+    !isValidQuestion(currentQuestion)
     || quizState.finished
     || alreadyAnswered
     || !Number.isInteger(optionIndex)
@@ -79,7 +81,7 @@ export function answerQuestion(quizState, optionIndex) {
   };
   const state = {
     ...quizState,
-    answers: [...quizState.answers, answer],
+    answers: [...answers, answer],
     xpEarned: quizState.xpEarned + xpGained,
     correctCount: quizState.correctCount + Number(isCorrect),
   };
@@ -129,10 +131,14 @@ export function isLastQuestion(quizState) {
  * @returns {{ok: boolean, correctCount: number, total: number, xpEarned: number, accuracy: number, leveledUp: boolean, newLevel: number, unlockedAchievements: Array<object>, studyRecorded?: boolean, reason?: string}}
  */
 export function finishQuiz(quizState) {
-  const total = Array.isArray(quizState?.questions) ? quizState.questions.length : 0;
+  const questions = Array.isArray(quizState?.questions)
+    ? quizState.questions.filter(isValidQuestion)
+    : [];
+  const total = questions.length;
   const answers = Array.isArray(quizState?.answers) ? quizState.answers : [];
-  const correctCount = answers.filter((answer) => answer.isCorrect).length;
-  const xpEarned = answers.reduce((totalXp, answer) => totalXp + toNonNegativeNumber(answer.xpGained), 0);
+  const validAnswers = validateAnswers(questions, answers);
+  const correctCount = validAnswers.filter((answer) => answer.isCorrect).length;
+  const xpEarned = validAnswers.reduce((totalXp, answer) => totalXp + answer.xpGained, 0);
   const baseResult = {
     ok: false,
     correctCount,
@@ -144,7 +150,7 @@ export function finishQuiz(quizState) {
     unlockedAchievements: [],
   };
 
-  if (quizState?.finished || total === 0 || answers.length !== total) {
+  if (quizState?.finished || total === 0 || validAnswers.length !== total) {
     return { ...baseResult, reason: "incomplete" };
   }
 
@@ -156,7 +162,7 @@ export function finishQuiz(quizState) {
 
   const progress = user.progress && typeof user.progress === "object" ? user.progress : {};
   const xpResult = addXp({ ...progress, instrumentId: user.instrument }, xpEarned);
-  const correctStreak = getBestCorrectStreak(answers);
+  const correctStreak = getBestCorrectStreak(validAnswers);
   const existingQuizStats = progress.quizStats ?? {};
   const currentStreak = answers.reduce(
     (streak, answer) => (answer.isCorrect ? streak + 1 : 0),
@@ -169,7 +175,7 @@ export function finishQuiz(quizState) {
     gamesPlayed: toNonNegativeNumber(progress.gamesPlayed) + 1,
     studyMinutes: toNonNegativeNumber(progress.studyMinutes) + 2,
     quizStats: {
-      answered: toNonNegativeNumber(existingQuizStats.answered) + answers.length,
+      answered: toNonNegativeNumber(existingQuizStats.answered) + validAnswers.length,
       correct: toNonNegativeNumber(existingQuizStats.correct) + correctCount,
       currentStreak,
       bestStreak: Math.max(toNonNegativeNumber(existingQuizStats.bestStreak), currentStreak, correctStreak),
@@ -217,6 +223,61 @@ function shuffle(items) {
   }
 
   return shuffled;
+}
+
+function isValidQuestion(question) {
+  return Boolean(
+    question
+    && typeof question.id === "string"
+    && typeof question.question === "string"
+    && Array.isArray(question.options)
+    && question.options.length === 4
+    && new Set(question.options.map((option) => option?.id)).size === question.options.length
+    && question.options.every((option) => (
+      option && typeof option.id === "string" && typeof option.text === "string"
+    ))
+    && Number.isInteger(question.correctIndex)
+    && question.correctIndex >= 0
+    && question.correctIndex < question.options.length
+    && typeof question.explanation === "string"
+    && Number.isFinite(question.xp)
+    && question.xp >= 0
+  );
+}
+
+function validateAnswers(questions, answers) {
+  if (!Array.isArray(answers)) {
+    return [];
+  }
+
+  const questionById = new Map(questions.map((question) => [question.id, question]));
+  const seen = new Set();
+  const valid = [];
+
+  answers.forEach((answer) => {
+    const question = questionById.get(answer?.questionId);
+
+    if (
+      !question
+      || seen.has(question.id)
+      || !Number.isInteger(answer.optionIndex)
+      || answer.optionIndex < 0
+      || answer.optionIndex >= question.options.length
+    ) {
+      return;
+    }
+
+    const isCorrect = answer.optionIndex === question.correctIndex;
+    seen.add(question.id);
+    valid.push({
+      questionId: question.id,
+      optionIndex: answer.optionIndex,
+      isCorrect,
+      xpGained: isCorrect ? toNonNegativeNumber(question.xp) : 0,
+    });
+  });
+
+  return valid;
 }
 
 function getBestCorrectStreak(answers) {

@@ -2,14 +2,16 @@ import { createUser, getCurrentUser, getUserByEmail, removeUser, setSession, cle
 import { formatName, normalizeEmail } from "./utils.js";
 
 // Projeto educacional sem backend: isto NÃO é segurança real.
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/u;
 const NAME_PATTERN = /^[\p{L}\p{M}]+(?:[ '-][\p{L}\p{M}]+)*$/u;
+const MAX_NAME_LENGTH = 40;
+const MAX_PASSWORD_LENGTH = 128;
+const MAX_EMAIL_LENGTH = 254;
 
 export const AUTH_MESSAGES = Object.freeze({
   duplicateEmail: "Este e-mail já tem uma conta. Entre ou use outro e-mail.",
   invalidCredentials: "Não encontramos essa combinação de e-mail e senha. Confira e tente de novo.",
   cryptoUnavailable: "Não foi possível preparar sua senha neste navegador. Abra o MUSICPLAY em localhost ou HTTPS e tente novamente.",
-  storageUnavailable: "Não foi possível salvar seus dados agora. Confira o espaço disponível no navegador e tente novamente.",
+  storageUnavailable: "Não conseguimos salvar seu progresso neste navegador. Confira o espaço disponível e tente novamente.",
 });
 
 /**
@@ -46,8 +48,12 @@ export function validateSignup(fields = {}) {
   validateNameField(values.lastName, "lastName", "Sobrenome", errors);
   validateEmailField(values.email, errors);
 
-  if (typeof values.password !== "string" || values.password.length < 6) {
-    errors.password = "Use uma senha com pelo menos 6 caracteres.";
+  if (
+    typeof values.password !== "string"
+    || values.password.length < 6
+    || values.password.length > MAX_PASSWORD_LENGTH
+  ) {
+    errors.password = `Use uma senha com 6 a ${MAX_PASSWORD_LENGTH} caracteres.`;
   }
 
   if (values.terms !== true) {
@@ -68,8 +74,12 @@ export function validateLogin(fields = {}) {
   const errors = {};
   validateEmailField(values.email, errors);
 
-  if (typeof values.password !== "string" || values.password.length === 0) {
-    errors.password = "Informe sua senha para continuar.";
+  if (
+    typeof values.password !== "string"
+    || values.password.length === 0
+    || values.password.length > MAX_PASSWORD_LENGTH
+  ) {
+    errors.password = `Informe sua senha (até ${MAX_PASSWORD_LENGTH} caracteres).`;
   }
 
   return errors;
@@ -222,13 +232,50 @@ function validateNameField(value, field, label, errors) {
   const normalizedName = value.trim().replace(/\s+/gu, " ");
   const letters = Array.from(normalizedName).filter((character) => /\p{L}/u.test(character));
 
-  if (letters.length < 2 || !NAME_PATTERN.test(normalizedName)) {
-    errors[field] = `${label} deve ter pelo menos 2 letras.`;
+  if (
+    letters.length < 2
+    || Array.from(normalizedName).length > MAX_NAME_LENGTH
+    || !NAME_PATTERN.test(normalizedName)
+  ) {
+    errors[field] = `${label} deve ter pelo menos 2 letras e até ${MAX_NAME_LENGTH} caracteres.`;
   }
 }
 
 function validateEmailField(value, errors) {
-  if (typeof value !== "string" || !EMAIL_PATTERN.test(normalizeEmail(value))) {
+  if (
+    typeof value !== "string"
+    || normalizeEmail(value).length > MAX_EMAIL_LENGTH
+    || !isValidEmail(normalizeEmail(value))
+  ) {
     errors.email = "Ops, esse e-mail parece incompleto. Exemplo: nome@email.com";
   }
+}
+
+function isValidEmail(email) {
+  const [localPart, domain, extraPart] = email.split("@");
+
+  if (
+    !localPart
+    || !domain
+    || extraPart !== undefined
+    || localPart.length > 64
+    || localPart.startsWith(".")
+    || localPart.endsWith(".")
+    || localPart.includes("..")
+    || !/^[\p{L}\p{N}!#$%&'*+/=?^_`{|}~.-]+$/u.test(localPart)
+  ) {
+    return false;
+  }
+
+  const labels = domain.split(".");
+  const topLevelDomain = labels[labels.length - 1];
+  return labels.length >= 2
+    && topLevelDomain.length >= 2
+    && topLevelDomain.length <= 63
+    && /^[\p{L}]+$/u.test(topLevelDomain)
+    && labels.every((label) => (
+      label.length >= 1
+      && label.length <= 63
+      && /^[\p{L}\p{N}](?:[\p{L}\p{N}-]*[\p{L}\p{N}])?$/u.test(label)
+    ));
 }

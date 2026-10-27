@@ -72,7 +72,7 @@ export function registerVisit(today = todayKey()) {
  * @returns {object | null} Updated user copy, or null when no user is active.
  */
 export function registerStudy(studyDate = todayKey()) {
-  if (!isDateKey(studyDate) || !getCurrentUser()) {
+  if (!isDateKey(studyDate) || studyDate > todayKey() || !getCurrentUser()) {
     return null;
   }
 

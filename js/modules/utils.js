@@ -20,8 +20,12 @@ export function formatName(raw) {
   return words
     .split(" ")
     .map((word, index) => word
-      .split("-")
+      .split(/([-'])/u)
       .map((part, partIndex) => {
+        if (part === "-" || part === "'") {
+          return part;
+        }
+
         if ((index > 0 || partIndex > 0) && NAME_PARTICLES.has(part)) {
           return part;
         }
@@ -29,7 +33,7 @@ export function formatName(raw) {
         const [firstLetter, ...remainingLetters] = Array.from(part);
         return `${firstLetter?.toLocaleUpperCase("pt-BR") ?? ""}${remainingLetters.join("")}`;
       })
-      .join("-"))
+      .join(""))
     .join(" ");
 }
 
@@ -114,5 +118,5 @@ export function percent(value, total) {
  * @returns {number} Safe non-negative number.
  */
 export function toNonNegativeNumber(value) {
-  return typeof value === "number" && Number.isFinite(value) ? Math.max(0, value) : 0;
+  return typeof value === "number" && Number.isFinite(value) ? Math.max(0, Math.trunc(value)) : 0;
 }

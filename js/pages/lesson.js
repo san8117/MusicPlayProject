@@ -194,6 +194,29 @@ function initializePlayer(root, lesson, user) {
   button.setAttribute("aria-pressed", "false");
   player.setAttribute("aria-label", `Vídeo da aula ${lesson.title}`);
 
+  let activeIframe = null;
+  let activeErrorMessage = null;
+  let fallbackTimer = null;
+  const stopVideo = () => {
+    globalThis.clearTimeout(fallbackTimer);
+    activeIframe?.remove();
+    activeErrorMessage?.remove();
+    activeIframe = null;
+    activeErrorMessage = null;
+    button.dataset.videoLoaded = "false";
+    button.disabled = false;
+    button.setAttribute("aria-pressed", "false");
+    placeholder.hidden = false;
+    placeholder.textContent = "Clique para carregar o vídeo desta aula.";
+    if (quality) {
+      quality.hidden = false;
+    }
+    if (controls) {
+      controls.hidden = false;
+    }
+  };
+  globalThis.addEventListener("pagehide", stopVideo);
+
   return () => {
     if (button.dataset.videoLoaded === "true") {
       return;
@@ -201,7 +224,9 @@ function initializePlayer(root, lesson, user) {
 
     button.dataset.videoLoaded = "true";
     button.disabled = true;
-    quality?.remove();
+    if (quality) {
+      quality.hidden = true;
+    }
     placeholder.hidden = true;
     if (controls) {
       controls.hidden = true;
@@ -209,6 +234,7 @@ function initializePlayer(root, lesson, user) {
 
     const instrument = INSTRUMENTS.find((entry) => entry.id === user.instrument);
     const iframe = root.createElement("iframe");
+    activeIframe = iframe;
     iframe.className = "lesson-player__iframe";
     iframe.setAttribute("src", `https://www.youtube-nocookie.com/embed/${videoId}`);
     iframe.setAttribute("title", `${video?.title ?? lesson.title} — ${instrument?.name ?? "instrumento"} | MUSICPLAY`);
@@ -219,6 +245,7 @@ function initializePlayer(root, lesson, user) {
     screen.replaceChildren(iframe);
 
     const errorMessage = root.createElement("p");
+    activeErrorMessage = errorMessage;
     const link = root.createElement("a");
     errorMessage.className = "lesson-player__error";
     errorMessage.hidden = true;
@@ -231,7 +258,7 @@ function initializePlayer(root, lesson, user) {
     player.insertBefore(errorMessage, controls ?? null);
 
     let loaded = false;
-    const fallbackTimer = globalThis.setTimeout(() => {
+    fallbackTimer = globalThis.setTimeout(() => {
       if (!loaded) {
         errorMessage.hidden = false;
       }

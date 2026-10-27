@@ -51,8 +51,8 @@ export function initializeSongsPage(root = document) {
 
     const practiceButton = event.target.closest('[data-action="practice-song"][data-song-action]');
 
-    if (practiceButton && page.contains(practiceButton)) {
-      recordPractice(practiceButton.dataset.songAction);
+    if (practiceButton && page.contains(practiceButton) && !practiceButton.disabled) {
+      recordPractice(practiceButton.dataset.songAction, practiceButton);
     }
   });
 
@@ -78,7 +78,12 @@ export function initializeSongsPage(root = document) {
     }
   }
 
-  function recordPractice(songId) {
+  function recordPractice(songId, practiceButton) {
+    practiceButton.disabled = true;
+    globalThis.setTimeout(() => {
+      practiceButton.disabled = false;
+    }, 500);
+
     const card = cards.find((item) => [...item.querySelectorAll("[data-song-id]")]
       .some((element) => element.dataset.songId === songId));
 
@@ -97,6 +102,12 @@ export function initializeSongsPage(root = document) {
         ? progress.songProgress
         : {};
       const previousPercent = getSongPercentage(songs[songId]);
+
+      if (previousPercent >= 100) {
+        sessionResult = { alreadyCompleted: true };
+        return currentUser;
+      }
+
       const nextPercent = Math.min(100, previousPercent + SONG_PRACTICE_REWARD.progress);
       const xpResult = addXp({ ...progress, instrumentId: currentUser.instrument }, SONG_PRACTICE_REWARD.xp);
 
@@ -115,6 +126,11 @@ export function initializeSongsPage(root = document) {
 
     if (!updatedUser || !sessionResult) {
       showToast("Não foi possível salvar esta sessão de prática. Tente novamente.", { type: "info" });
+      return;
+    }
+
+    if (sessionResult.alreadyCompleted) {
+      showToast("Essa música já foi concluída. Você pode revisá-la sem ganhar XP novamente.", { type: "info" });
       return;
     }
 

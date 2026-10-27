@@ -2,6 +2,8 @@ import { getCurrentUser, updateCurrentUser } from "./state.js";
 import { getPageRoute } from "./auth.js";
 import { INSTRUMENTS } from "../data/instruments.js";
 import { getLessonsForInstrument } from "../data/lessons.js";
+import { initializeSessionSync } from "./session-sync.js";
+import { showToast } from "./toast.js";
 
 const HELP_TEXT = Object.freeze({
   1: "Escolha um instrumento para continuar.",
@@ -34,6 +36,13 @@ export function initializeOnboarding(root = document) {
     return;
   }
 
+  initializeSessionSync("onboarding", user);
+  if (user.recoveryNotice) {
+    showToast("Precisamos confirmar novamente suas escolhas de instrumento e nível. Seu progresso anterior foi mantido.", { type: "info" });
+    updateCurrentUser((currentUser) => {
+      currentUser.recoveryNotice = false;
+    });
+  }
   const draft = user.onboardingDraft ?? {
     step: user.instrument ? (user.level ? 3 : 2) : 1,
     instrument: user.instrument,
@@ -94,6 +103,7 @@ export function initializeOnboarding(root = document) {
       currentUser.goals = values.goals;
       currentUser.onboardingDone = true;
       currentUser.onboardingDraft = null;
+      currentUser.recoveryNotice = false;
     });
 
     if (!updatedUser) {

@@ -15,9 +15,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:wght@700;800&amp;display=swap">
     <link rel="stylesheet" href="../css/main.css">
+    <script src="../js/environment-warning.js" defer></script>
     <script type="module" src="../js/main.js"></script>
   </head>
   <body data-page="login">
+    <noscript><p class="environment-notice">Ative o JavaScript para usar as aulas, o progresso e os recursos interativos do MUSICPLAY.</p></noscript>
     <a class="skip-link" href="#main-content">Pular para o conteúdo</a>
     <main class="auth-page" id="main-content" tabindex="-1">
       <div class="auth-page__container">
@@ -40,6 +42,7 @@
                 type="email"
                 autocomplete="email"
                 inputmode="email"
+                maxlength="254"
                 required
                 aria-describedby="login-email-error"
                 data-field="email"
@@ -56,6 +59,7 @@
                   name="password"
                   type="password"
                   autocomplete="current-password"
+                  maxlength="128"
                   required
                   aria-describedby="login-password-error"
                   data-field="password"

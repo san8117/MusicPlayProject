@@ -10,6 +10,16 @@
   pointer-events: none;
 }
 
+.environment-notice {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border-block-end: 1px solid var(--color-border-strong);
+  color: var(--color-text);
+  background: var(--color-surface-raised);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
 .toast {
   display: flex;
   width: min(100%, 24rem);

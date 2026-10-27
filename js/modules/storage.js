@@ -1,35 +1,71 @@
 const ROOT_KEY = "musicplay:v1";
 const SESSION_KEY = "musicplay:session";
-const DEFAULT_ROOT = Object.freeze({ schemaVersion: 1 });
+const SCHEMA_VERSION = 2;
+const DEFAULT_ROOT = Object.freeze({ schemaVersion: SCHEMA_VERSION });
 
 /**
- * Reads the versioned storage root, removing it if its JSON is corrupted.
+ * Dispatches a storage failure event for the UI without depending on a page module.
+ *
+ * @returns {void}
+ */
+function notifyStorageError() {
+  if (typeof globalThis.dispatchEvent === "function" && typeof globalThis.CustomEvent === "function") {
+    globalThis.dispatchEvent(new globalThis.CustomEvent("musicplay:storage-error"));
+  }
+}
+
+/**
+ * Saves malformed raw data under a timestamped backup key when storage permits.
+ *
+ * @param {string} key Original localStorage key.
+ * @param {string} rawValue Malformed serialized value.
+ * @returns {void}
+ */
+export function backupCorruptValue(key, rawValue) {
+  try {
+    localStorage.setItem(`musicplay:backup:${key}:${Date.now()}`, rawValue);
+  } catch {
+    notifyStorageError();
+  }
+}
+
+/**
+ * Reads the versioned storage root, preserving malformed data before recovery.
  *
  * @returns {Record<string, unknown> | null}
  */
 function readRoot() {
+  let rawValue;
+
   try {
-    const rawValue = localStorage.getItem(ROOT_KEY);
+    rawValue = localStorage.getItem(ROOT_KEY);
+  } catch {
+    notifyStorageError();
+    return null;
+  }
 
-    if (rawValue === null) {
-      return { ...DEFAULT_ROOT };
-    }
+  if (rawValue === null) {
+    return { ...DEFAULT_ROOT };
+  }
 
+  try {
     const value = JSON.parse(rawValue);
 
     if (value === null || typeof value !== "object" || Array.isArray(value)) {
-      localStorage.removeItem(ROOT_KEY);
+      backupCorruptValue(ROOT_KEY, rawValue);
       return { ...DEFAULT_ROOT };
     }
 
-    return value;
-  } catch {
-    try {
-      localStorage.removeItem(ROOT_KEY);
-    } catch {
+    const version = Number.isInteger(value.schemaVersion) ? value.schemaVersion : 1;
+
+    if (version > SCHEMA_VERSION) {
+      notifyStorageError();
       return null;
     }
 
+    return { ...value, schemaVersion: SCHEMA_VERSION };
+  } catch {
+    backupCorruptValue(ROOT_KEY, rawValue);
     return { ...DEFAULT_ROOT };
   }
 }
@@ -43,25 +79,46 @@ function readRoot() {
  * @returns {T}
  */
 export function getItem(key, fallback) {
-  try {
-    if (key === "session") {
+  if (key === "session") {
+    try {
       const rawSession = localStorage.getItem(SESSION_KEY);
-      return rawSession === null ? fallback : JSON.parse(rawSession);
-    }
 
-    const root = readRoot();
-    return root && Object.hasOwn(root, key) ? root[key] : fallback;
-  } catch {
-    if (key === "session") {
-      try {
-        localStorage.removeItem(SESSION_KEY);
-      } catch {
+      if (rawSession === null) {
         return fallback;
       }
+
+      const session = JSON.parse(rawSession);
+
+      if (typeof session === "string" && session.trim()) {
+        return session;
+      }
+
+      backupCorruptValue(SESSION_KEY, rawSession);
+      localStorage.removeItem(SESSION_KEY);
+      return fallback;
+    } catch {
+      notifyStorageError();
+      return fallback;
+    }
+  }
+
+  const root = readRoot();
+
+  if (!root) {
+    return fallback;
+  }
+
+  const value = root[key];
+
+  if (key === "users" && (!value || typeof value !== "object" || Array.isArray(value))) {
+    if (Object.hasOwn(root, key)) {
+      backupCorruptValue(`${ROOT_KEY}:users`, JSON.stringify(value));
     }
 
     return fallback;
   }
+
+  return Object.hasOwn(root, key) ? value : fallback;
 }
 
 /**
@@ -76,6 +133,7 @@ export function setItem(key, value) {
     const serializedValue = JSON.stringify(value);
 
     if (serializedValue === undefined) {
+      notifyStorageError();
       return false;
     }
 
@@ -87,13 +145,16 @@ export function setItem(key, value) {
     const root = readRoot();
 
     if (!root) {
+      notifyStorageError();
       return false;
     }
 
     root[key] = value;
+    root.schemaVersion = SCHEMA_VERSION;
     localStorage.setItem(ROOT_KEY, JSON.stringify(root));
     return true;
   } catch {
+    notifyStorageError();
     return false;
   }
 }
@@ -114,13 +175,16 @@ export function removeItem(key) {
     const root = readRoot();
 
     if (!root) {
+      notifyStorageError();
       return false;
     }
 
     delete root[key];
+    root.schemaVersion = SCHEMA_VERSION;
     localStorage.setItem(ROOT_KEY, JSON.stringify(root));
     return true;
   } catch {
+    notifyStorageError();
     return false;
   }
 }
@@ -144,6 +208,7 @@ export function update(key, updaterFn) {
 
     return nextValue;
   } catch {
+    notifyStorageError();
     return false;
   }
 }
@@ -159,6 +224,7 @@ export function clearAll() {
     localStorage.removeItem(SESSION_KEY);
     return true;
   } catch {
+    notifyStorageError();
     return false;
   }
 }
