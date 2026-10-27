@@ -4,6 +4,7 @@ import * as storage from "./storage.js";
 const EMPTY_QUIZ_STATS = Object.freeze({
   answered: 0,
   correct: 0,
+  currentStreak: 0,
   bestStreak: 0,
   perfectQuizzes: 0,
 });

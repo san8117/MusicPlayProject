@@ -6,6 +6,7 @@ import {
   getLessonStates,
   getNextLesson,
   saveLessonProgress,
+  startLessonSession,
 } from "../modules/lessons.js";
 import { showToast } from "../modules/toast.js";
 
@@ -42,6 +43,7 @@ export function initializeLessonPage(root = document) {
     return;
   }
 
+  startLessonSession(lesson.id);
   const currentLesson = { ...lesson, state };
   populateLesson(root, currentLesson, user);
   initializeLessonInteractions(root, currentLesson);

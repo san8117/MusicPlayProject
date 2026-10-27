@@ -1,6 +1,7 @@
 import { getCurrentUser } from "../modules/state.js";
 import { getCurrentStreak } from "../modules/streak.js";
 import { toNonNegativeNumber } from "../modules/utils.js";
+import { renderCalendar } from "../modules/calendar.js";
 
 /**
  * Populates profile statistics from the active learner's isolated progress.
@@ -44,6 +45,8 @@ export function initializeProfile(root = document) {
   if (studyTimeUnit) {
     studyTimeUnit.textContent = "min";
   }
+
+  renderCalendar(root, user);
 }
 
 function countCompleted(values) {

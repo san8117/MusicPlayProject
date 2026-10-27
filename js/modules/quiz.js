@@ -4,6 +4,7 @@ import { getCurrentUser, updateCurrentUser } from "./state.js";
 import { registerStudy } from "./streak.js";
 import { showToast } from "./toast.js";
 import { toNonNegativeNumber } from "./utils.js";
+import { unlockAchievements } from "./achievements.js";
 
 /**
  * Selects up to `count` unique questions and creates a fresh quiz round.
@@ -115,10 +116,9 @@ export function isLastQuestion(quizState) {
  * Persists a completed round's XP and statistics exactly once.
  *
  * @param {object} quizState Completed round state.
- * @param {{checkAchievements?: (user: object) => Array<object> | void}} [options] Optional achievement integration callback.
  * @returns {{ok: boolean, correctCount: number, total: number, xpEarned: number, accuracy: number, leveledUp: boolean, newLevel: number, unlockedAchievements: Array<object>, studyRecorded?: boolean, reason?: string}}
  */
-export function finishQuiz(quizState, options = {}) {
+export function finishQuiz(quizState) {
   const total = Array.isArray(quizState?.questions) ? quizState.questions.length : 0;
   const answers = Array.isArray(quizState?.answers) ? quizState.answers : [];
   const correctCount = answers.filter((answer) => answer.isCorrect).length;
@@ -148,6 +148,10 @@ export function finishQuiz(quizState, options = {}) {
   const xpResult = addXp({ ...progress, instrumentId: user.instrument }, xpEarned);
   const correctStreak = getBestCorrectStreak(answers);
   const existingQuizStats = progress.quizStats ?? {};
+  const currentStreak = answers.reduce(
+    (streak, answer) => (answer.isCorrect ? streak + 1 : 0),
+    toNonNegativeNumber(existingQuizStats.currentStreak),
+  );
   const nextProgress = {
     ...progress,
     xp: xpResult.progress.xp,
@@ -157,7 +161,8 @@ export function finishQuiz(quizState, options = {}) {
     quizStats: {
       answered: toNonNegativeNumber(existingQuizStats.answered) + answers.length,
       correct: toNonNegativeNumber(existingQuizStats.correct) + correctCount,
-      bestStreak: Math.max(toNonNegativeNumber(existingQuizStats.bestStreak), correctStreak),
+      currentStreak,
+      bestStreak: Math.max(toNonNegativeNumber(existingQuizStats.bestStreak), currentStreak, correctStreak),
       perfectQuizzes: toNonNegativeNumber(existingQuizStats.perfectQuizzes)
         + Number(correctCount === total && total === 3),
     },
@@ -177,21 +182,10 @@ export function finishQuiz(quizState, options = {}) {
 
   quizState.finished = true;
   const studyRecorded = Boolean(registerStudy());
-  const updatedUserWithStudy = getCurrentUser();
-  const checkAchievements = typeof options?.checkAchievements === "function"
-    ? options.checkAchievements
-    : null;
-  const unlockedAchievements = checkAchievements?.(updatedUserWithStudy ?? updatedUser) ?? [];
+  const unlockedAchievements = unlockAchievements();
 
   if (xpResult.leveledUp) {
     showToast(`Você subiu para o Nível ${xpResult.level}! 🎉`, { type: "level" });
-  }
-
-  if (Array.isArray(unlockedAchievements)) {
-    unlockedAchievements.forEach((achievement) => {
-      const title = achievement?.title ?? "Nova conquista desbloqueada!";
-      showToast(title, { type: "achievement" });
-    });
   }
 
   return {

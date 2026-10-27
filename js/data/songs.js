@@ -1,3 +1,10 @@
+/** Fixed reward and progress increment for one simulated practice session. */
+export const SONG_PRACTICE_REWARD = Object.freeze({
+  progress: 20,
+  xp: 10,
+  minutes: 5,
+});
+
 export const SONGS = Object.freeze([
   Object.freeze({ id: "asa-branca", title: "Asa Branca", artist: "Luiz Gonzaga", chords: Object.freeze(["Am", "Em", "C"]), level: "beginner" }),
   Object.freeze({ id: "parabens-pra-voce", title: "Parabéns pra Você", artist: "Tradicional", chords: Object.freeze(["G", "D", "C"]), level: "beginner" }),

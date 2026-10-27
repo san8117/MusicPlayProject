@@ -9,6 +9,8 @@ import { initializeLessonPage } from "./pages/lesson.js";
 import { initializeProfile } from "./pages/profile.js";
 import { initializeGamesPage } from "./pages/games.js";
 import { initializeQuizPage } from "./pages/quiz.js";
+import { initializeAchievementsPage } from "./pages/achievements.js";
+import { initializeSongsPage } from "./pages/songs.js";
 
 const page = document.body.dataset.page;
 
@@ -40,6 +42,10 @@ if (page === "signup" || page === "login") {
     initializeGamesPage(document);
   } else if (page === "quiz") {
     initializeQuizPage(document);
+  } else if (page === "achievements") {
+    initializeAchievementsPage(document);
+  } else if (page === "songs") {
+    initializeSongsPage(document);
   }
 }
 

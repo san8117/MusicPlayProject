@@ -3,9 +3,26 @@ import { addXp } from "./xp.js";
 import { getCurrentUser, updateCurrentUser } from "./state.js";
 import { registerStudy } from "./streak.js";
 import { clamp, toNonNegativeNumber } from "./utils.js";
+import { unlockAchievements } from "./achievements.js";
 
 const LESSON_LOCKED_MESSAGE = "Conclua a aula anterior para liberar esta 🔒";
 const DEFAULT_INSTRUMENT_ID = "guitar";
+const lessonSessionStartTimes = new Map();
+
+/**
+ * Starts an in-memory timing session for the selected lesson.
+ *
+ * @param {string} lessonId Lesson identifier.
+ * @returns {boolean} Whether the lesson exists and its timing started.
+ */
+export function startLessonSession(lessonId) {
+  if (!getLessonById(lessonId)) {
+    return false;
+  }
+
+  lessonSessionStartTimes.set(lessonId, Date.now());
+  return true;
+}
 
 /**
  * Returns sequential lesson and module states for an instrument's authored path.
@@ -184,14 +201,22 @@ export function completeLesson(lessonId) {
   }
 
   const studyUpdate = registerStudy();
+  const startedAt = lessonSessionStartTimes.get(lessonId);
+  lessonSessionStartTimes.delete(lessonId);
+  const lessonDurationMinutes = Number.isFinite(startedAt)
+    ? Math.max(0, (Date.now() - startedAt) / 60_000)
+    : null;
+  const unlockedAchievements = unlockAchievements({
+    completedLessonId: lessonId,
+    lessonDurationMinutes,
+  });
 
-  // Achievement evaluation is connected in Etapa 3.6; this result remains the integration point.
   return {
     ok: true,
     xpGained: lesson.xp,
     leveledUp: xpResult.leveledUp,
     newLevel: xpResult.level,
-    unlockedAchievements: [],
+    unlockedAchievements,
     nextLessonId: nextLesson?.id ?? null,
     studyRecorded: Boolean(studyUpdate),
   };

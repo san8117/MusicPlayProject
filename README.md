@@ -108,7 +108,7 @@ Os nomes acima são rascunhos de design tokens, não valores finais de cor. A pa
 
 ## Personalização por aluno
 
-Os dados mostrados nas telas do Figma — João Silva, 850 XP, quatro dias de sequência, Nível 3 e “Setembro 2024” — são apenas exemplos de layout. Não devem ser fixados como conteúdo de todos os usuários nem como estado inicial.
+Os dados mostrados nas telas do Figma — João Silva, 850 XP, quatro dias de sequência, Nível 3 e “Setembro 2024” — são apenas exemplos de layout. Não devem ser fixados como conteúdo de todos os usuários nem como estado inicial. O calendário usa o mês e o ano locais atuais, sem datas de demonstração fixas.
 
 ### Nome e apresentação
 
@@ -205,7 +205,15 @@ Implementar as 12 conquistas apresentadas no Figma, sem desbloqueá-las para alu
 11. 100 Questões
 12. Módulo Completo
 
-Os critérios precisos de desbloqueio devem corresponder às atividades do produto e às referências disponíveis; onde não houver definição suficiente, confirmar antes de assumir regras.
+Critérios implementados: Primeira Aula após concluir uma aula; 3/7 Dias Seguidos usando dias locais consecutivos; 100 XP ao atingir esse total; Primeira Nota na primeira sessão simulada de prática musical; Primeiro Acorde ao concluir a Aula 4, que apresenta Am, Em e C; Mestre das Notas ao fechar um quiz com 3/3; Atirador Certeiro ao atingir dez respostas certas consecutivas, inclusive entre rodadas; Primeira Música ao completar uma faixa; Velocista ao concluir uma aula em até dez minutos desde sua abertura nesta sessão; 100 Questões após 100 respostas; Módulo Completo ao concluir as cinco aulas do Módulo 1. Não há XP bônus associado às definições atuais.
+
+## Músicas e prática simulada
+
+A página filtra as faixas pelos níveis já registrados nos cards, atualiza os botões com `aria-pressed` e anuncia a quantidade de resultados na região acessível existente. Como ainda não há uma tela de música, cada clique em Praticar/Continuar/Revisar representa uma sessão simulada: soma 20 pontos percentuais, 10 XP e cinco minutos, e registra o dia de estudo. A quinta sessão completa a música; sessões de Revisar continuam sendo sessões de prática, mas não contam uma segunda conclusão. Os valores do incremento e da recompensa estão em `js/data/songs.js`. Esta simulação será substituída quando a experiência de música estiver disponível.
+
+## Calendário de estudos
+
+O perfil gera o mês local atual, com deslocamento inicial a partir de domingo, dias de estudo destacados, hoje realçado e datas futuras em estado neutro. O título usa mês e ano atuais em português; o estado vazio aparece se nenhum dia do mês foi registrado. O gerador recebe ano, mês zero-based, data atual e `studyDays`, permitindo validar meses de 28 a 31 dias e anos bissextos.
 
 ## Estrutura de pastas
 
@@ -341,7 +349,7 @@ Não é necessário build ou backend. As páginas HTML referenciam `css/main.css
 ### Teste manual da Etapa 3.3
 
 1. Com uma conta recém-criada e onboarding concluído, abra o dashboard: confira “Bem-vindo, Guilherme!”, Nível 1, 0 XP, 0 dias e a indicação da Aula 1. Recarregue para conferir “Bem-vindo de volta”.
-2. No perfil, confira nome, e-mail, inicial e os oito indicadores zerados; o calendário permanece no estado inicial até a Etapa 3.6.
+2. No perfil, confira nome, e-mail, inicial e os oito indicadores zerados; o calendário mostra o mês local atual e o aviso de que ainda não houve estudo no mês.
 3. Faça logout, tente abrir diretamente `pages/dashboard.html` sem sessão e confirme o redirecionamento ao login. Crie outra conta sem concluir o onboarding e tente abrir uma página logada; o destino deve ser onboarding.
 4. Entre com dois e-mails diferentes no mesmo navegador, conclua onboarding com instrumentos distintos e confira que nome, instrumento, XP, aulas e demais dados não se misturam após logout/login.
 5. Teste os itens de navegação: Aula deve ativar Aprender, Quiz deve ativar Jogos e apenas o link correspondente deve manter `aria-current="page"`. Recarregue páginas logadas para confirmar que a sessão continua e não ganha dias de estudo apenas por visita.
@@ -362,6 +370,15 @@ Não é necessário build ou backend. As páginas HTML referenciam `css/main.css
 3. Responda as três perguntas, clique em “Ver resultado” e confira acertos, XP, taxa, mensagem encorajadora, salvamento no estado do aluno e taxa atualizada no Perfil.
 4. Clique em “Jogar de novo” e confirme que há novas perguntas sem repetição na rodada. Responda pelo menos uma pergunta e tente voltar para Jogos: “Continuar jogando” mantém a rodada; “Sair” a descarta. Recarregue uma rodada respondida e confirme que ela recomeça sem salvar XP ou estatísticas.
 5. Repita o Quiz com dois alunos do mesmo navegador e confira que XP, taxa de acerto, partidas, tempo e sequência permanecem isolados.
+
+### Teste manual da Etapa 3.6
+
+1. Com uma conta nova, conclua a Aula 1 e confirme “Primeira Aula” no toast e na página de Conquistas. Para verificar “100 XP”, conclua aulas e/ou pratique músicas até ultrapassar 100 XP.
+2. Acerte 3/3 perguntas em um quiz e confirme “Mestre das Notas”; faça outra rodada com respostas corretas seguidas e verifique o contador persistente usado por “Atirador Certeiro”.
+3. Na página Músicas, alterne Todas, Iniciante, Intermediário e Avançado; confira que apenas um filtro tem `aria-pressed="true"`, a lista é filtrada, a quantidade é anunciada e o estado vazio aparece se uma categoria não tiver faixas.
+4. Pratique uma mesma música cinco vezes: o progresso deve avançar 20% por sessão, o botão alternar entre Praticar/Continuar/Revisar, e na quinta sessão surgir “Primeira Música”. Confirme XP, cinco minutos e sequência atualizados.
+5. No Perfil, confira o mês local atual, hoje destacado e os dias estudados marcados; em um perfil novo, a mensagem de estado vazio aparece. Para conferir o deslocamento, teste `buildMonthCalendar(2026, 11, "2026-12-01", [])`: dezembro de 2026 tem 31 dias e dois espaços antes de terça-feira, totalizando 33 células. Também confira fevereiro de 2024 para o ano bissexto.
+6. Repita as ações com dois alunos no mesmo navegador e confira que conquistas, músicas, XP, dias de estudo e calendário ficam isolados por usuário.
 
 ## Plano de desenvolvimento
 
@@ -398,7 +415,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - [x] 3.3 — Navegação protegida, personalização, dashboard, perfil e base da sequência.
 - [x] 3.4 — Trilha Aprender, aulas e registro de conclusão/progresso.
 - [x] 3.5 — Quiz Musical e Jogos.
-- [ ] 3.6 — Integração e feedback de estados.
+- [x] 3.6 — Conquistas, Músicas e Calendário.
 
 ### Fase 4 — Revisão e entrega
 
@@ -479,17 +496,21 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - As páginas já têm os pontos de ligação necessários; não houve mudança em HTML ou CSS. Não foi iniciada a autenticação de servidor, que não faz parte deste projeto sem backend.
 - A Etapa 3.3 protege as oito páginas logadas: sem sessão, direciona para login; com onboarding incompleto, direciona para onboarding. A navegação ativa mantém `aria-current="page"` e Aula/Aprender e Quiz/Jogos compartilham seus destinos de navegação.
 - A personalização global preenche os marcadores `data-user` por `textContent`, deriva nível/título a partir do XP e do instrumento e mostra a saudação de primeiro acesso uma única vez. O dashboard destaca a aula atual ou a Aula 1, recomenda a próxima aula, um jogo e uma música compatível com o nível escolhido, e mantém a mensagem vazia de conquistas quando não há desbloqueios.
-- O perfil calcula aulas, músicas concluídas, jogos, taxa de acerto, sequência, XP, conquistas e tempo de estudo; valores de tempo são exibidos como `0min`, `45min` ou `3h 20min`. O calendário permanece sem integração nesta etapa para ser conectado na 3.6.
+- O perfil calcula aulas, músicas concluídas, jogos, taxa de acerto, sequência, XP, conquistas e tempo de estudo; valores de tempo são exibidos como `0min`, `45min` ou `3h 20min`. O calendário é gerado dinamicamente para o mês local atual.
 - A sequência usa datas locais `YYYY-MM-DD`: estudar hoje ou ontem mantém a contagem consecutiva; se o último estudo foi anteontem ou antes, a sequência exibida é zero sem apagar o histórico. `registerVisit()` recalcula a sequência sem registrar estudo; somente `registerStudy()` acrescenta o dia, no máximo uma vez por data.
 - O registro das datas e o cálculo da sequência são separados para permitir testes com datas fornecidas; o botão de conclusão da aula chama `registerStudy()`, enquanto abrir ou reproduzir a prévia não registra estudo.
-- A Etapa 3.5 implementa a lógica pura da rodada e a persistência final do Quiz: sorteia até três perguntas sem repetição, soma 20 XP temporários por acerto e só atualiza XP, `quizStats`, jogos, tempo e sequência após todas as respostas. `bestStreak` registra a maior sequência de acertos de uma rodada e `perfectQuizzes` só aumenta em uma rodada completa de 3/3.
+- A Etapa 3.5 implementa a lógica pura da rodada e a persistência final do Quiz: sorteia até três perguntas sem repetição, soma 20 XP temporários por acerto e só atualiza XP, `quizStats`, jogos, tempo e sequência após todas as respostas. `currentStreak` acompanha acertos consecutivos entre rodadas, `bestStreak` guarda o maior recorde acumulado e `perfectQuizzes` só aumenta em uma rodada completa de 3/3.
 - Uma rodada não concluída não grava nada: navegar após responder exige confirmação; sair descarta a rodada, e recarregar reinicia sem salvar. O resultado mostra taxa de acerto, XP e feedback conforme a quantidade de acertos; o jogo reiniciado sorteia perguntas novamente.
 - O Quiz Musical é o único jogo implementado; os outros cinco cards, incluindo o destaque “Monte o Acorde”, mostram um toast de disponibilidade futura sem navegar. Atualmente só há perguntas de violão; para os demais instrumentos, a página informa que o conteúdo está sendo preparado.
-- A marcação existente do Quiz já continha a tela de resultado e o diálogo de saída, portanto não foram necessários ajustes em HTML ou CSS. A verificação de conquistas fica como callback opcional de `finishQuiz()` para a Etapa 3.6.
+- A marcação existente do Quiz já continha a tela de resultado e o diálogo de saída, portanto não foram necessários ajustes em HTML ou CSS. `finishQuiz()` agora chama a integração de conquistas após salvar a rodada.
+- A Etapa 3.6 avalia as 12 regras por funções sem efeitos, grava uma única data local por conquista e enfileira toasts “Nova conquista: <título> 🏆”; nenhuma das definições de dados prevê bônus de XP.
+- Primeira Nota significa a primeira sessão de prática simulada; Primeiro Acorde é a conclusão da Aula 4 (primeira aula com acordes); Velocista mede o tempo em memória desde a abertura da aula até a conclusão, e considera até dez minutos. Respostas consecutivas do quiz são acumuladas entre rodadas com `quizStats.currentStreak`.
+- As músicas ainda não têm tela própria: cada sessão de prática adiciona 20% de progresso, 10 XP e cinco minutos; concluir pela primeira vez ocorre ao alcançar 100%. Práticas de revisão ainda contam como sessões de estudo e concedem a recompensa configurada.
+- O calendário reutiliza `studyDays`, datas locais e layout domingo-primeiro já preparado no HTML/CSS; células vazias alinham o primeiro dia, hoje continua destacado sem estudo e datas futuras não recebem estado negativo. Mês/ano nunca ficam fixos em setembro de 2024.
 - A Etapa 3.4 implementa `getLessonStates`, `getNextLesson`, `getLessonById` e `getModuleProgress` a partir da trilha cadastrada. Aula 1 inicia como atual; só completar uma aula libera a seguinte; as concluídas permanecem concluídas e acessíveis. O Módulo 2 libera ao completar as cinco aulas do Módulo 1.
 - O total real da trilha de violão é sete aulas (cinco no Módulo 1 e duas no Módulo 2), embora o Figma/HTML de referência indique 12. A interface da trilha exibe o total existente, 7, sem criar cinco aulas não descritas.
 - Para instrumentos sem trilha cadastrada, a página oculta os módulos de violão de exemplo, mostra 0 aulas e exibe “As aulas para este instrumento chegam em breve.” em vez de apresentar conteúdo de outro instrumento.
-- A conclusão soma uma única vez o XP cadastrado por aula (30 ou 40), o tempo estimado daquela aula e o registro de estudo do dia; `saveLessonProgress()` aceita 0–100 e não reduz um progresso maior já salvo. Conquistas são retornadas como lista vazia até a integração da Etapa 3.6.
+- A conclusão soma uma única vez o XP cadastrado por aula (30 ou 40), o tempo estimado daquela aula e o registro de estudo do dia; `saveLessonProgress()` aceita 0–100 e não reduz um progresso maior já salvo. A conclusão também avalia e registra novas conquistas.
 - O player é uma simulação local sem vídeo: avança em intervalos de 60 segundos e persiste marcos de 25%, 50%, 75% e 100%. O botão de exercício mostra o aviso de disponibilidade futura e salva 50% como progresso parcial.
 - O módulo `toast.js` utiliza a região `aria-live` existente (ou cria uma se ausente), usa `textContent`, permite dispensar avisos e remove cada toast após cerca de 3,5 segundos, mesmo sob movimento reduzido.
 - A Etapa 3.4 reutiliza títulos, descrições, objetivos, acordes, XP e duração já presentes em `lessons.js`. As descrições das Aulas 1, 2, 3, 5, 6 e 7 foram criadas como conteúdo-base na Etapa 3.1, pois não havia detalhes dessas aulas no Figma; não foram adicionadas novas afirmações teóricas ou conteúdos além desses registros.
@@ -510,7 +531,6 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 ## Pendências conhecidas
 
 - Conferir a renderização responsiva de todas as telas contra o Figma na Etapa 4.2, quando as capturas de referência estiverem acessíveis.
-- Os critérios de algumas conquistas sem definição explícita no Figma continuam pendentes de validação durante a Etapa 3.6.
 - SHA-256 local é somente uma demonstração educacional, não uma proteção de contas ou senhas reais.
 
 ## Créditos
