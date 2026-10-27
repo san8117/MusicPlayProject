@@ -1,4 +1,5 @@
 import { INSTRUMENTS } from "../data/instruments.js";
+import { getInstrumentLessonProgress } from "../data/lessons.js";
 import { getCurrentUser } from "../modules/state.js";
 import { getLessonStates, getLockedLessonMessage } from "../modules/lessons.js";
 import { showToast } from "../modules/toast.js";
@@ -18,17 +19,18 @@ export function initializeLearnPage(root = document) {
   }
 
   const { modules, lessons } = getLessonStates(user.progress, user.instrument);
+  const instrumentProgress = getInstrumentLessonProgress(user.progress, user.instrument);
   const totalLessons = lessons.length;
   const completedLessons = lessons.filter((lesson) => lesson.state === "completed").length;
   const lessonById = new Map(lessons.map((lesson) => [lesson.id, lesson]));
 
   updatePageHeading(root, user.instrument);
-  renderModules(root, modules);
+  renderModules(root, modules, instrumentProgress);
   root.querySelectorAll("[data-lesson-id]").forEach((item) => {
     const lesson = lessonById.get(item.dataset.lessonId);
 
     if (lesson) {
-      renderLessonItem(root, item, lesson, user.progress);
+      renderLessonItem(root, item, lesson, instrumentProgress);
     }
   });
   renderOverallProgress(root, completedLessons, totalLessons);
@@ -42,7 +44,7 @@ function updatePageHeading(root, instrumentId) {
   const instrument = INSTRUMENTS.find((entry) => entry.id === instrumentId);
 
   if (heading && instrument) {
-    heading.textContent = `Trilha de Aprendizado ${instrument.emoji}`;
+    heading.textContent = `Trilha de Aprendizado · ${instrument.name} ${instrument.emoji}`;
   }
 }
 
@@ -68,47 +70,83 @@ function renderEmptyPathState(root, totalLessons) {
   root.querySelector(".learning-progress")?.after(message);
 }
 
-function renderModules(root, modules) {
-  root.querySelectorAll("[data-module-id]").forEach((section) => {
-    const module = modules.find((entry) => entry.id === section.dataset.moduleId);
+function renderModules(root, modules, instrumentProgress) {
+  const main = root.querySelector(".learn-page");
 
-    if (!module) {
-      section.hidden = true;
-      return;
-    }
+  if (!main) {
+    return;
+  }
 
-    section.hidden = false;
+  main.querySelectorAll(".learning-module").forEach((section) => section.remove());
+  modules.forEach((module) => {
+    const section = root.createElement("section");
+    const header = root.createElement("header");
+    const headingGroup = root.createElement("div");
+    const eyebrow = root.createElement("p");
+    const title = root.createElement("h2");
+    const count = root.createElement("p");
+    const lessonList = root.createElement("ol");
+
+    section.className = "learning-module";
+    section.dataset.moduleId = module.id;
+    header.className = "learning-module__header";
+    eyebrow.className = "learning-module__eyebrow";
+    eyebrow.textContent = `Módulo ${module.number}`;
+    title.className = "learning-module__title";
+    title.id = `${module.id}-title`;
+    title.textContent = module.title;
+    count.className = "learning-module__progress";
+    count.dataset.moduleProgress = module.id;
+    lessonList.className = "lesson-list";
+    lessonList.setAttribute("aria-label", `Aulas do módulo ${module.title}`);
+    headingGroup.append(eyebrow, title);
+    header.append(headingGroup, count);
+    section.append(header);
+    section.setAttribute("aria-labelledby", title.id);
+
     const state = module.unlocked ? "unlocked" : "locked";
     section.dataset.state = state;
     section.classList.toggle("learning-module--locked", !module.unlocked);
+    count.textContent = module.unlocked
+      ? `${module.completedCount} / ${module.totalLessons} aulas`
+      : "Bloqueado";
 
-    const title = section.querySelector(".learning-module__title");
-    const count = section.querySelector("[data-module-progress]");
-    const lockMessage = section.querySelector(".learning-module__lock-message");
-
-    if (title) {
-      title.textContent = module.title;
-    }
-
-    if (count) {
-      count.textContent = `${module.completedCount} / ${module.totalLessons} aulas`;
-    }
-
-    if (lockMessage) {
-      lockMessage.hidden = module.unlocked;
+    if (!module.unlocked) {
+      const lockMessage = root.createElement("p");
+      lockMessage.className = "learning-module__lock-message";
+      lockMessage.id = `${module.id}-lock-message`;
       lockMessage.textContent = "Complete o módulo anterior para desbloquear.";
-    }
-
-    const lessonList = section.querySelector(".lesson-list");
-    if (lessonList) {
-      lessonList.setAttribute("aria-label", `Aulas do módulo ${module.title}`);
-    }
-
-    if (module.unlocked) {
-      section.removeAttribute("aria-describedby");
-    } else if (lockMessage?.id) {
       section.setAttribute("aria-describedby", lockMessage.id);
+      section.append(lockMessage);
     }
+
+    section.append(lessonList);
+    module.lessons.forEach((lesson) => {
+      const item = root.createElement("li");
+      const link = root.createElement(lesson.state === "locked" ? "span" : "a");
+      const number = root.createElement("span");
+      const content = root.createElement("span");
+      const lessonTitle = root.createElement("span");
+      const status = root.createElement("span");
+      const xp = root.createElement("span");
+
+      item.className = "lesson-list__item";
+      item.dataset.lessonId = lesson.id;
+      link.className = "lesson-item";
+      number.className = "lesson-item__number";
+      number.setAttribute("aria-hidden", "true");
+      content.className = "lesson-item__content";
+      lessonTitle.className = "lesson-item__title";
+      status.className = "lesson-item__status visually-hidden";
+      xp.className = "lesson-item__xp";
+      content.append(lessonTitle, status);
+      link.append(number, content, xp);
+      item.append(link);
+      lessonList.append(item);
+      renderLessonItem(root, item, lesson, instrumentProgress);
+    });
+
+    main.append(section);
   });
 }
 

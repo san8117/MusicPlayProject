@@ -16,7 +16,17 @@ import { unlockAchievements } from "./achievements.js";
 export function startQuiz(questions = QUIZ_QUESTIONS, options = {}) {
   const requestedCount = Number.isFinite(options?.count) ? Math.max(0, Math.floor(options.count)) : 3;
   const selectedQuestions = shuffle(Array.isArray(questions) ? questions : [])
-    .slice(0, requestedCount);
+    .slice(0, requestedCount)
+    .map((question) => {
+      const correctOptionId = question.options[question.correctIndex]?.id;
+      const options = shuffle(question.options);
+
+      return {
+        ...question,
+        options,
+        correctIndex: options.findIndex((option) => option.id === correctOptionId),
+      };
+    });
 
   return {
     questions: selectedQuestions,

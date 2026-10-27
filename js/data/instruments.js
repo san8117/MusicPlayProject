@@ -1,14 +1,14 @@
 export const INSTRUMENTS = Object.freeze([
-  Object.freeze({ id: "guitar", name: "Violão", emoji: "🎸", availableLessons: 48 }),
-  Object.freeze({ id: "keyboard", name: "Teclado", emoji: "🎹", availableLessons: null }),
-  Object.freeze({ id: "piano", name: "Piano", emoji: "🎹", availableLessons: null }),
-  Object.freeze({ id: "drums", name: "Bateria", emoji: "🥁", availableLessons: null }),
-  Object.freeze({ id: "electric-guitar", name: "Guitarra", emoji: "🎸", availableLessons: null }),
-  Object.freeze({ id: "violin", name: "Violino", emoji: "🎻", availableLessons: null }),
-  Object.freeze({ id: "flute", name: "Flauta", emoji: "🪈", availableLessons: null }),
-  Object.freeze({ id: "cavaquinho", name: "Cavaquinho", emoji: "🪕", availableLessons: null }),
-  Object.freeze({ id: "ukulele", name: "Ukulele", emoji: "🎸", availableLessons: null }),
-  Object.freeze({ id: "accordion", name: "Sanfona / Acordeão", emoji: "🪗", availableLessons: null }),
+  Object.freeze({ id: "guitar", name: "Violão", emoji: "🎸" }),
+  Object.freeze({ id: "keyboard", name: "Teclado", emoji: "🎹" }),
+  Object.freeze({ id: "piano", name: "Piano", emoji: "🎹" }),
+  Object.freeze({ id: "drums", name: "Bateria", emoji: "🥁" }),
+  Object.freeze({ id: "electric-guitar", name: "Guitarra", emoji: "🎸" }),
+  Object.freeze({ id: "violin", name: "Violino", emoji: "🎻" }),
+  Object.freeze({ id: "flute", name: "Flauta", emoji: "🪈" }),
+  Object.freeze({ id: "cavaquinho", name: "Cavaquinho", emoji: "🪕" }),
+  Object.freeze({ id: "ukulele", name: "Ukulele", emoji: "🎸" }),
+  Object.freeze({ id: "accordion", name: "Sanfona / Acordeão", emoji: "🪗" }),
 ]);
 
 export const ONBOARDING_LEVELS = Object.freeze([

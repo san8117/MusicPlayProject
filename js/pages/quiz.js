@@ -136,7 +136,7 @@ export function initializeQuizPage(root = document) {
     counter.textContent = "0 / 0";
     progress.setAttribute("aria-valuenow", "0");
     progress.setAttribute("aria-valuemax", "0");
-    showToast("O Quiz Musical está disponível para violão por enquanto. Novas perguntas chegam em breve! 🎵", {
+    showToast("Ainda estamos preparando perguntas para este instrumento. 🎵", {
       type: "info",
     });
     return;

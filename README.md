@@ -26,7 +26,7 @@ Crianças, jovens e adultos que desejam iniciar ou desenvolver seus estudos musi
 - HTML5 semântico, CSS3 puro e JavaScript puro (ES6+ com ES Modules).
 - Sem frameworks, bibliotecas de CSS, build step ou backend.
 - Os dados dos alunos e o progresso ficam no navegador, em `localStorage`.
-- Sem dependências externas ou CDNs, exceto Google Fonts (Poppins e Inter).
+- Sem dependências externas. As únicas chamadas externas previstas são Google Fonts (Poppins e Inter) e, após clique explícito do aluno, o iframe de vídeo do YouTube em domínio de privacidade aprimorada `youtube-nocookie.com`.
 - As páginas que usam ES Modules devem ser executadas por servidor estático; não oferecer suporte a `file://`.
 - Senhas não ficam em texto puro: o protótipo usa hash SHA-256 por `crypto.subtle`. Isso não torna autenticação local segura (detalhes em [Autenticação](#autenticação)).
 
@@ -164,7 +164,7 @@ O quiz usa o título “Quiz Musical 🧠”, badge de XP (por exemplo, “⭐ 0
 | Errou | Alternativa escolhida em vermelho, com borda e fundo rosado; correta em verde; demais neutras; alternativas travadas. Exibir caixa vermelha “❌ Não foi dessa vez...” com explicação e botão “Próxima pergunta →”. | Não ganha XP. |
 | Acertou | Alternativa escolhida em verde. Exibir caixa verde “✅ Resposta correta!”, “+20 XP ganhos! 🎉” e explicação; atualizar badge de XP com animação leve e botão “Próxima pergunta →”. | Ganha 20 XP. |
 
-Na última pergunta, o botão passa a ser “Ver resultado”. A tela de resultado, já prevista na marcação HTML, apresenta acertos, XP, taxa de acerto, opção de jogar novamente e retorno aos jogos. O quiz sorteia até três perguntas distintas do instrumento; nesta etapa, há seis perguntas para violão. Para os demais instrumentos, o quiz informa com gentileza que as perguntas ainda estão sendo preparadas.
+Na última pergunta, o botão passa a ser “Ver resultado”. A tela de resultado, já prevista na marcação HTML, apresenta acertos, XP, taxa de acerto, opção de jogar novamente e retorno aos jogos. O quiz sorteia até três perguntas distintas entre as perguntas específicas do instrumento e seis questões comuns de teoria musical. Todos os instrumentos têm pelo menos dez perguntas disponíveis; cada pergunta tem quatro opções, explicação e recompensa de 20 XP.
 
 O XP correto acumula somente no estado temporário da rodada e aparece no badge; ele só é persistido ao concluir todas as perguntas. Sair após responder abre uma confirmação e descarta a rodada se a pessoa escolher sair; recarregar também reinicia sem persistir respostas, XP, estatísticas ou tempo. A taxa exibida no resultado é calculada sobre as perguntas da rodada. O estado de resposta é comunicado em região `aria-live`.
 
@@ -176,10 +176,10 @@ Composição para mobile e desktop, nesta ordem:
 2. Badges de Módulo, Aula e +XP.
 3. Título e descrição.
 4. Metadados: minutos, objetivos e nível.
-5. Player como placeholder visual com HD, botão play, 0:00 e duração; não há vídeo real.
+5. Player de proporção 16:9: sem vídeo cadastrado mostra o placeholder e a mensagem “O vídeo desta aula chega em breve 🎬”; com vídeo, o player só cria o iframe depois do clique em play.
 6. Card “Objetivos da aula”.
-7. Card “Conteúdo teórico resumido”, com três cartões de acorde: Am roxo, Em ciano e C verde.
-8. Card “Agora é sua vez! 🎸” com botão “Iniciar exercício prático”.
+7. Card “Conteúdo teórico resumido”, com blocos de título, detalhes e cor próprios de cada instrumento; a Aula 4 do Violão mantém Am, Em e C.
+8. Card “Agora é sua vez!” com instruções genéricas para o instrumento e botão “Iniciar exercício prático”.
 9. Rodapé com “✓ Marcar como concluída” e “Próxima aula →” lado a lado.
 
 Ao concluir a aula, mostrar toast com o XP definido nos dados daquela aula, alterar o botão para “Concluída ✓” e liberar a próxima aula.
@@ -211,7 +211,7 @@ Implementar as 12 conquistas apresentadas no Figma, sem desbloqueá-las para alu
 11. 100 Questões
 12. Módulo Completo
 
-Critérios implementados: Primeira Aula após concluir uma aula; 3/7 Dias Seguidos usando dias locais consecutivos; 100 XP ao atingir esse total; Primeira Nota na primeira sessão simulada de prática musical; Primeiro Acorde ao concluir a Aula 4, que apresenta Am, Em e C; Mestre das Notas ao fechar um quiz com 3/3; Atirador Certeiro ao atingir dez respostas certas consecutivas, inclusive entre rodadas; Primeira Música ao completar uma faixa; Velocista ao concluir uma aula em até dez minutos desde sua abertura nesta sessão; 100 Questões após 100 respostas; Módulo Completo ao concluir as cinco aulas do Módulo 1. Não há XP bônus associado às definições atuais.
+Critérios implementados: Primeira Aula após concluir uma aula; 3/7 Dias Seguidos usando dias locais consecutivos; 100 XP ao atingir esse total; Primeira Nota ao concluir o marco da primeira prática de nota/som; Primeiro Acorde ao concluir o marco do primeiro acorde ou padrão musical completo; Mestre das Notas ao fechar um quiz com 3/3; Atirador Certeiro ao atingir dez respostas certas consecutivas, inclusive entre rodadas; Primeira Música ao completar uma faixa; Velocista ao concluir uma aula em até dez minutos desde sua abertura nesta sessão; 100 Questões após 100 respostas; Módulo Completo ao concluir as quatro aulas do Módulo 1. Não há XP bônus associado às definições atuais.
 
 ## Músicas e prática simulada
 
@@ -335,6 +335,51 @@ Uma inspeção estática e a medição de tokens não substituem testes com tecn
 3. Comparar fontes/cores com as capturas existentes e confirmar que nenhuma diferença visual foi introduzida; verificar funcionamento quando Google Fonts não responde (fallback do sistema).
 4. Medir tempo e tamanho de resposta no DevTools em uma hospedagem representativa antes de decidir sobre bundling ou minificação.
 
+## Aulas e vídeos por instrumento (Etapa 4.4-A)
+
+Cada um dos dez instrumentos tem três módulos com quatro aulas (12 aulas por percurso; 120 aulas no catálogo total). XP: +30 nas três primeiras aulas e +40 nas nove seguintes. Minutos, objetivos, descrição e blocos teóricos são definidos por instrumento; a trilha é gerada a partir de `js/data/lessons.js`. As páginas Aprender, Aula, Dashboard e Perfil leem o percurso do instrumento selecionado. Onboarding calcula as 12 aulas diretamente dos dados.
+
+| Instrumento | Aulas | Com vídeo |
+|---|---:|---:|
+| Violão | 12 | 0 |
+| Teclado | 12 | 0 |
+| Piano | 12 | 0 |
+| Bateria | 12 | 0 |
+| Guitarra | 12 | 0 |
+| Violino | 12 | 0 |
+| Flauta | 12 | 0 |
+| Cavaquinho | 12 | 0 |
+| Ukulele | 12 | 0 |
+| Sanfona / Acordeão | 12 | 0 |
+| **Total** | **120** | **0** |
+
+`js/data/videos.js` contém um mapa editável para todos os IDs de aula; os IDs de vídeo começam como `null` e cada registro tem `title`, `channel` e `duration` nulos como campos preparados. Para incluir um vídeo, edite o objeto daquela aula com um ID real ou URL real suportada. `parseYouTubeId()` em `js/modules/youtube.js` aceita ID de 11 caracteres, `youtube.com/watch?v=`, `youtu.be/`, `/shorts/` e `/embed/`, valida somente `[A-Za-z0-9_-]` e rejeita domínios externos. A URL do iframe e do link externo é sempre construída a partir do ID validado, nunca de texto cru.
+
+O placeholder/fachada aparece primeiro; só um clique do aluno cria o iframe `https://www.youtube-nocookie.com/embed/<id>`, com carregamento lazy, título acessível, política de referrer estrita e permissões mínimas. Sem ID válido, o play fica oculto e desabilitado, o placeholder informa gentilmente que o vídeo chega em breve e as ações de exercício/conclusão continuam disponíveis. Reproduzir um vídeo não conclui nem marca progresso da aula automaticamente; a conclusão é sempre uma ação explícita do aluno.
+
+Sem rede ou sem resposta do iframe, a interface tenta mostrar “Não conseguimos carregar o vídeo. Abrir no YouTube ↗” com `target="_blank"` e proteção `noopener noreferrer`. Limitação do navegador: um embed de origem cruzada pode sinalizar `load` mesmo quando o vídeo foi removido ou bloqueado; sem IFrame API (proibida neste projeto), não é possível detectar com certeza todos os erros exibidos dentro do player. Abrir o projeto por `file://` não é suportado para embeds; use servidor local/Live Server.
+
+Para acompanhar vídeos pendentes, execute `js/dev/check-videos.js` como módulo no navegador/console de desenvolvimento; ele lista as aulas e quantos vídeos faltam por instrumento. O script não é importado pelas páginas de produção.
+
+IDs `lesson-1` a `lesson-7` do Violão foram preservados; as cinco novas aulas do Violão continuam a sequência em `lesson-8` a `lesson-12`. Não é necessária migração destrutiva: o progresso antigo do Violão é lido dos campos legados; na primeira gravação, é copiado para `instrumentProgressById.guitar`. Os outros instrumentos gravam `completedLessons`, `lessonProgress`, `currentLessonId` e aulas liberadas em `instrumentProgressById[instrumentId]`. Assim, mudar o instrumento não apaga progresso anterior. A interface ainda não oferece uma ação para trocar instrumento; o modelo já mantém os percursos isolados.
+
+Há seis perguntas comuns de teoria musical, compartilhadas entre instrumentos, além das perguntas específicas. Foram criadas quatro perguntas instrumentais para cada um de Teclado, Piano, Bateria, Guitarra, Violino, Flauta, Cavaquinho, Ukulele e Sanfona/Acordeão (36 novas questões). Temas por instrumento: padrão de teclas pretas, Dó central, escalas e tríades; bumbo/caixa, baquetas e rudimentos; captadores, power chords e palhetada; cordas, arco e queixeira; fluxo de ar, embocadura, chaves e articulação; cordas/afinação, palheta e acordes do cavaquinho; afinação, forma de C e batida do ukulele; fole, baixos, teclado melódico e correias do acordeão. O Violão mantém seis questões próprias. As seis comuns abordam semitom, escala de Dó maior, tríade, andamento, dinâmica e compassos.
+
+As conquistas “Primeira Nota” e “Primeiro Acorde” são satisfeitas pelos marcos definidos nos dados de cada instrumento. Para instrumentos harmônicos, o primeiro acorde vem da aula de acorde; para Bateria, Flauta e Violino, “Primeiro Acorde” significa o primeiro padrão musical completo/levada/frase do percurso. “Primeira Nota” corresponde à primeira aula de prática de nota ou som fundamental de cada instrumento. As descrições das conquistas foram generalizadas para comunicar o equivalente não harmônico.
+
+**Pendências de escopo:** a landing ainda anuncia “48 aulas”; o catálogo atual contém 120 aulas no total (12 por instrumento). O texto de marketing deve ser revisto para refletir o número aprovado, mas não foi alterado nesta etapa por exigir confirmação. A biblioteca de Músicas mantém acordes e arranjos de violão, e alguns jogos/desafios continuam específicos de acordes; adaptar essas áreas a todos os instrumentos fica fora desta etapa.
+
+### Como preencher e testar os vídeos
+
+1. Abra `js/data/videos.js`; localize instrumento e `lessonId` (por exemplo, `guitar` → `lesson-1`) e substitua os campos nulos pelos dados reais disponíveis.
+2. Informe `videoId` como ID real de 11 caracteres ou URL real do YouTube; `title`, `channel` e `duration` são metadados opcionais.
+3. Sirva o projeto por Live Server ou outro servidor HTTP local, entre com aluno daquele instrumento e abra a aula correspondente. Antes do clique, confirme no Network que não houve requisição ao YouTube.
+4. Clique em play: confira que o iframe usa `youtube-nocookie.com`, mantém 16:9 e que outra aula/instrumento não recebe esse vídeo.
+5. Confirme que tocar o vídeo não conclui a aula; use “Marcar como concluída” explicitamente. Teste também ID inválido, `null`, offline e o link de fallback.
+6. Importe/executar `js/dev/check-videos.js` para revisar a contagem de pendências; não o inclua em `main.js`.
+
+O arquivo de marketing da landing (`index.html`) ainda indica 48 aulas; dado o total atual de 120, a atualização recomendada é “120 aulas” se o número pretende representar o catálogo inteiro, ou “12 aulas por instrumento” se pretende comunicar a trilha individual. A decisão de marketing aguarda confirmação.
+
 ## Modelo de dados (`localStorage`)
 
 A Etapa 3.1 implementa o armazenamento local versionado: `musicplay:v1` contém `schemaVersion` e o mapa de usuários indexado pelo e-mail normalizado; `musicplay:session` contém somente o e-mail da sessão atual. O progresso é isolado por conta. O wrapper recupera JSON corrompido, tenta remover a chave inválida e retorna fallback sem deixar erros de armazenamento escaparem.
@@ -421,11 +466,11 @@ Não é necessário build ou backend. As páginas HTML referenciam `css/main.css
 
 ### Teste manual da Etapa 3.4
 
-1. Crie ou selecione um aluno novo com Violão e abra Aprender: a trilha deve mostrar `0 / 7 aulas`, Aula 1 atual e Aulas 2 a 7 bloqueadas. A barra deve expor `aria-valuenow="0"`.
+1. Crie ou selecione um aluno novo com Violão e abra Aprender: a trilha deve mostrar `0 / 12 aulas`, Aula 1 atual e Aulas 2 a 12 bloqueadas. A barra deve expor `aria-valuenow="0"`.
 2. Tente abrir a Aula 5 diretamente por `pages/lesson.html?lesson=lesson-5`; deve voltar à trilha e mostrar o aviso para concluir a aula anterior.
-3. Conclua as Aulas 1, 2, 3, 4 e 5 pela ação de conclusão, avançando pelo botão de próxima aula. Confirme que cada aula soma o XP definido nos dados, registra o dia de estudo (sequência passa a 1 na primeira conclusão), e que o Módulo 2 libera ao completar a Aula 5.
+3. Conclua as Aulas 1, 2, 3 e 4 pela ação de conclusão, avançando pelo botão de próxima aula. Confirme que cada aula soma o XP definido nos dados, registra o dia de estudo (sequência passa a 1 na primeira conclusão), e que o Módulo 2 libera após a Aula 4.
 4. Abra uma aula já concluída e pressione novamente sua ação de conclusão (se necessário, teste `completeLesson("lesson-1")` no Console); XP não pode aumentar pela segunda vez.
-5. Inicie o player simulado e confirme que ele salva marcos percentuais; use “Iniciar exercício prático” para conferir o aviso e o mínimo de 50% salvo.
+5. Sem ID de vídeo, confirme que o placeholder mostra “O vídeo desta aula chega em breve 🎬” e que o play não pode ser acionado; use “Iniciar exercício prático” para conferir 50% de progresso parcial.
 6. Repita com dois alunos diferentes no mesmo navegador, concluindo aulas para um deles; após alternar sessão, o outro deve manter seu próprio XP, aulas concluídas, progresso e sequência.
 
 ### Teste manual da Etapa 3.5
@@ -495,6 +540,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - [x] 4.1 — Auditoria estática de responsividade nas páginas e larguras de referência.
 - [x] 4.2 — Auditoria estática de acessibilidade (meta WCAG 2.1 AA).
 - [x] 4.3 — Auditoria de performance e consistência.
+- [x] 4.4-A — Aulas e mecanismo de vídeo para os dez instrumentos.
 - [ ] 4.4 — Revisão de conteúdo, estados vazios e mensagens.
 - [ ] 4.5 — Verificação final e documentação.
 
@@ -511,9 +557,9 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - As escolhas de instrumento e nível são grupos de radio com seleção única; objetivos são checkboxes de seleção múltipla. A página não inclui navegação do app.
 - Dashboard e Aprender compartilham a mesma marcação de navegação com seis itens e ícones SVG em traço consistente; cada página marca o item atual com `aria-current="page"`.
 - O dashboard usa valores neutros de aluno novo, mantém o estado vazio de conquistas oculto por padrão e oferece marcadores `data-*` para preenchimento posterior.
-- A trilha apresenta as sete aulas especificadas, com a Aula 1 em andamento e as demais bloqueadas; o progresso total permanece em 0 / 12 e não foram inventadas as cinco aulas não descritas.
+- A trilha é gerada dinamicamente conforme o instrumento escolhido, com 12 aulas distribuídas em três módulos de quatro.
 - Aula, Jogos e Quiz repetem a mesma navegação autenticada de seis itens; a Aula ativa Aprender e Jogos/Quiz ativam Jogos.
-- A página da aula usa conteúdo de “Primeiros Acordes” como exemplo preenchido por padrão, marcadores `data-lesson`, player visual sem vídeo e cartões Am, Em e C com posições dos dedos.
+- A página da aula usa marcadores `data-lesson` e blocos teóricos próprios por instrumento; a Aula 4 do Violão contém Am, Em e C com posições.
 - O Quiz contém marcação para pergunta, alternativas, feedback correto/incorreto, avanço, resultado e confirmação de saída; os estados que não são iniciais ficam `hidden`.
 - Músicas, Conquistas e Perfil repetem a marcação padrão da navegação logada e indicam o item ativo com `aria-current="page"`.
 - A biblioteca de músicas inicia com oito cartões e progresso 0%; filtros e ações têm atributos para integração posterior, sem carregar biblioteca ou serviço externo nesta etapa HTML.
@@ -557,16 +603,16 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - A Etapa 3.1 cria ES Modules para storage, estado, utilitários, XP e dados. Os testes de console ficam em `js/dev/devtools.js`, fora dos imports das páginas.
 - O storage guarda o objeto `{ schemaVersion, users }` em `musicplay:v1` e o e-mail da sessão em `musicplay:session`. As funções retornam fallback, booleano, `false` ou `null` em erros, removem somente a chave de aplicação inválida quando possível e nunca apagam outras chaves do navegador.
 - A conta guarda `level` da escolha de onboarding; `progress.level` representa o nível numérico de XP. O progresso inicial possui 0 XP, nível 1, sequência zerada e somente `lesson-1` liberada; cópias são devolvidas para evitar mutações acidentais.
-- Os dados imutáveis incluem dez instrumentos, três níveis e quatro objetivos, sete aulas disponíveis na trilha de violão (com conteúdo detalhado da Aula 4), seis perguntas de violão e sete músicas originais do Figma. Instrumentos sem conteúdo de aula recebem lista vazia; a música “Brilha, Brilha, Estrelinha”, adicionada anteriormente para completar oito cards HTML, não entra no conjunto fonte solicitado de sete faixas.
+- Os dados imutáveis incluem dez instrumentos, três níveis e quatro objetivos. A Etapa 4.4-A adiciona três módulos e 12 aulas por instrumento, seis questões específicas de Violão, quatro questões específicas para cada um dos outros nove instrumentos e seis questões comuns de teoria musical. A música “Brilha, Brilha, Estrelinha”, adicionada anteriormente para completar oito cards HTML, não entra no conjunto fonte solicitado de sete faixas.
 - As faixas de XP são 0, 100, 250, 450, 700 e 1.000 XP para os níveis 1 a 6; acima disso, a progressão extrapola em incrementos de 300 XP. Títulos são Iniciante até o nível 3, Intermediário do 4 ao 6 e Avançado a partir do 7.
-- Três perguntas adicionais de violão iniciante foram criadas para ampliar o sorteio: afinação da 1ª corda solta, distância de semitom entre casas e notas da tríade de Mi menor. Todas têm quatro alternativas e concedem 20 XP por acerto.
+- O conjunto original do Violão é preservado; a Etapa 4.4-A acrescenta conteúdo de Quiz específico para todos os outros instrumentos e seis questões de teoria comum.
 - A etapa não altera HTML/CSS nem adiciona dependências; a chave de sessão separada preserva o modelo já documentado e a implementação usa apenas APIs nativas do navegador.
 - A Etapa 3.2 implementa cadastro e login em ES Modules, hashing SHA-256 via Web Crypto e sessão local. O comentário de `auth.js` alerta que o hash no cliente, sem backend, não oferece segurança real; sem `crypto.subtle`, a interface recebe uma mensagem que orienta usar localhost ou HTTPS.
 - Cadastro valida nome e sobrenome com letras Unicode (mínimo duas letras em cada), e-mail, senha de pelo menos seis caracteres e aceite dos termos. Login valida e-mail/senha e apresenta mensagem genérica para combinação incorreta, sem revelar qual dado falhou.
 - Erros por campo são associados aos elementos já existentes por `data-field-error`, `aria-invalid` e `.form-field--error`; o primeiro inválido recebe foco. Os formulários validam no blur, durante edição de campos com erro e no envio. O feedback geral informa e-mail repetido e falhas de persistência sem culpar a pessoa.
 - A visibilidade de senha atualiza o tipo, o rótulo acessível e `aria-pressed`. Durante o envio, o botão mostra “Criando sua conta...” ou “Entrando...”; links da landing já apontavam para cadastro e login corretos.
 - Na Etapa 3.2, `main.js` identificava as telas públicas pelo caminho. A Etapa 3.3 adiciona `data-page` ao `<body>` das 12 páginas e roteia cada tela por esse identificador. Rotas relativas funcionam tanto na raiz quanto em `pages/`; logout continua ligado uma única vez por delegação quando a página contém `data-action="logout"`.
-- O wizard salva instrumento, nível, objetivos e passo em `onboardingDraft` a cada escolha/avanço, restaura os controles no retorno, atualiza progresso e foco do título e só conclui com ao menos um objetivo. “48 aulas disponíveis” vem dos dados do violão e é atualizado no ponto já existente do HTML.
+- O wizard salva instrumento, nível, objetivos e passo em `onboardingDraft` a cada escolha/avanço, restaura os controles no retorno, atualiza progresso e foco do título e só conclui com ao menos um objetivo. A quantidade de aulas disponíveis é calculada do catálogo selecionado (12 para cada instrumento).
 - As páginas já têm os pontos de ligação necessários; não houve mudança em HTML ou CSS. Não foi iniciada a autenticação de servidor, que não faz parte deste projeto sem backend.
 - A Etapa 3.3 protege as oito páginas logadas: sem sessão, direciona para login; com onboarding incompleto, direciona para onboarding. A navegação ativa mantém `aria-current="page"` e Aula/Aprender e Quiz/Jogos compartilham seus destinos de navegação.
 - A personalização global preenche os marcadores `data-user` por `textContent`, deriva nível/título a partir do XP e do instrumento e mostra a saudação de primeiro acesso uma única vez. O dashboard destaca a aula atual ou a Aula 1, recomenda a próxima aula, um jogo e uma música compatível com o nível escolhido, e mantém a mensagem vazia de conquistas quando não há desbloqueios.
@@ -575,19 +621,18 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - O registro das datas e o cálculo da sequência são separados para permitir testes com datas fornecidas; o botão de conclusão da aula chama `registerStudy()`, enquanto abrir ou reproduzir a prévia não registra estudo.
 - A Etapa 3.5 implementa a lógica pura da rodada e a persistência final do Quiz: sorteia até três perguntas sem repetição, soma 20 XP temporários por acerto e só atualiza XP, `quizStats`, jogos, tempo e sequência após todas as respostas. `currentStreak` acompanha acertos consecutivos entre rodadas, `bestStreak` guarda o maior recorde acumulado e `perfectQuizzes` só aumenta em uma rodada completa de 3/3.
 - Uma rodada não concluída não grava nada: navegar após responder exige confirmação; sair descarta a rodada, e recarregar reinicia sem salvar. O resultado mostra taxa de acerto, XP e feedback conforme a quantidade de acertos; o jogo reiniciado sorteia perguntas novamente.
-- O Quiz Musical é o único jogo implementado; os outros cinco cards, incluindo o destaque “Monte o Acorde”, mostram um toast de disponibilidade futura sem navegar. Atualmente só há perguntas de violão; para os demais instrumentos, a página informa que o conteúdo está sendo preparado.
+- O Quiz Musical é o único jogo implementado; os outros cinco cards, incluindo o destaque “Monte o Acorde”, mostram um toast de disponibilidade futura sem navegar. O quiz filtra perguntas específicas para o instrumento e acrescenta seis questões de teoria musical comum.
 - A marcação existente do Quiz já continha a tela de resultado e o diálogo de saída, portanto não foram necessários ajustes em HTML ou CSS. `finishQuiz()` agora chama a integração de conquistas após salvar a rodada.
 - A Etapa 3.6 avalia as 12 regras por funções sem efeitos, grava uma única data local por conquista e enfileira toasts “Nova conquista: <título> 🏆”; nenhuma das definições de dados prevê bônus de XP.
-- Primeira Nota significa a primeira sessão de prática simulada; Primeiro Acorde é a conclusão da Aula 4 (primeira aula com acordes); Velocista mede o tempo em memória desde a abertura da aula até a conclusão, e considera até dez minutos. Respostas consecutivas do quiz são acumuladas entre rodadas com `quizStats.currentStreak`.
+- Primeira Nota e Primeiro Acorde usam os marcos indicados em cada percurso: em instrumentos sem acordes, Primeiro Acorde é o primeiro padrão musical completo (Bateria: primeira levada; Flauta e Violino: primeira frase/melodia). Velocista mede o tempo em memória desde a abertura da aula até a conclusão, e considera até dez minutos. Respostas consecutivas do quiz são acumuladas entre rodadas com `quizStats.currentStreak`.
 - As músicas ainda não têm tela própria: cada sessão de prática adiciona 20% de progresso, 10 XP e cinco minutos; concluir pela primeira vez ocorre ao alcançar 100%. Práticas de revisão ainda contam como sessões de estudo e concedem a recompensa configurada.
 - O calendário reutiliza `studyDays`, datas locais e layout domingo-primeiro já preparado no HTML/CSS; células vazias alinham o primeiro dia, hoje continua destacado sem estudo e datas futuras não recebem estado negativo. Mês/ano nunca ficam fixos em setembro de 2024.
-- A Etapa 3.4 implementa `getLessonStates`, `getNextLesson`, `getLessonById` e `getModuleProgress` a partir da trilha cadastrada. Aula 1 inicia como atual; só completar uma aula libera a seguinte; as concluídas permanecem concluídas e acessíveis. O Módulo 2 libera ao completar as cinco aulas do Módulo 1.
-- O total real da trilha de violão é sete aulas (cinco no Módulo 1 e duas no Módulo 2), embora o Figma/HTML de referência indique 12. A interface da trilha exibe o total existente, 7, sem criar cinco aulas não descritas.
-- Para instrumentos sem trilha cadastrada, a página oculta os módulos de violão de exemplo, mostra 0 aulas e exibe “As aulas para este instrumento chegam em breve.” em vez de apresentar conteúdo de outro instrumento.
+- A Etapa 3.4 implementa `getLessonStates`, `getNextLesson`, `getLessonById` e `getModuleProgress` a partir da trilha cadastrada. Aula 1 inicia como atual; só completar uma aula libera a seguinte; as concluídas permanecem concluídas e acessíveis. Cada módulo tem quatro aulas e libera o próximo ao concluir todas as quatro.
+- A Etapa 4.4-A cria a trilha para todos os dez instrumentos e gera módulos/aulas em Aprender com conteúdo do instrumento selecionado; não há fallback para conteúdo do Violão em outras trilhas.
 - A conclusão soma uma única vez o XP cadastrado por aula (30 ou 40), o tempo estimado daquela aula e o registro de estudo do dia; `saveLessonProgress()` aceita 0–100 e não reduz um progresso maior já salvo. A conclusão também avalia e registra novas conquistas.
-- O player é uma simulação local sem vídeo: avança em intervalos de 60 segundos e persiste marcos de 25%, 50%, 75% e 100%. O botão de exercício mostra o aviso de disponibilidade futura e salva 50% como progresso parcial.
+- O player usa uma fachada local; sem ID válido não carrega iframe e mostra “O vídeo desta aula chega em breve 🎬”. Com ID válido, o iframe privado é criado somente após clique. A conclusão continua explícita pelo botão do aluno. O exercício prático registra 50% como progresso parcial.
 - O módulo `toast.js` utiliza a região `aria-live` existente (ou cria uma se ausente), usa `textContent`, permite dispensar avisos e remove cada toast após cerca de 3,5 segundos, mesmo sob movimento reduzido.
-- A Etapa 3.4 reutiliza títulos, descrições, objetivos, acordes, XP e duração já presentes em `lessons.js`. As descrições das Aulas 1, 2, 3, 5, 6 e 7 foram criadas como conteúdo-base na Etapa 3.1, pois não havia detalhes dessas aulas no Figma; não foram adicionadas novas afirmações teóricas ou conteúdos além desses registros.
+- A Etapa 4.4-A concentra três módulos e 12 aulas específicas para cada instrumento em `js/data/lessons.js`; o mapa editável de vídeos está em `js/data/videos.js`. O progresso de aulas usa `instrumentProgressById`, migrando os campos antigos do Violão na primeira gravação, sem apagar seu histórico.
 - A Etapa 4.1 removeu a largura mínima global de 320 px, habilitou quebra segura de palavras longas e acrescentou `100dvh` depois dos fallbacks legados. O conteúdo logado fica limitado a 60 rem no tablet e 96 rem no desktop; os contêineres públicos preservam o máximo de 80 rem.
 - Em paisagem de baixa altura (até 384 px) abaixo do breakpoint desktop, `--bottom-nav-height` passa de 4,5 rem para 3,75 rem, preservando o mínimo de 44 px dos alvos. O diálogo do quiz ganha limite de altura dinâmica e rolagem própria; onboarding reduz espaçamentos verticais nesse cenário.
 - A inspeção da Etapa 4.1 foi estática, baseada em HTML/CSS; não houve validação renderizada no navegador. A verificação visual nas larguras de referência, com zoom, fonte grande e orientação paisagem permanece no checklist manual e a comparação pixel a pixel com o Figma fica para a revisão final.
@@ -604,8 +649,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - Na Etapa 1.1, as imagens do Figma não estavam acessíveis nos arquivos do projeto; o HTML daquela etapa seguiu a estrutura e os textos descritos no pedido, e a fidelidade visual ainda deve ser conferida com as referências antes da estilização.
 - A página de login não tem tela de referência no Figma; foi criada no mesmo padrão estrutural do cadastro, com e-mail, senha, ação de entrar e link para criar conta.
 - O checklist 1.1–1.5 foi alinhado à divisão de etapas informada para esta implementação; as páginas futuras continuam pendentes.
-- O detalhe “48 aulas disponíveis” é exibido somente para Violão, como exemplo informado, sem inferir a quantidade de aulas dos outros instrumentos.
-- Como a trilha fornecida descreve apenas sete das 12 aulas totais, as cinco restantes não foram nomeadas ou representadas como conteúdo inventado.
+- A landing ainda anuncia “48 aulas”; o catálogo atual contém 120 aulas totais. A proposta de marketing (120 no catálogo ou 12 por percurso) está documentada, mas a landing não foi alterada por depender de confirmação.
 - A tela de resultado do Quiz já estava incluída na marcação HTML e foi usada nesta etapa, embora sua composição não esteja especificada no Figma.
 - A página Jogos apresenta descrições textuais para os títulos fornecidos; somente Quiz Musical é jogável nesta etapa e os demais cards avisam que chegam em breve.
 - A lista de músicas solicitada enumera sete títulos distintos; para completar oito entradas, foi incluída “Brilha, Brilha, Estrelinha” (Tradicional), uma escolha estática de repertório tradicional, sem integração a catálogo ou biblioteca externa.

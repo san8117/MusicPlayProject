@@ -1,6 +1,6 @@
 import { INSTRUMENTS } from "../data/instruments.js";
 import { getLevelInfo } from "../data/levels.js";
-import { getLessonsForInstrument } from "../data/lessons.js";
+import { getInstrumentLessonProgress, getLessonsForInstrument } from "../data/lessons.js";
 import { getCurrentUser, updateCurrentUser } from "./state.js";
 import { getCurrentStreak } from "./streak.js";
 import { getFirstName, getInitial, toNonNegativeNumber } from "./utils.js";
@@ -37,8 +37,9 @@ export function populateUserUI(root = document) {
   const firstName = getFirstName(user.name);
   const instrument = INSTRUMENTS.find((entry) => entry.id === user.instrument);
   const modules = getLessonsForInstrument(user.instrument);
-  const availableLessons = instrument?.availableLessons ?? countLessons(modules);
-  const completedLessons = Array.isArray(progress.completedLessons) ? progress.completedLessons.length : 0;
+  const availableLessons = countLessons(modules);
+  const instrumentProgress = getInstrumentLessonProgress(progress, user.instrument);
+  const completedLessons = instrumentProgress.completedLessons.length;
   const streak = getCurrentStreak(progress);
   const achievementCount = Object.keys(progress.unlockedAchievements ?? {}).length;
   const values = {

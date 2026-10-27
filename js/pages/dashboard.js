@@ -1,5 +1,6 @@
 import { ACHIEVEMENTS } from "../data/achievements.js";
-import { getLessonsForInstrument } from "../data/lessons.js";
+import { getInstrumentLessonProgress, getLessonsForInstrument } from "../data/lessons.js";
+import { INSTRUMENTS } from "../data/instruments.js";
 import { SONGS } from "../data/songs.js";
 import { getCurrentUser } from "../modules/state.js";
 
@@ -24,8 +25,8 @@ export function initializeDashboard(root = document) {
 
 function updateCurrentLesson(root, user) {
   const lessons = flattenLessons(getLessonsForInstrument(user.instrument));
-  const progress = user.progress ?? {};
-  const completedLessons = Array.isArray(progress.completedLessons) ? progress.completedLessons : [];
+  const progress = getInstrumentLessonProgress(user.progress ?? {}, user.instrument);
+  const completedLessons = progress.completedLessons;
   const currentLesson = lessons.find(({ lesson }) => lesson.id === progress.currentLessonId
     && !completedLessons.includes(lesson.id))
     ?? lessons.find(({ lesson }) => !completedLessons.includes(lesson.id));
@@ -34,7 +35,7 @@ function updateCurrentLesson(root, user) {
     : 0;
   const isNewLearner = completedLessons.length === 0
     && currentProgress === 0
-    && (!progress.currentLessonId || progress.currentLessonId === "lesson-1");
+    && (!progress.currentLessonId || currentLesson?.lesson.number === 1);
   const title = root.querySelector("[data-current-lesson-title]");
   const description = root.querySelector("[data-current-lesson-description]");
   const moduleLabel = root.querySelector("[data-current-module]");
@@ -114,7 +115,8 @@ function updateCurrentLesson(root, user) {
 function updateRecommendations(root, user) {
   const cards = root.querySelectorAll(".recommendation-card");
   const modules = getLessonsForInstrument(user.instrument);
-  const completedLessons = Array.isArray(user.progress?.completedLessons) ? user.progress.completedLessons : [];
+  const progress = getInstrumentLessonProgress(user.progress ?? {}, user.instrument);
+  const completedLessons = progress.completedLessons;
   const nextLesson = flattenLessons(modules).find(({ lesson }) => !completedLessons.includes(lesson.id));
   const lessonCard = cards[0];
 
@@ -158,7 +160,7 @@ function updateRecommendations(root, user) {
 
     if (description) {
       description.textContent = song
-        ? `${song.artist} · ${song.chords.join(", ")}`
+        ? song.artist
         : "Descubra músicas para acompanhar seus estudos.";
     }
   }
@@ -171,16 +173,18 @@ function updatePersonalTip(root, user) {
     return;
   }
 
-  const completedLessons = Array.isArray(user.progress?.completedLessons) ? user.progress.completedLessons : [];
-  const currentProgress = user.progress?.lessonProgress ?? {};
+  const instrumentProgress = getInstrumentLessonProgress(user.progress ?? {}, user.instrument);
+  const completedLessons = instrumentProgress.completedLessons;
+  const currentProgress = instrumentProgress.lessonProgress;
+  const instrument = INSTRUMENTS.find((entry) => entry.id === user.instrument);
   const hasStartedLesson = Object.values(currentProgress).some((entry) => getLessonPercentage(entry) > 0);
   const isNewLearner = completedLessons.length === 0
     && !hasStartedLesson
-    && (!user.progress?.currentLessonId || user.progress.currentLessonId === "lesson-1");
+    && (!instrumentProgress.currentLessonId || getLessonsForInstrument(user.instrument)[0]?.lessons[0]?.number === 1);
 
   tip.textContent = isNewLearner
-    ? "Comece pela Aula 1 e ganhe seus primeiros XP."
-    : "Continue de onde parou ou revise uma aula para fortalecer o que já aprendeu.";
+    ? `Comece pela Aula 1 de ${instrument?.name.toLocaleLowerCase("pt-BR") ?? "seu instrumento"} e ganhe seus primeiros XP.`
+    : `Continue sua jornada de ${instrument?.name.toLocaleLowerCase("pt-BR") ?? "estudos"} ou revise uma aula para fortalecer o que já aprendeu.`;
 }
 
 function renderRecentAchievements(root, user) {

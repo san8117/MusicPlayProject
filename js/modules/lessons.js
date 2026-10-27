@@ -1,4 +1,8 @@
-import { getLessonsForInstrument, LESSONS_BY_INSTRUMENT } from "../data/lessons.js";
+import {
+  getInstrumentLessonProgress,
+  getLessonsForInstrument,
+  LESSONS_BY_INSTRUMENT,
+} from "../data/lessons.js";
 import { addXp } from "./xp.js";
 import { getCurrentUser, updateCurrentUser } from "./state.js";
 import { registerStudy } from "./streak.js";
@@ -34,7 +38,8 @@ export function startLessonSession(lessonId) {
 export function getLessonStates(progress = {}, instrumentId = progress?.instrumentId ?? DEFAULT_INSTRUMENT_ID) {
   const safeProgress = progress && typeof progress === "object" ? progress : {};
   const modules = getLessonsForInstrument(instrumentId);
-  const completedIds = new Set(Array.isArray(safeProgress.completedLessons) ? safeProgress.completedLessons : []);
+  const instrumentProgress = getInstrumentLessonProgress(safeProgress, instrumentId);
+  const completedIds = new Set(instrumentProgress.completedLessons);
   const lessonStates = [];
   const moduleStates = [];
   let nextLessonAvailable = true;
@@ -147,6 +152,7 @@ export function completeLesson(lessonId) {
   }
 
   const currentProgress = user.progress && typeof user.progress === "object" ? user.progress : {};
+  const instrumentProgress = getInstrumentLessonProgress(currentProgress, user.instrument);
   const state = getLessonStates(currentProgress, user.instrument).lessons
     .find((entry) => entry.id === lessonId)?.state;
 
@@ -166,27 +172,36 @@ export function completeLesson(lessonId) {
     return failure("locked");
   }
 
-  const completedLessons = Array.isArray(currentProgress.completedLessons) ? currentProgress.completedLessons : [];
-  const oldLessonProgress = currentProgress.lessonProgress
-    && typeof currentProgress.lessonProgress === "object"
-    && !Array.isArray(currentProgress.lessonProgress)
-    ? currentProgress.lessonProgress
-    : {};
+  const completedLessons = instrumentProgress.completedLessons;
+  const oldLessonProgress = instrumentProgress.lessonProgress;
   const xpResult = addXp({ ...currentProgress, instrumentId: user.instrument }, lesson.xp);
+  const nextCompletedLessons = [...new Set([...completedLessons, lessonId])];
+  const nextLessonProgress = { ...oldLessonProgress, [lessonId]: 100 };
+  const activeInstrumentProgress = {
+    ...instrumentProgress,
+    completedLessons: nextCompletedLessons,
+    lessonProgress: nextLessonProgress,
+    unlockedLessons: [...instrumentProgress.unlockedLessons],
+  };
   const nextProgress = {
     ...currentProgress,
     xp: xpResult.progress.xp,
     level: xpResult.progress.level,
-    completedLessons: [...new Set([...completedLessons, lessonId])],
+    completedLessons: nextCompletedLessons,
+    lessonProgress: nextLessonProgress,
+    unlockedLessons: activeInstrumentProgress.unlockedLessons,
+    instrumentProgressById: {
+      ...getInstrumentProgressMap(currentProgress),
+      [user.instrument]: activeInstrumentProgress,
+    },
   };
   const nextLesson = getNextLesson(nextProgress, user.instrument);
   nextProgress.currentLessonId = nextLesson?.id ?? null;
-  nextProgress.lessonProgress = { ...oldLessonProgress, [lessonId]: 100 };
+  activeInstrumentProgress.currentLessonId = nextProgress.currentLessonId;
   nextProgress.studyMinutes = toNonNegativeNumber(nextProgress.studyMinutes) + lesson.minutes;
-  nextProgress.unlockedLessons = [...new Set([
-    ...(Array.isArray(nextProgress.unlockedLessons) ? nextProgress.unlockedLessons : []),
-    ...(nextLesson ? [nextLesson.id] : []),
-  ])];
+  if (nextLesson && !nextProgress.unlockedLessons.includes(nextLesson.id)) {
+    nextProgress.unlockedLessons.push(nextLesson.id);
+  }
 
   const updatedUser = updateCurrentUser((currentUser) => {
     if (currentUser.email !== user.email || currentUser.instrument !== user.instrument) {
@@ -252,16 +267,22 @@ export function saveLessonProgress(lessonId, percentage) {
   const nextPercentage = clamp(percentage, 0, 100);
   return updateCurrentUser((currentUser) => {
     currentUser.progress ??= {};
-    const lessonProgress = currentUser.progress.lessonProgress
-      && typeof currentUser.progress.lessonProgress === "object"
-      && !Array.isArray(currentUser.progress.lessonProgress)
-      ? currentUser.progress.lessonProgress
-      : {};
+    const activeProgress = getInstrumentLessonProgress(currentUser.progress, user.instrument);
+    const lessonProgress = activeProgress.lessonProgress;
     const previous = toNonNegativeNumber(lessonProgress[lessonId]);
-    currentUser.progress.lessonProgress = {
+    const nextLessonProgress = {
       ...lessonProgress,
       [lessonId]: Math.max(previous, nextPercentage),
     };
+    const nextInstrumentProgress = {
+      ...activeProgress,
+      lessonProgress: nextLessonProgress,
+    };
+    currentUser.progress.instrumentProgressById = {
+      ...getInstrumentProgressMap(currentUser.progress),
+      [user.instrument]: nextInstrumentProgress,
+    };
+    currentUser.progress.lessonProgress = nextLessonProgress;
   });
 }
 
@@ -276,6 +297,24 @@ export function getLockedLessonMessage() {
 
 function getLessonCatalog() {
   return LESSONS_BY_INSTRUMENT;
+}
+
+/**
+ * Copies legacy lesson fields into the per-instrument map before the first write.
+ *
+ * @param {object} progress User progress record.
+ * @returns {object} Instrument progress records including legacy guitar progress.
+ */
+function getInstrumentProgressMap(progress) {
+  const instrumentProgressById = {
+    ...(progress.instrumentProgressById ?? {}),
+  };
+
+  if (!Object.hasOwn(instrumentProgressById, "guitar")) {
+    instrumentProgressById.guitar = getInstrumentLessonProgress(progress, "guitar");
+  }
+
+  return instrumentProgressById;
 }
 
 function failure(reason) {

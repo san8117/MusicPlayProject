@@ -2,6 +2,7 @@ import { getCurrentUser } from "../modules/state.js";
 import { getCurrentStreak } from "../modules/streak.js";
 import { toNonNegativeNumber } from "../modules/utils.js";
 import { renderCalendar } from "../modules/calendar.js";
+import { getInstrumentLessonProgress } from "../data/lessons.js";
 
 /**
  * Populates profile statistics from the active learner's isolated progress.
@@ -17,11 +18,12 @@ export function initializeProfile(root = document) {
   }
 
   const progress = user.progress ?? {};
+  const instrumentProgress = getInstrumentLessonProgress(progress, user.instrument);
   const quizStats = progress.quizStats ?? {};
   const answered = toNonNegativeNumber(quizStats.answered);
   const correct = toNonNegativeNumber(quizStats.correct);
   const stats = {
-    lessons: countCompleted(progress.completedLessons),
+    lessons: countCompleted(instrumentProgress.completedLessons),
     songs: countCompletedSongs(progress.songProgress),
     games: String(toNonNegativeNumber(progress.gamesPlayed)),
     accuracy: String(answered > 0 ? Math.min(100, Math.round((correct / answered) * 100)) : 0),

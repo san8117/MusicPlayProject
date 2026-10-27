@@ -1,5 +1,5 @@
 import { ACHIEVEMENTS } from "../data/achievements.js";
-import { getLessonsForInstrument } from "../data/lessons.js";
+import { getInstrumentLessonProgress, getLessonsForInstrument } from "../data/lessons.js";
 import { getCurrentUser, updateCurrentUser } from "./state.js";
 import { calculateStreak } from "./streak.js";
 import { showToast } from "./toast.js";
@@ -36,7 +36,7 @@ export function evaluateAchievementRule(rule, user, context = {}) {
   }
 
   const progress = user.progress && typeof user.progress === "object" ? user.progress : {};
-  const completedLessons = Array.isArray(progress.completedLessons) ? progress.completedLessons : [];
+  const completedLessons = getInstrumentLessonProgress(progress, user.instrument).completedLessons;
   const quizStats = progress.quizStats && typeof progress.quizStats === "object" ? progress.quizStats : {};
   const required = toNonNegativeNumber(rule.value);
 
@@ -61,10 +61,11 @@ export function evaluateAchievementRule(rule, user, context = {}) {
     case "moduleCompleted":
       return isModuleCompleted(user.instrument, completedLessons, required);
     case "notesPlayed":
-      return toNonNegativeNumber(progress.notesPlayed) >= required;
+      return toNonNegativeNumber(progress.notesPlayed) >= required
+        || (required <= 1 && hasCompletedMilestone(user.instrument, completedLessons, "first-note"));
     case "chordsLearned":
       return toNonNegativeNumber(progress.chordsLearned) >= required
-        || (required > 0 && completedLessons.includes("lesson-4"));
+        || (required <= 1 && hasCompletedMilestone(user.instrument, completedLessons, "first-chord"));
     case "lessonCompletedUnderMinutes":
       return context.completedLessonId !== undefined
         && completedLessons.includes(context.completedLessonId)
@@ -152,4 +153,11 @@ function isModuleCompleted(instrumentId, completedLessons, moduleNumber) {
 
   return Boolean(module?.lessons.length)
     && module.lessons.every((lesson) => completedLessons.includes(lesson.id));
+}
+
+function hasCompletedMilestone(instrumentId, completedLessons, milestone) {
+  const completedIds = new Set(completedLessons);
+  return getLessonsForInstrument(instrumentId)
+    .flatMap((module) => module.lessons)
+    .some((lesson) => completedIds.has(lesson.id) && lesson.milestones.includes(milestone));
 }

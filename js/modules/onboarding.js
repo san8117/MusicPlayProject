@@ -1,6 +1,7 @@
 import { getCurrentUser, updateCurrentUser } from "./state.js";
 import { getPageRoute } from "./auth.js";
 import { INSTRUMENTS } from "../data/instruments.js";
+import { getLessonsForInstrument } from "../data/lessons.js";
 
 const HELP_TEXT = Object.freeze({
   1: "Escolha um instrumento para continuar.",
@@ -202,6 +203,8 @@ function isStepValid(form, step) {
 
 function updateAvailableLessons(form, instrumentId) {
   const selectedInstrument = INSTRUMENTS.find((instrument) => instrument.id === instrumentId);
+  const lessonCount = getLessonsForInstrument(instrumentId)
+    .reduce((total, module) => total + module.lessons.length, 0);
 
   form.querySelectorAll('[data-option="instrument"]').forEach((input) => {
     const detail = input.closest(".choice-option")?.querySelector(".choice-option__detail");
@@ -210,8 +213,8 @@ function updateAvailableLessons(form, instrumentId) {
       return;
     }
 
-    if (input.checked && selectedInstrument?.availableLessons) {
-      detail.textContent = `${selectedInstrument.availableLessons} aulas disponíveis`;
+    if (input.checked && selectedInstrument && lessonCount > 0) {
+      detail.textContent = `${lessonCount} aulas disponíveis`;
       detail.hidden = false;
     } else {
       detail.hidden = true;

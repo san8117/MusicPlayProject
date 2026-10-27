@@ -9,12 +9,14 @@ import {
   startLessonSession,
 } from "../modules/lessons.js";
 import { showToast } from "../modules/toast.js";
+import { INSTRUMENTS } from "../data/instruments.js";
+import { VIDEOS_BY_INSTRUMENT } from "../data/videos.js";
+import { parseYouTubeId } from "../modules/youtube.js";
 
-const PLAYER_STEP_SECONDS = 60;
-const CHORD_CLASSES = Object.freeze({ am: "chord-card--am", c: "chord-card--c", em: "chord-card--em" });
+const VIDEO_LOAD_TIMEOUT_MS = 12000;
 
 /**
- * Initializes lesson content, player simulation, progress actions, and completion.
+ * Initializes instrument-specific lesson content, video facade, and completion.
  *
  * @param {Document} root Lesson document.
  * @returns {void}
@@ -51,6 +53,7 @@ export function initializeLessonPage(root = document) {
 
 function populateLesson(root, lesson, user) {
   const levelLabel = user.level === "some-experience" ? "Intermediário" : "Iniciante";
+  const instrument = INSTRUMENTS.find((entry) => entry.id === user.instrument);
   const values = {
     module: `Módulo ${lesson.moduleNumber}`,
     number: `Aula ${lesson.number}`,
@@ -70,14 +73,10 @@ function populateLesson(root, lesson, user) {
     }
   });
 
+  root.title = `${lesson.title} | MUSICPLAY`;
   renderObjectives(root, lesson.objectives);
   renderTheory(root, lesson.theory);
-
-  const heading = root.querySelector('[data-lesson="title"]');
-
-  if (heading) {
-    root.title = `${lesson.title} | MUSICPLAY`;
-  }
+  updateInstrumentCopy(root, instrument?.name ?? "instrumento");
 
   const durationSeconds = Math.max(1, lesson.minutes * 60);
   const duration = root.querySelector("[data-lesson-media-duration]");
@@ -92,6 +91,24 @@ function populateLesson(root, lesson, user) {
     mediaProgress.max = durationSeconds;
     mediaProgress.value = 0;
     mediaProgress.setAttribute("aria-valuenow", "0");
+  }
+}
+
+function updateInstrumentCopy(root, instrumentName) {
+  const practiceTitle = root.querySelector(".lesson-practice .lesson-card__title");
+  const practiceDescription = root.querySelector(".lesson-practice__description");
+  const metaDescription = root.querySelector('meta[name="description"]');
+
+  if (practiceTitle) {
+    practiceTitle.textContent = "Agora é sua vez!";
+  }
+
+  if (practiceDescription) {
+    practiceDescription.textContent = `Pratique ${instrumentName} e o conteúdo aprendido. Vá no seu ritmo e observe cada movimento.`;
+  }
+
+  if (metaDescription) {
+    metaDescription.content = `Acompanhe a aula ${root.querySelector('[data-lesson="title"]')?.textContent ?? ""} para ${instrumentName} no MUSICPLAY.`;
   }
 }
 
@@ -119,115 +136,122 @@ function renderTheory(root, theory) {
   }
 
   grid.replaceChildren();
+  grid.dataset.count = String(theory.length);
   section.hidden = theory.length === 0;
 
-  theory.forEach((chord) => {
+  theory.forEach((block) => {
     const card = root.createElement("article");
     const name = root.createElement("h3");
-    const description = root.createElement("p");
-    const fingers = root.createElement("ul");
-    const modifier = CHORD_CLASSES[chord.id] ?? `chord-card--${chord.id}`;
+    const details = root.createElement("ul");
 
-    card.className = `chord-card ${modifier}`;
+    card.className = `chord-card chord-card--${block.color}`;
     name.className = "chord-card__name";
-    name.textContent = chord.name;
-    description.className = "chord-card__description";
-    description.textContent = chord.description;
-    fingers.className = "chord-card__fingers";
-    fingers.setAttribute("aria-label", `Posições dos dedos para o acorde ${chord.description}`);
+    name.textContent = block.title;
+    details.className = "chord-card__fingers";
+    details.setAttribute("aria-label", `Detalhes de ${block.title}`);
 
-    chord.fingers.forEach((finger) => {
+    block.details.forEach((detail) => {
       const item = root.createElement("li");
-      item.textContent = finger;
-      fingers.append(item);
+      item.textContent = detail;
+      details.append(item);
     });
 
-    card.append(name, description, fingers);
+    card.append(name, details);
     grid.append(card);
   });
 }
 
-function initializePlayer(root, lesson) {
+function initializePlayer(root, lesson, user) {
   const button = root.querySelector('[data-action="play-lesson"]');
-  const progress = root.querySelector("[data-lesson-media-progress]");
-  const currentTime = root.querySelector("[data-lesson-current-time]");
-  const icon = button?.querySelector(".lesson-player__play-icon path");
+  const player = root.querySelector("[data-lesson-player]");
+  const screen = root.querySelector(".lesson-player__screen");
+  const placeholder = root.querySelector(".lesson-player__placeholder");
+  const controls = root.querySelector(".lesson-player__controls");
 
-  if (!button || !progress || !currentTime) {
+  if (!button || !player || !screen || !placeholder) {
     return;
   }
 
-  const durationSeconds = Math.max(1, lesson.minutes * 60);
-  const savedProgress = getCurrentUser()?.progress?.lessonProgress?.[lesson.id] ?? 0;
-  const savedPercentage = typeof savedProgress === "number"
-    ? savedProgress
-    : savedProgress && typeof savedProgress === "object"
-      ? savedProgress.percentage ?? savedProgress.progress ?? savedProgress.percent ?? 0
-      : 0;
-  let savedMilestone = Math.max(0, Math.min(100, Math.floor((Number(savedPercentage) || 0) / 25) * 25));
-  let elapsedSeconds = Math.floor((savedMilestone / 100) * durationSeconds);
-  let timer = null;
-  const milestones = new Set([25, 50, 75, 100]);
+  const video = VIDEOS_BY_INSTRUMENT[user.instrument]?.[lesson.id];
+  const videoId = parseYouTubeId(video?.videoId ?? "");
+  const quality = root.querySelector(".lesson-player__quality");
 
-  progress.value = elapsedSeconds;
-  progress.setAttribute("aria-valuenow", String(elapsedSeconds));
-  progress.setAttribute("aria-valuetext", `${formatTime(elapsedSeconds)} de ${formatTime(durationSeconds)}`);
-  currentTime.textContent = formatTime(elapsedSeconds);
-  setPlayerState(button, icon, false);
-
-  root.defaultView?.addEventListener("pagehide", () => {
-    if (timer !== null) {
-      globalThis.clearInterval(timer);
+  if (!videoId) {
+    button.hidden = true;
+    button.disabled = true;
+    placeholder.textContent = "O vídeo desta aula chega em breve 🎬";
+    if (controls) {
+      controls.hidden = true;
     }
-  }, { once: true });
+
+    return null;
+  }
+
+  placeholder.textContent = "Clique para carregar o vídeo desta aula.";
+  button.hidden = false;
+  button.disabled = false;
+  button.setAttribute("aria-label", `Carregar vídeo: ${video?.title ?? lesson.title}`);
+  button.setAttribute("aria-pressed", "false");
+  player.setAttribute("aria-label", `Vídeo da aula ${lesson.title}`);
 
   return () => {
-    if (timer !== null) {
-      globalThis.clearInterval(timer);
-      timer = null;
-      setPlayerState(button, icon, false);
+    if (button.dataset.videoLoaded === "true") {
       return;
     }
 
-    setPlayerState(button, icon, true);
-    timer = globalThis.setInterval(() => {
-      elapsedSeconds = Math.min(durationSeconds, elapsedSeconds + PLAYER_STEP_SECONDS);
-      progress.value = elapsedSeconds;
-      progress.setAttribute("aria-valuenow", String(elapsedSeconds));
-      progress.setAttribute("aria-valuetext", `${formatTime(elapsedSeconds)} de ${formatTime(durationSeconds)}`);
-      currentTime.textContent = formatTime(elapsedSeconds);
+    button.dataset.videoLoaded = "true";
+    button.disabled = true;
+    quality?.remove();
+    placeholder.hidden = true;
+    if (controls) {
+      controls.hidden = true;
+    }
 
-      const percentage = Math.floor((elapsedSeconds / durationSeconds) * 100);
-      for (const milestone of milestones) {
-        if (percentage >= milestone && milestone > savedMilestone) {
-          persistLessonProgress(lesson.id, milestone);
-          savedMilestone = milestone;
-        }
-      }
+    const instrument = INSTRUMENTS.find((entry) => entry.id === user.instrument);
+    const iframe = root.createElement("iframe");
+    iframe.className = "lesson-player__iframe";
+    iframe.setAttribute("src", `https://www.youtube-nocookie.com/embed/${videoId}`);
+    iframe.setAttribute("title", `${video?.title ?? lesson.title} — ${instrument?.name ?? "instrumento"} | MUSICPLAY`);
+    iframe.setAttribute("allow", "autoplay; encrypted-media; picture-in-picture");
+    iframe.setAttribute("allowfullscreen", "");
+    iframe.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
+    iframe.setAttribute("loading", "lazy");
+    screen.replaceChildren(iframe);
 
-      if (elapsedSeconds >= durationSeconds) {
-        globalThis.clearInterval(timer);
-        timer = null;
-        setPlayerState(button, icon, false);
+    const errorMessage = root.createElement("p");
+    const link = root.createElement("a");
+    errorMessage.className = "lesson-player__error";
+    errorMessage.hidden = true;
+    errorMessage.append("Não conseguimos carregar o vídeo. ");
+    link.href = `https://www.youtube.com/watch?v=${videoId}`;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = "Abrir no YouTube ↗";
+    errorMessage.append(link);
+    player.insertBefore(errorMessage, controls ?? null);
+
+    let loaded = false;
+    const fallbackTimer = globalThis.setTimeout(() => {
+      if (!loaded) {
+        errorMessage.hidden = false;
       }
-    }, 1000);
+    }, VIDEO_LOAD_TIMEOUT_MS);
+    iframe.addEventListener("load", () => {
+      loaded = true;
+      globalThis.clearTimeout(fallbackTimer);
+    }, { once: true });
+    iframe.addEventListener("error", () => {
+      loaded = true;
+      globalThis.clearTimeout(fallbackTimer);
+      errorMessage.hidden = false;
+    }, { once: true });
   };
-}
-
-function setPlayerState(button, icon, isPlaying) {
-  button.dataset.state = isPlaying ? "playing" : "paused";
-  button.setAttribute("aria-pressed", String(isPlaying));
-  button.setAttribute("aria-label", isPlaying ? "Pausar demonstração visual da aula" : "Reproduzir demonstração visual da aula");
-
-  if (icon) {
-    icon.setAttribute("d", isPlaying ? "M7 5h4v14H7zM14 5h4v14h-4z" : "M8 5.5v13l10-6.5-10-6.5Z");
-  }
 }
 
 function initializeExercise(lessonId) {
   return () => {
     persistLessonProgress(lessonId, 50);
-    showToast("Exercícios práticos chegam em breve 🎸", { type: "info" });
+    showToast("Exercício prático registrado. Continue no seu ritmo! 🎵", { type: "info" });
   };
 }
 
@@ -287,7 +311,7 @@ function initializeLessonInteractions(root, lesson) {
   }
 
   const handlers = {
-    "play-lesson": initializePlayer(root, lesson),
+    "play-lesson": initializePlayer(root, lesson, getCurrentUser()),
     "start-exercise": initializeExercise(lesson.id),
     "complete-lesson": initializeCompletion(root, lesson),
   };
