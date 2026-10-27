@@ -158,7 +158,9 @@ O quiz usa o título “Quiz Musical 🧠”, badge de XP (por exemplo, “⭐ 0
 | Errou | Alternativa escolhida em vermelho, com borda e fundo rosado; correta em verde; demais neutras; alternativas travadas. Exibir caixa vermelha “❌ Não foi dessa vez...” com explicação e botão “Próxima pergunta →”. | Não ganha XP. |
 | Acertou | Alternativa escolhida em verde. Exibir caixa verde “✅ Resposta correta!”, “+20 XP ganhos! 🎉” e explicação; atualizar badge de XP com animação leve e botão “Próxima pergunta →”. | Ganha 20 XP. |
 
-Na última pergunta, o botão passa a ser “Ver resultado”. A tela de resultado não existe no Figma; a marcação existente registra uma proposta simples com acertos, XP, taxa de acerto, opção de jogar novamente e retorno aos jogos. O resultado deve ser tratado como suposição de produto e pode ser ajustado após validação com os responsáveis. O estado de resposta é comunicado em região `aria-live`.
+Na última pergunta, o botão passa a ser “Ver resultado”. A tela de resultado, já prevista na marcação HTML, apresenta acertos, XP, taxa de acerto, opção de jogar novamente e retorno aos jogos. O quiz sorteia até três perguntas distintas do instrumento; nesta etapa, há seis perguntas para violão. Para os demais instrumentos, o quiz informa com gentileza que as perguntas ainda estão sendo preparadas.
+
+O XP correto acumula somente no estado temporário da rodada e aparece no badge; ele só é persistido ao concluir todas as perguntas. Sair após responder abre uma confirmação e descarta a rodada se a pessoa escolher sair; recarregar também reinicia sem persistir respostas, XP, estatísticas ou tempo. A taxa exibida no resultado é calculada sobre as perguntas da rodada. O estado de resposta é comunicado em região `aria-live`.
 
 ## Aula
 
@@ -181,7 +183,7 @@ Ao concluir a aula, mostrar toast com o XP definido nos dados daquela aula, alte
 ### XP, níveis e sequência
 
 - Novo aluno começa com 0 XP e Nível 1.
-- Resposta correta do quiz concede 20 XP; resposta incorreta não altera XP.
+- Resposta correta do quiz concede 20 XP temporários; resposta incorreta não altera o XP. A rodada grava XP, estatísticas, uma partida, aproximadamente dois minutos de estudo e um dia de sequência apenas ao finalizar.
 - Concluir uma aula concede o XP definido no registro da aula (30 ou 40 XP na trilha atual); uma aula já concluída não concede XP novamente.
 - Ganho de XP, subida de nível e conquista nova devem ter feedback imediato por toast acessível.
 - A sequência conta dias de estudo e começa em zero. A tabela de XP foi definida na Etapa 3.1; a regra implementada na Etapa 3.3 mantém a contagem se o último estudo foi hoje ou ontem e a zera visualmente após um intervalo maior, sem apagar o histórico.
@@ -353,6 +355,14 @@ Não é necessário build ou backend. As páginas HTML referenciam `css/main.css
 5. Inicie o player simulado e confirme que ele salva marcos percentuais; use “Iniciar exercício prático” para conferir o aviso e o mínimo de 50% salvo.
 6. Repita com dois alunos diferentes no mesmo navegador, concluindo aulas para um deles; após alternar sessão, o outro deve manter seu próprio XP, aulas concluídas, progresso e sequência.
 
+### Teste manual da Etapa 3.5
+
+1. Com um aluno de Violão, abra Jogos e confirme que “Quiz Musical” abre a rodada; ao clicar em “Jogar” nos outros cards ou no destaque “Monte o Acorde”, a página não navega e mostra o aviso de disponibilidade futura.
+2. No Quiz, confira que o badge começa em `0 XP`; erre uma resposta (alternativa escolhida vermelha e correta verde) e depois acerte uma (feedback verde e badge temporário `20 XP`). Use teclado com Tab e Enter/Espaço para responder.
+3. Responda as três perguntas, clique em “Ver resultado” e confira acertos, XP, taxa, mensagem encorajadora, salvamento no estado do aluno e taxa atualizada no Perfil.
+4. Clique em “Jogar de novo” e confirme que há novas perguntas sem repetição na rodada. Responda pelo menos uma pergunta e tente voltar para Jogos: “Continuar jogando” mantém a rodada; “Sair” a descarta. Recarregue uma rodada respondida e confirme que ela recomeça sem salvar XP ou estatísticas.
+5. Repita o Quiz com dois alunos do mesmo navegador e confira que XP, taxa de acerto, partidas, tempo e sequência permanecem isolados.
+
 ## Plano de desenvolvimento
 
 Executar somente a etapa solicitada. Ao concluir cada etapa, parar, listar os arquivos alterados (incluindo este README), resumir decisões e suposições em 3 a 5 linhas, encerrar com “✅ Etapa X concluída. Pode fazer o commit.” e sugerir uma mensagem Conventional Commits. Esperar “continuar” antes de avançar. Não executar comandos Git.
@@ -387,7 +397,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - [x] 3.2 — Autenticação local e onboarding.
 - [x] 3.3 — Navegação protegida, personalização, dashboard, perfil e base da sequência.
 - [x] 3.4 — Trilha Aprender, aulas e registro de conclusão/progresso.
-- [ ] 3.5 — Conquistas.
+- [x] 3.5 — Quiz Musical e Jogos.
 - [ ] 3.6 — Integração e feedback de estados.
 
 ### Fase 4 — Revisão e entrega
@@ -456,9 +466,9 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - A Etapa 3.1 cria ES Modules para storage, estado, utilitários, XP e dados. Os testes de console ficam em `js/dev/devtools.js`, fora dos imports das páginas.
 - O storage guarda o objeto `{ schemaVersion, users }` em `musicplay:v1` e o e-mail da sessão em `musicplay:session`. As funções retornam fallback, booleano, `false` ou `null` em erros, removem somente a chave de aplicação inválida quando possível e nunca apagam outras chaves do navegador.
 - A conta guarda `level` da escolha de onboarding; `progress.level` representa o nível numérico de XP. O progresso inicial possui 0 XP, nível 1, sequência zerada e somente `lesson-1` liberada; cópias são devolvidas para evitar mutações acidentais.
-- Os dados imutáveis incluem dez instrumentos, três níveis e quatro objetivos, sete aulas disponíveis na trilha de violão (com conteúdo detalhado da Aula 4), três perguntas e sete músicas originais do Figma. Instrumentos sem conteúdo de aula recebem lista vazia; a música “Brilha, Brilha, Estrelinha”, adicionada anteriormente para completar oito cards HTML, não entra no conjunto fonte solicitado de sete faixas.
+- Os dados imutáveis incluem dez instrumentos, três níveis e quatro objetivos, sete aulas disponíveis na trilha de violão (com conteúdo detalhado da Aula 4), seis perguntas de violão e sete músicas originais do Figma. Instrumentos sem conteúdo de aula recebem lista vazia; a música “Brilha, Brilha, Estrelinha”, adicionada anteriormente para completar oito cards HTML, não entra no conjunto fonte solicitado de sete faixas.
 - As faixas de XP são 0, 100, 250, 450, 700 e 1.000 XP para os níveis 1 a 6; acima disso, a progressão extrapola em incrementos de 300 XP. Títulos são Iniciante até o nível 3, Intermediário do 4 ao 6 e Avançado a partir do 7.
-- Duas perguntas adicionais de violão foram criadas para completar o mínimo solicitado de três. Regras sem critério explícito foram assumidas como: primeira nota tocada, primeiro acorde aprendido e conclusão de aula em até 10 minutos para “Velocista”.
+- Três perguntas adicionais de violão iniciante foram criadas para ampliar o sorteio: afinação da 1ª corda solta, distância de semitom entre casas e notas da tríade de Mi menor. Todas têm quatro alternativas e concedem 20 XP por acerto.
 - A etapa não altera HTML/CSS nem adiciona dependências; a chave de sessão separada preserva o modelo já documentado e a implementação usa apenas APIs nativas do navegador.
 - A Etapa 3.2 implementa cadastro e login em ES Modules, hashing SHA-256 via Web Crypto e sessão local. O comentário de `auth.js` alerta que o hash no cliente, sem backend, não oferece segurança real; sem `crypto.subtle`, a interface recebe uma mensagem que orienta usar localhost ou HTTPS.
 - Cadastro valida nome e sobrenome com letras Unicode (mínimo duas letras em cada), e-mail, senha de pelo menos seis caracteres e aceite dos termos. Login valida e-mail/senha e apresenta mensagem genérica para combinação incorreta, sem revelar qual dado falhou.
@@ -472,6 +482,10 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - O perfil calcula aulas, músicas concluídas, jogos, taxa de acerto, sequência, XP, conquistas e tempo de estudo; valores de tempo são exibidos como `0min`, `45min` ou `3h 20min`. O calendário permanece sem integração nesta etapa para ser conectado na 3.6.
 - A sequência usa datas locais `YYYY-MM-DD`: estudar hoje ou ontem mantém a contagem consecutiva; se o último estudo foi anteontem ou antes, a sequência exibida é zero sem apagar o histórico. `registerVisit()` recalcula a sequência sem registrar estudo; somente `registerStudy()` acrescenta o dia, no máximo uma vez por data.
 - O registro das datas e o cálculo da sequência são separados para permitir testes com datas fornecidas; o botão de conclusão da aula chama `registerStudy()`, enquanto abrir ou reproduzir a prévia não registra estudo.
+- A Etapa 3.5 implementa a lógica pura da rodada e a persistência final do Quiz: sorteia até três perguntas sem repetição, soma 20 XP temporários por acerto e só atualiza XP, `quizStats`, jogos, tempo e sequência após todas as respostas. `bestStreak` registra a maior sequência de acertos de uma rodada e `perfectQuizzes` só aumenta em uma rodada completa de 3/3.
+- Uma rodada não concluída não grava nada: navegar após responder exige confirmação; sair descarta a rodada, e recarregar reinicia sem salvar. O resultado mostra taxa de acerto, XP e feedback conforme a quantidade de acertos; o jogo reiniciado sorteia perguntas novamente.
+- O Quiz Musical é o único jogo implementado; os outros cinco cards, incluindo o destaque “Monte o Acorde”, mostram um toast de disponibilidade futura sem navegar. Atualmente só há perguntas de violão; para os demais instrumentos, a página informa que o conteúdo está sendo preparado.
+- A marcação existente do Quiz já continha a tela de resultado e o diálogo de saída, portanto não foram necessários ajustes em HTML ou CSS. A verificação de conquistas fica como callback opcional de `finishQuiz()` para a Etapa 3.6.
 - A Etapa 3.4 implementa `getLessonStates`, `getNextLesson`, `getLessonById` e `getModuleProgress` a partir da trilha cadastrada. Aula 1 inicia como atual; só completar uma aula libera a seguinte; as concluídas permanecem concluídas e acessíveis. O Módulo 2 libera ao completar as cinco aulas do Módulo 1.
 - O total real da trilha de violão é sete aulas (cinco no Módulo 1 e duas no Módulo 2), embora o Figma/HTML de referência indique 12. A interface da trilha exibe o total existente, 7, sem criar cinco aulas não descritas.
 - Para instrumentos sem trilha cadastrada, a página oculta os módulos de violão de exemplo, mostra 0 aulas e exibe “As aulas para este instrumento chegam em breve.” em vez de apresentar conteúdo de outro instrumento.
@@ -487,8 +501,8 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 - O checklist 1.1–1.5 foi alinhado à divisão de etapas informada para esta implementação; as páginas futuras continuam pendentes.
 - O detalhe “48 aulas disponíveis” é exibido somente para Violão, como exemplo informado, sem inferir a quantidade de aulas dos outros instrumentos.
 - Como a trilha fornecida descreve apenas sete das 12 aulas totais, as cinco restantes não foram nomeadas ou representadas como conteúdo inventado.
-- A tela de resultado do Quiz não consta no Figma; para cumprir a etapa, foi proposta uma composição no mesmo padrão semântico, com acertos, XP, taxa de acerto, opção de jogar novamente e retorno aos jogos.
-- A página Jogos apresenta descrições textuais para os títulos fornecidos; os outros jogos ainda são links demonstrativos até suas experiências serem implementadas.
+- A tela de resultado do Quiz já estava incluída na marcação HTML e foi usada nesta etapa, embora sua composição não esteja especificada no Figma.
+- A página Jogos apresenta descrições textuais para os títulos fornecidos; somente Quiz Musical é jogável nesta etapa e os demais cards avisam que chegam em breve.
 - A lista de músicas solicitada enumera sete títulos distintos; para completar oito entradas, foi incluída “Brilha, Brilha, Estrelinha” (Tradicional), uma escolha estática de repertório tradicional, sem integração a catálogo ou biblioteca externa.
 - Os exemplos de datas de desbloqueio exibidos nas capturas do Figma representam dados de demonstração; no HTML de aluno novo, todos os registros começam bloqueados e sem uma data de desbloqueio.
 - A composição visual das páginas estilizadas foi implementada a partir da identidade e dos requisitos descritos; a comparação pixel a pixel com as capturas ainda precisa ser feita na revisão responsiva da Etapa 4.2.
@@ -496,7 +510,7 @@ Etapas de alto nível abaixo são um checklist de acompanhamento; a descrição 
 ## Pendências conhecidas
 
 - Conferir a renderização responsiva de todas as telas contra o Figma na Etapa 4.2, quando as capturas de referência estiverem acessíveis.
-- Os critérios de algumas conquistas sem definição explícita no Figma continuam sendo as suposições já documentadas e poderão ser ajustados durante a implementação da Etapa 3.5.
+- Os critérios de algumas conquistas sem definição explícita no Figma continuam pendentes de validação durante a Etapa 3.6.
 - SHA-256 local é somente uma demonstração educacional, não uma proteção de contas ou senhas reais.
 
 ## Créditos
