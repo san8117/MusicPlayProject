@@ -66,13 +66,19 @@
   }
 
   .app-nav__link[aria-current="page"] {
-    border-color: rgb(150 56 245 / 22%);
-    color: var(--color-primary-hover);
-    background: var(--color-primary-soft);
+    border-color: rgb(162 76 255 / 45%);
+    color: var(--color-brand-light);
+    background: var(--color-surface-purple-selected);
   }
 
   .app-nav__link[aria-current="page"]::before {
-    display: none;
+    inset-block: 50% auto;
+    inset-inline-start: 0;
+    display: block;
+    width: 0.2rem;
+    height: 1.5rem;
+    border-radius: var(--radius-pill);
+    transform: translateY(-50%);
   }
 
   .app-nav__link:hover:not([aria-current="page"]) {
